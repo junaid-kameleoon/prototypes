@@ -52,6 +52,7 @@
     const ChevronsDown = ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="m7 6 5 5 5-5" /><path d="m7 13 5 5 5-5" /></svg>;
     const ChevronsUp = ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="m17 11-5-5-5 5" /><path d="m17 18-5-5-5 5" /></svg>;
     const Flask = ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M7 2h10" /><path d="M12 2v7.5" /><path d="m5 20 5-10.5h4l5 10.5a2 2 0 0 1-2 2h-10a2 2 0 0 1-2-2Z" /></svg>;
+    const Sparkles = ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275Z" /><path d="M5 3v4" /><path d="M9 5H5" /></svg>;
 
     const MAX_TRACKED_PAGES = 10;
     const TRACKED_PAGES = [
@@ -161,6 +162,64 @@
       );
     }
 
+    function VariationItem({ variation }) {
+      const [isExpanded, setIsExpanded] = useState(false);
+
+      return (
+        <div className="border border-gray-200 rounded-md bg-white overflow-hidden transition-all hover:border-blue-300 shadow-sm">
+          <div className="p-3">
+            <div className="flex items-center justify-between gap-3 mb-1">
+              <div className="flex items-center gap-2 font-medium text-gray-900 text-xs">
+                <Layers className="w-3.5 h-3.5 text-[#4262ff]" />
+                {variation.name}
+                <InfoTooltip label="Variation ID" content={variation.id} />
+              </div>
+              <Button className="px-2 py-0.5 text-[10px] h-auto min-h-0">Create</Button>
+            </div>
+            {variation.description && <p className="text-[11px] text-gray-600 mb-2">{variation.description}</p>}
+
+            <button
+              onClick={() => setIsExpanded(!isExpanded)}
+              className="flex items-center gap-1 text-[10px] text-gray-400 hover:text-gray-600 font-medium transition-colors"
+            >
+              {isExpanded ? "Show less" : "See details"}
+              {isExpanded ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
+            </button>
+          </div>
+
+          {isExpanded && (
+            <div className="bg-gray-50/50 border-t border-gray-100 p-3 space-y-3">
+              {/* Technical Details */}
+              <div>
+                <h4 className="text-[10px] uppercase tracking-wide text-gray-500 font-semibold mb-2">Technical Implementation</h4>
+                <div className="grid grid-cols-2 gap-2">
+                  <div className="bg-white p-2 rounded border border-gray-200">
+                    <div className="text-[10px] text-gray-500 mb-0.5">Selector</div>
+                    <code className="text-[10px] text-blue-600 font-mono bg-blue-50 px-1 py-0.5 rounded">{variation.technical?.selector || ".element"}</code>
+                  </div>
+                  <div className="bg-white p-2 rounded border border-gray-200">
+                    <div className="text-[10px] text-gray-500 mb-0.5">Trigger</div>
+                    <code className="text-[10px] text-purple-600 font-mono bg-purple-50 px-1 py-0.5 rounded">{variation.technical?.trigger || "Load"}</code>
+                  </div>
+                </div>
+              </div>
+
+              {/* AI Prompt */}
+              <div className="p-2.5 rounded-md bg-gradient-to-r from-indigo-50 to-purple-50 border border-indigo-100">
+                <div className="flex items-center gap-1.5 mb-1.5">
+                  <Sparkles className="w-3 h-3 text-indigo-600" />
+                  <span className="text-[10px] font-semibold text-indigo-800">AI Generation Prompt</span>
+                </div>
+                <p className="text-[10px] text-indigo-900 leading-relaxed font-medium">
+                  "{variation.prompt || "Generate a variation..."}"
+                </p>
+              </div>
+            </div>
+          )}
+        </div>
+      );
+    }
+
     function AccordionSection({ title, children, defaultOpen = true, icon: Icon }) {
       const [isOpen, setIsOpen] = useState(defaultOpen);
       return (
@@ -196,6 +255,7 @@
       const [showAddPagesModal, setShowAddPagesModal] = useState(false);
       const [newPageUrls, setNewPageUrls] = useState([""]);
       const [trackedPages, setTrackedPages] = useState(TRACKED_PAGES);
+      const [variationsExpanded, setVariationsExpanded] = useState(false);
 
       // Embedded data to avoid fetch/CORS issues
       const DATA = {
@@ -246,7 +306,9 @@
                       {
                         "id": "var_single_column",
                         "name": "Single-page layout",
-                        "description": "Merge all checkout steps into one page with a clear single-column layout."
+                        "description": "Merge all checkout steps into one page with a clear single-column layout.",
+                        "technical": { "selector": ".checkout-form", "trigger": "DOMContentLoaded" },
+                        "prompt": "Generate a single-page checkout layout that merges all steps into one column, ensuring clear visual separation between sections."
                       }
                     ]
                   },
@@ -266,7 +328,9 @@
                       {
                         "id": "var_guest_button",
                         "name": "Primary 'Continue as guest' button",
-                        "description": "Show a primary 'Continue as guest' CTA next to secondary login options."
+                        "description": "Show a primary 'Continue as guest' CTA next to secondary login options.",
+                        "technical": { "selector": "#login-form .guest-cta", "trigger": "DOMContentLoaded" },
+                        "prompt": "Design a prominent 'Continue as guest' button, visually distinct from login options, positioned above the fold."
                       }
                     ]
                   }
@@ -314,12 +378,16 @@
                       {
                         "id": "var_direct_headline",
                         "name": "Direct product headline",
-                        "description": "Replace the abstract hero headline with a direct product-focused statement."
+                        "description": "Replace the abstract hero headline with a direct product-focused statement.",
+                        "technical": { "selector": ".hero-headline", "trigger": "DOMContentLoaded" },
+                        "prompt": "Create a direct, product-focused headline for the hero section, emphasizing 'performance running shoes'."
                       },
                       {
                         "id": "var_emotional_headline",
                         "name": "Emotional benefit headline",
-                        "description": "Focus on the feeling of running effortlessly."
+                        "description": "Focus on the feeling of running effortlessly.",
+                        "technical": { "selector": ".hero-headline", "trigger": "DOMContentLoaded" },
+                        "prompt": "Develop an emotional benefit-driven headline for the hero section, focusing on the feeling of effortless running."
                       }
                     ]
                   }
@@ -352,7 +420,9 @@
                       {
                         "id": "var_logos_grayscale",
                         "name": "Grayscale logos",
-                        "description": "Subtle, monochrome logos to not distract from the hero."
+                        "description": "Subtle, monochrome logos to not distract from the hero.",
+                        "technical": { "selector": ".trust-bar", "trigger": "DOMContentLoaded" },
+                        "prompt": "Implement a grayscale version of the media logos in the trust bar, ensuring they are subtle and do not distract from the main hero."
                       }
                     ]
                   }
@@ -393,7 +463,9 @@
                       {
                         "id": "var_quiz_modal",
                         "name": "Quiz Modal",
-                        "description": "A 3-step quiz asking about current shoe brands."
+                        "description": "A 3-step quiz asking about current shoe brands.",
+                        "technical": { "selector": "#size-selector .quiz-button", "trigger": "click" },
+                        "prompt": "Design a 3-step quiz modal for size recommendation, asking about current shoe brands and fit preferences."
                       }
                     ]
                   }
@@ -827,7 +899,20 @@
                       </div>
                     </div>
                   )}
-                  <div className="mt-3 flex flex-col items-center gap-2 p-4 bg-blue-50/50 rounded-lg">
+
+                  {/* Variations List */}
+                  {selectedExperiment.experiment.variations?.length > 0 && (
+                    <div className="mt-4">
+                      <h3 className="text-sm text-gray-800 font-medium mb-2">Variations</h3>
+                      <div className="space-y-3">
+                        {selectedExperiment.experiment.variations.map((v) => (
+                          <VariationItem key={v.id || v.name} variation={v} />
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="mt-4 flex flex-col items-center gap-2 p-4 bg-blue-50/50 rounded-lg">
                     <svg width={60} height={60} className="shrink-0">
                       <circle cx={30} cy={30} r={24} stroke="#e5e7eb" strokeWidth={5} fill="none" />
                       <circle cx={30} cy={30} r={24} stroke="#4262ff" strokeWidth={5} fill="none" strokeDasharray={2 * Math.PI * 24} strokeDashoffset={2 * Math.PI * 24 - (Math.max(0, Math.min(10, selectedExperiment.experiment.score || 0)) / 10) * (2 * Math.PI * 24)} strokeLinecap="round" transform="rotate(-90 30 30)" />
@@ -885,26 +970,6 @@
                     </div>
                   )}
                 </AccordionSection>
-
-                {selectedExperiment.experiment.variations?.length > 0 && (
-                  <AccordionSection title="Variations" icon={Layers} defaultOpen={false}>
-                    <div className="space-y-3">
-                      {selectedExperiment.experiment.variations.map((v) => (
-                        <div key={v.id} className="border border-gray-200 rounded-md bg-white px-3 py-2 text-sm text-gray-700 flex flex-col gap-1 hover:border-blue-300 transition-colors">
-                          <div className="flex items-center justify-between gap-3">
-                            <div className="flex items-center gap-2 font-medium text-gray-900">
-                              <Layers className="w-4 h-4 text-[#4262ff]" />
-                              {v.name}
-                              <InfoTooltip label="Variation ID" content={v.id} />
-                            </div>
-                            <Button className="px-3 py-1 text-[11px]">Create in PBX</Button>
-                          </div>
-                          {v.description && <p className="text-[11px] text-gray-600 mt-1">{v.description}</p>}
-                        </div>
-                      ))}
-                    </div>
-                  </AccordionSection>
-                )}
               </div>
             </div>
           )}
