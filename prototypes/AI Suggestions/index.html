@@ -6,6 +6,28 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AI Suggestions Dashboard</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#3838E7',
+            'primary-hover': '#2b2bb5',
+            background: '#FAFAFA',
+            surface: '#FFFFFF',
+          },
+          fontFamily: {
+            sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+          },
+          borderRadius: {
+            DEFAULT: '6px',
+            md: '6px',
+            lg: '8px',
+          }
+        }
+      }
+    }
+  </script>
   <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -123,7 +145,7 @@
       return (
         <svg width={40} height={40} className="text-xs shrink-0">
           <circle cx={20} cy={20} r={radius} stroke="#e5e7eb" strokeWidth={4} fill="none" />
-          <circle cx={20} cy={20} r={radius} stroke="#4262ff" strokeWidth={4} fill="none" strokeDasharray={circumference} strokeDashoffset={offset} strokeLinecap="round" transform="rotate(-90 20 20)" />
+          <circle cx={20} cy={20} r={radius} stroke="#3838E7" strokeWidth={4} fill="none" strokeDasharray={circumference} strokeDashoffset={offset} strokeLinecap="round" transform="rotate(-90 20 20)" />
           <text x="50%" y="54%" textAnchor="middle" fill="#111827" fontSize={11} fontWeight="bold">{clamped.toFixed(1)}</text>
         </svg>
       );
@@ -133,7 +155,7 @@
       if (!status) return null;
       const normalized = status.toLowerCase();
       let bg = "bg-gray-100 text-gray-700";
-      if (normalized === "new") bg = "bg-[#e5f0ff] text-[#1b4dff]";
+      if (normalized === "new") bg = "bg-blue-50 text-blue-700";
       if (normalized === "launched") bg = "bg-[#e7f8ec] text-[#177a3d]";
       if (normalized === "archived") bg = "bg-gray-200 text-gray-700";
       return (
@@ -154,7 +176,7 @@
         <button
           onClick={onClick}
           disabled={disabled}
-          className={`inline-flex items-center justify-center font-medium rounded-md text-xs px-4 py-2 transition-colors ${disabled ? "bg-gray-300 cursor-not-allowed" : "bg-[#4262ff] text-white hover:bg-[#2140ff]"
+          className={`inline-flex items-center justify-center font-medium rounded-md text-xs px-4 py-2 transition-colors ${disabled ? "bg-gray-300 cursor-not-allowed" : "bg-primary text-white hover:bg-primary-hover"
             } ${className}`}
         >
           {children}
@@ -170,7 +192,7 @@
           <div className="p-3">
             <div className="flex items-center justify-between gap-3 mb-1">
               <div className="flex items-center gap-2 font-medium text-gray-900 text-xs">
-                <Layers className="w-3.5 h-3.5 text-[#4262ff]" />
+                <Layers className="w-3.5 h-3.5 text-primary" />
                 {variation.name}
                 <InfoTooltip label="Variation ID" content={variation.id} />
               </div>
@@ -229,7 +251,7 @@
             onClick={() => setIsOpen(!isOpen)}
           >
             <div className="flex items-center gap-2 font-semibold text-gray-900 text-base">
-              {Icon && <Icon className="w-4 h-4 text-[#4262ff]" />}
+              {Icon && <Icon className="w-4 h-4 text-primary" />}
               {title}
             </div>
             {isOpen ? <ChevronUp className="w-4 h-4 text-gray-400" /> : <ChevronDown className="w-4 h-4 text-gray-400" />}
@@ -591,28 +613,28 @@
               <div className="mt-4 flex items-center">
                 <div className="relative w-full max-w-xl">
                   <Search className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
-                  <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search suggestions..." className="w-full pl-9 pr-3 py-2 text-xs border rounded-md focus:outline-none focus:ring-1 focus:ring-[#4262ff]" />
+                  <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search suggestions..." className="w-full pl-9 pr-3 py-2 text-xs border rounded-md focus:outline-none focus:ring-1 focus:ring-primary" />
                 </div>
               </div>
 
               {/* Tabs */}
               <div className="mt-4 border-b border-gray-200 flex items-center justify-between">
                 <div className="flex gap-6 text-sm">
-                  <button className={`pb-2 -mb-px border-b-2 ${activeTab === "suggested" ? "border-[#4262ff] text-[#4262ff] font-medium" : "border-transparent text-gray-500 hover:text-gray-700"}`} onClick={() => setActiveTab("suggested")}>Suggested campaigns ✨</button>
-                  <button className={`pb-2 -mb-px border-b-2 ${activeTab === "tracked" ? "border-[#4262ff] text-[#4262ff] font-medium" : "border-transparent text-gray-500 hover:text-gray-700"}`} onClick={() => setActiveTab("tracked")}>Tracked pages</button>
+                  <button className={`pb-2 -mb-px border-b-2 ${activeTab === "suggested" ? "border-primary text-primary font-medium" : "border-transparent text-gray-500 hover:text-gray-700"}`} onClick={() => setActiveTab("suggested")}>Suggested campaigns ✨</button>
+                  <button className={`pb-2 -mb-px border-b-2 ${activeTab === "tracked" ? "border-primary text-primary font-medium" : "border-transparent text-gray-500 hover:text-gray-700"}`} onClick={() => setActiveTab("tracked")}>Tracked pages</button>
                 </div>
                 {activeTab === "suggested" && (
                   <div className="flex items-center bg-gray-100 rounded-full p-1 gap-1">
                     <button
                       onClick={collapseAll}
-                      className={`p-1.5 rounded-full transition-all ${openHypothesisIds.length === 0 ? "bg-white shadow-sm text-[#4262ff]" : "text-gray-400 hover:text-gray-600"}`}
+                      className={`p-1.5 rounded-full transition-all ${openHypothesisIds.length === 0 ? "bg-white shadow-sm text-primary" : "text-gray-400 hover:text-gray-600"}`}
                       title="Hypothesis View"
                     >
                       <Lightbulb className="w-3 h-3" />
                     </button>
                     <button
                       onClick={expandAll}
-                      className={`p-1.5 rounded-full transition-all ${openHypothesisIds.length > 0 && openHypothesisIds.length === pages.flatMap(p => p.hypotheses).length ? "bg-white shadow-sm text-[#4262ff]" : "text-gray-400 hover:text-gray-600"}`}
+                      className={`p-1.5 rounded-full transition-all ${openHypothesisIds.length > 0 && openHypothesisIds.length === pages.flatMap(p => p.hypotheses).length ? "bg-white shadow-sm text-primary" : "text-gray-400 hover:text-gray-600"}`}
                       title="Experiment View"
                     >
                       <Flask className="w-3 h-3" />
@@ -625,7 +647,7 @@
               {activeTab === "suggested" && (
                 <div className="mt-4 flex gap-2 text-[11px]">
                   {["All", "New", "Launched", "Archived"].map((s) => (
-                    <button key={s} className={`px-3 py-1 rounded-full border ${statusFilter === s ? "bg-[#4262ff] text-white border-[#4262ff]" : "bg-gray-50 text-gray-600 border-gray-200"}`} onClick={() => setStatusFilter(s)}>{s}</button>
+                    <button key={s} className={`px-3 py-1 rounded-full border ${statusFilter === s ? "bg-primary text-white border-primary" : "bg-gray-50 text-gray-600 border-gray-200"}`} onClick={() => setStatusFilter(s)}>{s}</button>
                   ))}
                 </div>
               )}
@@ -669,8 +691,8 @@
                                   {/* Hypothesis header */}
                                   <button className="w-full flex items-center justify-between px-4 py-3 hover:bg-gray-50" onClick={() => toggleHypothesis(hyp.id)}>
                                     <div className="flex items-center gap-3">
-                                      <Lightbulb className="w-5 h-5 text-[#4262ff] shrink-0" />
-                                      <div className="w-10 h-10 rounded-md bg-[#4262ff] flex items-center justify-center text-[9px] text-white font-medium shrink-0">{page.type}</div>
+                                      <Lightbulb className="w-5 h-5 text-primary shrink-0" />
+                                      <div className="w-10 h-10 rounded-md bg-primary flex items-center justify-center text-[9px] text-white font-medium shrink-0">{page.type}</div>
                                       <div className="text-left">
                                         <div className="text-sm font-semibold text-gray-900 flex items-center gap-2">
                                           {hyp.name}
@@ -679,7 +701,7 @@
                                         <div className="text-[11px] text-gray-500 line-clamp-2">{hyp.description}</div>
                                       </div>
                                     </div>
-                                    <div className="flex items-center gap-3 text-[11px] text-[#4262ff] font-medium ml-4 shrink-0">
+                                    <div className="flex items-center gap-3 text-[11px] text-primary font-medium ml-4 shrink-0">
                                       <span>{experimentCount} experiment{experimentCount > 1 ? "s" : ""}</span>
                                       {isOpen ? <ChevronUp className="w-4 h-4 text-gray-400" /> : <ChevronDown className="w-4 h-4 text-gray-400" />}
                                     </div>
@@ -694,9 +716,9 @@
                                         const isSelected = selectedExperiment && selectedExperiment.experiment.id === exp.id;
 
                                         return (
-                                          <div key={exp.id} className={`flex items-center justify-between px-4 py-3 gap-4 cursor-pointer ml-4 ${index > 0 ? "border-t border-gray-100" : ""} ${isSelected ? "bg-[#f0f3ff]" : "hover:bg-gray-50"}`} onClick={() => handleExperimentClick(page, hyp, exp)}>
+                                          <div key={exp.id} className={`flex items-center justify-between px-4 py-3 gap-4 cursor-pointer ml-4 ${index > 0 ? "border-t border-gray-100" : ""} ${isSelected ? "bg-blue-50" : "hover:bg-gray-50"}`} onClick={() => handleExperimentClick(page, hyp, exp)}>
                                             <div className="flex items-start gap-3 flex-1">
-                                              <FlaskConical className="w-4 h-4 text-[#4262ff] mt-0.5 shrink-0" />
+                                              <FlaskConical className="w-4 h-4 text-primary mt-0.5 shrink-0" />
                                               <div>
                                                 <div className="flex items-center gap-2 mb-0.5">
                                                   <span className="text-xs font-medium text-gray-900">{exp.name}</span>
@@ -730,7 +752,7 @@
               {activeTab === "tracked" && (
                 <div className="mt-4">
                   <div className="text-xs text-gray-500 mb-1">{trackedCount} of {MAX_TRACKED_PAGES} URLs currently tracked</div>
-                  <div className="w-full max-w-sm h-1.5 bg-gray-100 rounded-full overflow-hidden mb-3"><div className="h-full bg-[#4262ff]" style={{ width: `${trackedProgress}%` }} /></div>
+                  <div className="w-full max-w-sm h-1.5 bg-gray-100 rounded-full overflow-hidden mb-3"><div className="h-full bg-primary" style={{ width: `${trackedProgress}%` }} /></div>
                   <div className="border rounded-md overflow-hidden bg-white">
                     {trackedPages.map((p, index) => (
                       <div key={p.url} className={`flex items-center justify-between px-4 py-3 text-xs ${index > 0 ? "border-t border-gray-100" : ""}`}>
@@ -769,7 +791,7 @@
                               if (e.key === 'Enter' && index === newPageUrls.length - 1) handleAddTrackedPage();
                             }}
                             placeholder="https://example.com/page"
-                            className="flex-1 px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#4262ff] focus:border-transparent"
+                            className="flex-1 px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                             autoFocus={index === newPageUrls.length - 1}
                           />
                           {newPageUrls.length > 1 && (
@@ -787,7 +809,7 @@
 
                     <button
                       onClick={addUrlInput}
-                      className="mt-3 text-sm text-[#4262ff] font-medium hover:text-[#2140ff] flex items-center gap-1"
+                      className="mt-3 text-sm text-primary font-medium hover:text-primary-hover flex items-center gap-1"
                     >
                       <span className="text-lg leading-none">+</span> Add another URL
                     </button>
@@ -833,11 +855,11 @@
 
               <div className="overflow-y-auto text-xs flex-1 bg-white">
                 {/* Placeholder purple layout */}
-                <div className="mx-6 mt-4 rounded-md overflow-hidden mb-4 h-40 bg-[#4262ff] text-white flex items-center justify-center relative group shrink-0">
+                <div className="mx-6 mt-4 rounded-md overflow-hidden mb-4 h-40 bg-primary text-white flex items-center justify-center relative group shrink-0">
                   <div className="w-5/6 h-3/4 border border-white/50 rounded-md flex flex-col justify-between p-3 text-[11px]">
                     <div className="h-3 bg-white/80 rounded mb-2" />
                     <div className="flex-1 border border-dashed border-white/40 rounded mb-2" />
-                    <div className="h-8 bg-white/90 rounded-full flex items-center justify-center text-[10px] text-[#4262ff] font-medium">{selectedExperiment.page.type}</div>
+                    <div className="h-8 bg-white/90 rounded-full flex items-center justify-center text-[10px] text-primary font-medium">{selectedExperiment.page.type}</div>
                   </div>
                   {selectedExperiment.page.desktop_screenshot_url && (
                     <div className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
@@ -915,7 +937,7 @@
                   <div className="mt-4 flex flex-col items-center gap-2 p-4 bg-blue-50/50 rounded-lg">
                     <svg width={60} height={60} className="shrink-0">
                       <circle cx={30} cy={30} r={24} stroke="#e5e7eb" strokeWidth={5} fill="none" />
-                      <circle cx={30} cy={30} r={24} stroke="#4262ff" strokeWidth={5} fill="none" strokeDasharray={2 * Math.PI * 24} strokeDashoffset={2 * Math.PI * 24 - (Math.max(0, Math.min(10, selectedExperiment.experiment.score || 0)) / 10) * (2 * Math.PI * 24)} strokeLinecap="round" transform="rotate(-90 30 30)" />
+                      <circle cx={30} cy={30} r={24} stroke="#3838E7" strokeWidth={5} fill="none" strokeDasharray={2 * Math.PI * 24} strokeDashoffset={2 * Math.PI * 24 - (Math.max(0, Math.min(10, selectedExperiment.experiment.score || 0)) / 10) * (2 * Math.PI * 24)} strokeLinecap="round" transform="rotate(-90 30 30)" />
                       <text x="50%" y="54%" textAnchor="middle" fill="#111827" fontSize={16} fontWeight="bold">{selectedExperiment.experiment.score.toFixed(1)}</text>
                     </svg>
                     <span className="text-xs text-gray-600 font-medium">Impact Score: {selectedExperiment.experiment.score.toFixed(1)} / 10</span>
