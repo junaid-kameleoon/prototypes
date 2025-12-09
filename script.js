@@ -10,6 +10,16 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(response => response.json())
         .then(prototypes => {
             renderGallery(prototypes);
+
+            // Check for slug in URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const slug = urlParams.get('prototype');
+            if (slug) {
+                const proto = prototypes.find(p => p.slug === slug);
+                if (proto) {
+                    openViewer(proto);
+                }
+            }
         })
         .catch(error => {
             console.error('Error loading prototypes:', error);
@@ -18,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function renderGallery(prototypes) {
         galleryGrid.innerHTML = '';
-        
+
         if (prototypes.length === 0) {
             galleryGrid.innerHTML = '<p class="empty-state">No prototypes found. Add one to get started!</p>';
             return;
@@ -44,16 +54,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function openViewer(proto) {
         viewerTitle.textContent = proto.title;
-        // Construct path: prototypes/{id}/index.html
-        prototypeFrame.src = `prototypes/${proto.id}/index.html`;
+        // Construct path: prototypes/{id}/{file} or default to index.html
+        const fileName = proto.file || 'index.html';
+        prototypeFrame.src = `prototypes/${proto.id}/${fileName}`;
         viewerModal.classList.remove('hidden');
         document.body.style.overflow = 'hidden'; // Prevent background scrolling
+
+        // Update URL
+        if (proto.slug) {
+            const newUrl = new URL(window.location);
+            newUrl.searchParams.set('prototype', proto.slug);
+            window.history.pushState({ path: newUrl.href }, '', newUrl.href);
+        }
     }
 
     function closeViewer() {
         viewerModal.classList.add('hidden');
         prototypeFrame.src = ''; // Clear iframe to stop execution
         document.body.style.overflow = '';
+
+        // Clear URL param
+        const newUrl = new URL(window.location);
+        newUrl.searchParams.delete('prototype');
+        window.history.pushState({ path: newUrl.href }, '', newUrl.href);
     }
 
     closeViewerBtn.addEventListener('click', closeViewer);
