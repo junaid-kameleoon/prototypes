@@ -5,7 +5,7 @@
         "title": "AI Experiments (v1)",
         "description": "Original prototype with Hypothesis -> Experiment hierarchy.",
         "icon": "✨",
-        "file": "index.html"
+        "file": "v1/index.html"
     },
     {
         "id": "AI Suggestions",
@@ -13,6 +13,14 @@
         "title": "AI Experiments (v2)",
         "description": "Refactored hierarchy: Diagnosis vs Solution.",
         "icon": "🚀",
-        "file": "index2.html"
+        "file": "v2/index.html"
+    },
+    {
+        "id": "AI Suggestions",
+        "slug": "ai-suggestions-v3",
+        "title": "AI Experiments (v3)",
+        "description": "Enhanced UI with unified sidebar and improved dashboard.",
+        "icon": "💎",
+        "file": "v3/index.html"
     }
 ]
