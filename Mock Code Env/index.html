@@ -29,8 +29,15 @@
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
-    body { background: #1e1e1e; color: #d4d4d4; }
-    .editor-line { counter-increment: line; }
+    body {
+      background: #1e1e1e;
+      color: #d4d4d4;
+    }
+
+    .editor-line {
+      counter-increment: line;
+    }
+
     .editor-line::before {
       content: counter(line);
       display: inline-block;
@@ -54,7 +61,7 @@
         // Try connecting to local server
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 1000); // 1s timeout
-        
+
         const response = await fetch('http://localhost:3001/mcp', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -65,49 +72,87 @@
           signal: controller.signal
         });
         clearTimeout(timeoutId);
-        
+
         const data = await response.json();
         return data.result.content[0].text;
       } catch (err) {
         console.warn('MCP connection failed, using mock fallback:', err);
-        
-        // Fallback for demo when server is unreachable
+
+        // Lot 0 (MVP) Fallback
         if (name === 'kameleoon_predictive_templates') {
-            // Return raw JSON array string for reliable parsing
-            return JSON.stringify([
-              {"name": "Cart Abandonment", "confidence": "98%", "description": "Detects users about to leave the cart and triggers a retention modal.", "code": "cart-abandonment"},
-              {"name": "VIP Welcome", "confidence": "85%", "description": "Identifies high-value enterprise visitors and personalizes the homepage hero.", "code": "vip-hero"},
-              {"name": "Discount affinity", "confidence": "72%", "description": "Targets price-sensitive users with a limited-time offer banner.", "code": "discount-affinity"}
-            ]);
+          const suggestions = [
+            {
+              "name": "list_feature_flags",
+              "confidence": "MVP",
+              "description": "List all available feature flags for the current project.",
+              "code": "list_feature_flags"
+            },
+            {
+              "name": "get_feature_flag",
+              "confidence": "MVP",
+              "description": "Retrieve configuration for a specific flag.",
+              "code": "get_feature_flag"
+            },
+            {
+              "name": "search_flags",
+              "confidence": "MVP",
+              "description": "Search flags by name or key.",
+              "code": "search_flags"
+            },
+            {
+              "name": "view_activity_logs",
+              "confidence": "MVP",
+              "description": "View audit logs for a flag.",
+              "code": "view_activity_logs"
+            },
+            {
+              "name": "request_results",
+              "confidence": "MVP",
+              "description": "Get performance metrics for a flag.",
+              "code": "request_results"
+            }
+          ];
+          return JSON.stringify(suggestions);
         }
+
         if (name === 'kameleoon_generate_sdk_snippet') {
-            const key = args.key || 'generic';
-            if (key.includes('cart') || args.key === 'cart-abandonment') {
-                return `// Generated SDK Code for Cart Abandonment
-Kameleoon.API.runWhenConditionTrue(function() {
-    return Kameleoon.API.Visitor.data.cartValue > 0 && Kameleoon.API.Visitor.predictive.churnProbability > 0.8;
-}, function() {
-    Kameleoon.API.Utils.showModal({
-        content: "Wait! Get 10% off if you complete your order now.",
-        width: 400,
-        overlay: true
-    });
+          const key = args.key || 'generic';
+
+          if (key === 'list_feature_flags') {
+            return `// List all feature flags
+const flags = await kameleoon.getFeatureFlags();
+console.table(flags);`;
+          }
+          if (key === 'get_feature_flag') {
+            return `// Get details for a specific flag
+const flagKey = "cart_abandonment_promo";
+const config = await kameleoon.getFeatureFlag(flagKey);
+console.log("Flag Config:", config);`;
+          }
+          if (key === 'search_flags') {
+            return `// Search for flags
+const query = "header";
+const results = await kameleoon.searchFlags(query);
+console.log(\`Found \${results.length} flags matching "\${query}"\`);`;
+          }
+          if (key === 'view_activity_logs') {
+            return `// View activity logs for a flag
+const logs = await kameleoon.getFlagActivity("new_checkout_flow");
+logs.forEach(log => {
+  console.log(\`[\${log.timestamp}] \${log.user}: \${log.action}\`);
 });`;
-            }
-             if (key.includes('vip') || args.key === 'vip-hero') {
-                return `// Generated SDK Code for VIP Welcome
-if (Kameleoon.API.Visitor.segment === 'VIP_Enterprise') {
-    const heroTitle = document.querySelector('.hero-title');
-    if (heroTitle) {
-        heroTitle.innerText = "Welcome back, valued partner. See our exclusive enterprise deals.";
-        heroTitle.style.color = "#d4af37"; // Gold
-    }
-}`;
-            }
-            return `// Generated SDK Code
-console.log("Kameleoon SDK initialized for experiment: ${key}");`;
+          }
+          if (key === 'request_results') {
+            return `// Request results for a feature flag experiment
+const results = await kameleoon.getExperimentResults("pricing_page_v2");
+console.log("Conversion Rate:", results.conversionRate);
+console.log("Confidence:", results.statisticalSignificance);`;
+          }
+
+          return `// Generic Kameleoon SDK Snippet
+const client = new KameleoonClient({ siteCode: "SITE_CODE" });
+await client.initialize();`;
         }
-        return `Error: ${err.message}`;
       }
     };
 
@@ -126,24 +171,24 @@ console.log("Kameleoon SDK initialized for experiment: ${key}");`;
           e.preventDefault();
           setLoading(true);
           addLog('Asking MCP for suggestions...');
-          
+
           try {
             // Mocking context: Assume we are asking for templates
             const response = await callMcpTool('kameleoon_predictive_templates', { vertical: 'e-commerce' });
-            
+
             // Handle parsing (supports both plain JSON and text-prefixed JSON)
             const parts = response.split('\n');
             let jsonPart = parts.find(p => p.trim().startsWith('['));
             if (!jsonPart && parts.length === 1 && response.trim().startsWith('[')) {
-                jsonPart = response;
+              jsonPart = response;
             }
             if (!jsonPart && parts.length > 1) jsonPart = parts[1];
-            
+
             if (jsonPart) {
-                setSuggestions(JSON.parse(jsonPart));
-                addLog('Received suggestions from MCP');
+              setSuggestions(JSON.parse(jsonPart));
+              addLog('Received suggestions from MCP');
             } else {
-                addLog('Failed to parse suggestions');
+              addLog('Failed to parse suggestions');
             }
           } catch (err) {
             addLog('Failed to get suggestions');
@@ -157,11 +202,11 @@ console.log("Kameleoon SDK initialized for experiment: ${key}");`;
       const insertTemplate = async (template) => {
         setLoading(true);
         addLog(`Generating SDK snippet for: ${template.name}`);
-        const snippet = await callMcpTool('kameleoon_generate_sdk_snippet', { 
-            key: template.code || template.name.toLowerCase().replace(/\s+/g, '-'), 
-            language: 'js' 
+        const snippet = await callMcpTool('kameleoon_generate_sdk_snippet', {
+          key: template.code || template.name.toLowerCase().replace(/\s+/g, '-'),
+          language: 'js'
         });
-        
+
         setCode(prev => prev + `\n// Goal: ${template.description}\n` + snippet + '\n');
         setSuggestions([]);
         setLoading(false);
@@ -178,7 +223,7 @@ console.log("Kameleoon SDK initialized for experiment: ${key}");`;
                 Connected to localhost:3001
               </div>
             </div>
-            
+
             <div className="flex-1 overflow-y-auto p-4 space-y-4">
               <div className="text-xs font-mono text-gray-400 uppercase">Available Tools</div>
               <div className="space-y-2">
@@ -193,7 +238,7 @@ console.log("Kameleoon SDK initialized for experiment: ${key}");`;
 
             {/* Logs */}
             <div className="h-48 border-t border-[#333] bg-[#1e1e1e] p-2 overflow-y-auto font-mono text-[10px]">
-               {logs.map((l, i) => <div key={i} className="text-gray-500">{l}</div>)}
+              {logs.map((l, i) => <div key={i} className="text-gray-500">{l}</div>)}
             </div>
           </div>
 
@@ -215,7 +260,7 @@ console.log("Kameleoon SDK initialized for experiment: ${key}");`;
                 className="w-full h-full bg-[#1e1e1e] text-[#d4d4d4] p-4 font-mono outline-none resize-none leading-relaxed"
                 spellCheck="false"
               />
-              
+
               {/* Suggestion Popover */}
               {suggestions.length > 0 && (
                 <div className="absolute top-20 left-10 bg-[#252526] border border-[#454545] shadow-2xl rounded-md w-80 overflow-hidden z-50">
@@ -225,7 +270,7 @@ console.log("Kameleoon SDK initialized for experiment: ${key}");`;
                   </div>
                   <div className="py-1">
                     {suggestions.map((s, i) => (
-                      <button 
+                      <button
                         key={i}
                         onClick={() => insertTemplate(s)}
                         className="w-full text-left px-3 py-2 hover:bg-[#094771] text-xs group"
@@ -253,4 +298,5 @@ console.log("Kameleoon SDK initialized for experiment: ${key}");`;
     root.render(<App />);
   </script>
 </body>
+
 </html>
