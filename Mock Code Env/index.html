@@ -73,7 +73,12 @@
         
         // Fallback for demo when server is unreachable
         if (name === 'kameleoon_predictive_templates') {
-            return `Detected context: E-commerce Vertical\n[\n  {"name": "Cart Abandonment", "confidence": "98%", "description": "Detects users about to leave the cart and triggers a retention modal.", "code": "cart-abandonment"}, \n  {"name": "VIP Welcome", "confidence": "85%", "description": "Identifies high-value enterprise visitors and personalizes the homepage hero.", "code": "vip-hero"}, \n  {"name": "Discount affinity", "confidence": "72%", "description": "Targets price-sensitive users with a limited-time offer banner.", "code": "discount-affinity"}\n]`;
+            // Return raw JSON array string for reliable parsing
+            return JSON.stringify([
+              {"name": "Cart Abandonment", "confidence": "98%", "description": "Detects users about to leave the cart and triggers a retention modal.", "code": "cart-abandonment"},
+              {"name": "VIP Welcome", "confidence": "85%", "description": "Identifies high-value enterprise visitors and personalizes the homepage hero.", "code": "vip-hero"},
+              {"name": "Discount affinity", "confidence": "72%", "description": "Targets price-sensitive users with a limited-time offer banner.", "code": "discount-affinity"}
+            ]);
         }
         if (name === 'kameleoon_generate_sdk_snippet') {
             const key = args.key || 'generic';
@@ -125,10 +130,14 @@ console.log("Kameleoon SDK initialized for experiment: ${key}");`;
           try {
             // Mocking context: Assume we are asking for templates
             const response = await callMcpTool('kameleoon_predictive_templates', { vertical: 'e-commerce' });
-            // The response format is "Some text\nJSON_ARRAY"
+            
+            // Handle parsing (supports both plain JSON and text-prefixed JSON)
             const parts = response.split('\n');
             let jsonPart = parts.find(p => p.trim().startsWith('['));
-            if (!jsonPart && parts.length > 1) jsonPart = parts[1]; // Fallback to second line
+            if (!jsonPart && parts.length === 1 && response.trim().startsWith('[')) {
+                jsonPart = response;
+            }
+            if (!jsonPart && parts.length > 1) jsonPart = parts[1];
             
             if (jsonPart) {
                 setSuggestions(JSON.parse(jsonPart));
