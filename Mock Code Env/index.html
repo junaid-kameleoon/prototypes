@@ -38,6 +38,14 @@
   <!-- Mock Data Import (Inlined for simplicity in this HTML file, or assume it's loaded) -->
   <script>
     // Inlining mock data to ensure it works without external file fetch issues on file:// protocol
+    const MVP_MOCK_DATA = [
+      { name: "list_feature_flags", confidence: "MVP", description: "List all available feature flags.", code: "list_feature_flags" },
+      { name: "get_feature_flag", confidence: "MVP", description: "Retrieve specific flag config.", code: "get_feature_flag" },
+      { name: "search_flags", confidence: "MVP", description: "Search flags using fuzzy match.", code: "search_flags" },
+      { name: "view_activity_logs", confidence: "MVP", description: "View recent changes.", code: "view_activity_logs" },
+      { name: "request_results", confidence: "MVP", description: "Get performance metrics.", code: "request_results" }
+    ];
+
     const LOT_1_MOCK_DATA = {
       suggestions: [
         {
@@ -230,17 +238,8 @@ Recommendation: Archive 5 unused flags to save ~4KB.`
 
         // --- LOT 0 (MVP) FALLBACKS ---
         if (name === 'kameleoon_predictive_templates') {
-          const mvpSuggestions = [
-            { name: "list_feature_flags", confidence: "MVP", description: "List all available feature flags.", code: "list_feature_flags" },
-            { name: "get_feature_flag", confidence: "MVP", description: "Retrieve specific flag config.", code: "get_feature_flag" },
-            { name: "search_flags", confidence: "MVP", description: "Search flags using fuzzy match.", code: "search_flags" },
-            { name: "view_activity_logs", confidence: "MVP", description: "View recent changes.", code: "view_activity_logs" },
-            { name: "request_results", confidence: "MVP", description: "Get performance metrics.", code: "request_results" }
-          ];
-
-          // Merge with Lot 1 Suggestions
+          const mvpSuggestions = MVP_MOCK_DATA;
           const lot1Suggestions = LOT_1_MOCK_DATA.suggestions;
-
           return JSON.stringify([...mvpSuggestions, ...lot1Suggestions]);
         }
 
@@ -304,18 +303,20 @@ Recommendation: Archive 5 unused flags to save ~4KB.`
           e.preventDefault();
           setLoading(true);
           addLog('Asking MCP for suggestions...');
-
-          try {
-            const response = await callMcpTool('kameleoon_predictive_templates', { vertical: 'e-commerce' });
-            const s = JSON.parse(response);
-            setSuggestions(s);
-            addLog(`Received ${s.length} suggestions`);
-          } catch (err) {
-            addLog('Failed to get suggestions');
-            console.error(err);
-          } finally {
-            setLoading(false);
-          }
+          // Add a small delay to simulate network feeling
+          setTimeout(async () => {
+            try {
+              const response = await callMcpTool('kameleoon_predictive_templates', { vertical: 'e-commerce' });
+              const s = JSON.parse(response);
+              setSuggestions(s);
+              addLog(`Received ${s.length} suggestions`);
+            } catch (err) {
+              addLog('Failed to get suggestions');
+              console.error(err);
+            } finally {
+              setLoading(false);
+            }
+          }, 300);
         }
       };
 
@@ -323,21 +324,18 @@ Recommendation: Archive 5 unused flags to save ~4KB.`
         setLoading(true);
         addLog(`Executing: ${cmd.name}`);
 
-        // Determine if we use the generic snippet tool or the specific Lot 1 tool name
-        // For Lot 0, we mapped them to generating snippets. For Lot 1, we treat them as direct tool calls.
-
-        let initialCode = code;
         let result = "";
 
         if (cmd.confidence === "MVP") {
-          // Use existing snippet generation for MVP ops
           result = await callMcpTool('kameleoon_generate_sdk_snippet', { key: cmd.code });
         } else {
-          // Direct tool call for Lot 1
           result = await callMcpTool(cmd.code, {});
         }
 
-        setCode(prev => prev + `\n// Result: ${cmd.description}\n` + result + '\n');
+        // Append Command Name + Result to Editor
+        const commandDisplay = `// > Command: ${cmd.name}`;
+
+        setCode(prev => prev + `\n${commandDisplay}\n` + result + '\n');
         setSuggestions([]);
         setLoading(false);
       };
@@ -347,33 +345,42 @@ Recommendation: Archive 5 unused flags to save ~4KB.`
           {/* Sidebar */}
           <div className="w-64 bg-[#252526] border-r border-[#333] flex flex-col">
             <div className="p-4 border-b border-[#333]">
-              <h1 className="font-semibold text-white font-sans">Kameleoon MCP</h1>
+              <div className="flex items-center justify-between">
+                <h1 className="font-semibold text-white font-sans">Kameleoon MCP</h1>
+                <span className="text-[10px] bg-blue-900 text-blue-200 px-1.5 rounded">v1.2</span>
+              </div>
               <div className="text-xs text-green-400 mt-1 flex items-center gap-1">
                 <span className="w-2 h-2 rounded-full bg-green-400"></span>
                 Connected to localhost:3001
               </div>
             </div>
             <div className="flex-1 overflow-y-auto p-4 space-y-4">
-              <div className="text-xs text-gray-500 uppercase">Lot 0 (MVP)</div>
-              <div className="space-y-1">
-                {['list_feature_flags', 'get_feature_flag', 'search_flags'].map(t => (
-                  <div key={t} className="flex items-center gap-2 text-gray-400 hover:text-white cursor-pointer py-1"
-                    onClick={() => executeCommand({ name: t, code: t, confidence: "MVP", description: t })}>
-                    <span className="text-blue-400">ƒ</span>
-                    <span>{t}</span>
-                  </div>
-                ))}
+              {/* Available Tools List */}
+
+              <div>
+                <div className="text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-2">Feature Flags (Lot 0)</div>
+                <div className="space-y-1">
+                  {MVP_MOCK_DATA.map(t => (
+                    <div key={t.name} className="flex items-center gap-2 text-gray-400 hover:text-white hover:bg-[#37373d] p-1 rounded cursor-pointer transition-colors"
+                      onClick={() => executeCommand(t)}>
+                      <span className="text-blue-400 text-xs">ƒ</span>
+                      <span className="truncate" title={t.name}>{t.name}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
 
-              <div className="text-xs text-gray-500 uppercase mt-4">Lot 1 (Prod)</div>
-              <div className="space-y-1">
-                {LOT_1_MOCK_DATA.suggestions.map(t => (
-                  <div key={t.name} className="flex items-center gap-2 text-gray-400 hover:text-white cursor-pointer py-1"
-                    onClick={() => executeCommand(t)}>
-                    <span className="text-purple-400">⚡</span>
-                    <span>{t.name}</span>
-                  </div>
-                ))}
+              <div>
+                <div className="text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-2">Production (Lot 1)</div>
+                <div className="space-y-1">
+                  {LOT_1_MOCK_DATA.suggestions.map(t => (
+                    <div key={t.name} className="flex items-center gap-2 text-gray-400 hover:text-white hover:bg-[#37373d] p-1 rounded cursor-pointer transition-colors"
+                      onClick={() => executeCommand(t)}>
+                      <span className="text-purple-400 text-xs">⚡</span>
+                      <span className="truncate" title={t.name}>{t.name}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
 
