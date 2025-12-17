@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prototype Gallery</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="app-container">
+        <header>
+            <div class="logo">
+                <span class="logo-icon">✨</span>
+                <h1>Prototypes</h1>
+            </div>
+            <p class="subtitle">Click on a prototype to view it in action</p>
+        </header>
+
+        <main>
+            <div id="gallery-grid" class="gallery-grid">
+                <!-- Prototypes will be injected here by script.js -->
+            </div>
+        </main>
+
+        <!-- Viewer Modal -->
+        <div id="viewer-modal" class="viewer-modal hidden">
+            <div class="viewer-header">
+                <h2 id="viewer-title">Prototype Title</h2>
+                <div class="viewer-controls">
+                    <button id="close-viewer" class="icon-btn" aria-label="Close">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <div class="viewer-content">
+                <iframe id="prototype-frame" src="" frameborder="0"></iframe>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+
+</html>

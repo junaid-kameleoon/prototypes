@@ -1,0 +1,65 @@
+Scope,Action,Automation API Endpoint,Phase
+Feature Flag,List feature flags,Get all feature flags,Lot 0 (MVP)
+Feature Flag,Get a feature flag,Get a feature flag configuration,Lot 0 (MVP)
+Feature Flag,Search flags,Search feature flags,Lot 0 (MVP)
+Feature Flag,View activity logs,Get feature activity logs,Lot 0 (MVP)
+Feature Flag,Request results,Request feature flag’s results,Lot 0 (MVP)
+Feature Flag,Create feature flag,Create new feature flag configuration,Lot 1
+Feature Flag,Duplicate feature flag,Duplicate a feature flag configuration,Lot 1
+Feature Flag,Partial update,Update a feature flag configuration,Lot 1
+Feature Flag,Update rule by ID,Update a single rule by id,Lot 1
+Feature Flag,Update for environment,Update a feature flag configuration for a specific environment,Lot 1
+Feature Flag,Delete feature flag,Delete a feature flag configuration,Lot 2
+Feature Flag,Share results,Share feature flag results,Lot 2
+Feature Flag,Bulk cleanup / tagging,(Grouped operation using partial updates),Lot 2
+Experiment,List experiments,Get all experiments,Lot 1
+Experiment,Get experiment,Get an experiment,Lot 1
+Experiment,Export experiment list,Export experiments,Lot 1
+Experiment,Request experiment results,Request experiment’s results,Lot 1
+Experiment,Export results,Export experiment results,Lot 1
+Experiment,Run opportunity detection,Run opportunity detection,Lot 1
+Experiment,Share new results UI,Share experiment new result page UI,Lot 1
+Experiment,Create experiment,Create a new experiment,Lot 1
+Experiment,Duplicate experiment,Duplicate an experiment,Lot 1
+Experiment,Partial update,Partially update experiment,Lot 1
+Experiment,Full update,Update experiment,Lot 2
+Experiment,Delete experiment,Delete experiment,Lot 2
+Experiment,Share experiment results,Share experiment results,Lot 2
+Experiment,Bulk archive / cleanup,(Grouped via update/delete),Lot 2
+Goal (Metric),List goals,Get all goals,Lot 1
+Goal,Search goals,Search goals,Lot 1
+Goal,Get goal,Get a goal,Lot 1
+Goal,Export goals,Export goals,Lot 1
+Goal,Create goal,Create a new goal,Lot 1
+Goal,Partial update,Partially update goal,Lot 1
+Goal,Update goal,Update goal,Lot 1
+Goal,Delete goal,Delete goal,Lot 2
+Custom Data,List custom data,Get all custom data,Lot 1
+Custom Data,Get custom data,Get a custom data,Lot 1
+Custom Data,Create custom data,Create new custom data,Lot 1
+Custom Data,Partial update,Partially update custom data,Lot 1
+Custom Data,Update custom data,Update custom data,Lot 1
+Custom Data,Delete custom data,Delete custom data,Lot 2
+Site,List sites,Get all sites,Lot 1
+Site,Get site,Get a site,Lot 1
+Site,Get site by code,Get a site by code,Lot 1
+Site,Get original file hash,Get a hash code of the contents of the original application file,Lot 1
+Site,Create site,Create new site,Lot 1
+Site,Partial update,Partially update site,Lot 1
+Site,Update site,Update site,Lot 1
+Site,Delete site,Delete site,Lot 2
+Account,List accounts,Get all accounts,Lot 1
+Account,Get account,Get an account,Lot 1
+Account,Create account,Create new account,Lot 1
+Account,Partial update,Partially update account,Lot 1
+Account,Update account,Update an account,Lot 2
+Account,Delete account,Delete an account,Lot 2
+AI Utility,Search docs,Search Kameleoon documentation,Lot 1
+AI Utility,Summaries,AI summaries of flags/experiments/goals (no endpoint),Lot 1
+AI Utility,Suggest experiment defaults,"(AI-generated, no endpoint)",Lot 1
+AI Utility,Generate SDK snippet,(AI-generated),Lot 1
+AI Utility,Detect stale flags,(Derived from list + config),Lot 2
+AI Utility,Experiment insights,(Derived from results),Lot 2
+AI Utility,Suggest cleanup,(Derived from stale detection),Lot 2
+AI Utility,Code intelligence,(No endpoint),Lot 3
+AI Utility,Predictive experiment templates,(No endpoint),Lot 3

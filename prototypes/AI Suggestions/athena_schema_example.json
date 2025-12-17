@@ -1,0 +1,205 @@
+{
+  "pages": [
+    {
+      "id": "page_checkout",
+      "url": "https://www.acmerun.com/checkout",
+      "type": "Checkout",
+      "title": "Acme Run | Checkout",
+      "hypotheses": [
+        {
+          "id": "hyp_checkout_flow",
+          "master_lever": "Usability",
+          "lever": "User Flow",
+          "sub_lever": "Friction",
+          "name": "Simplifying the checkout flow will reduce cart abandonment",
+          "description": "If we reduce friction in the checkout flow, fewer users will abandon their cart at the payment step.",
+          "evidence": {
+            "insight": "Users drop mainly on the payment step where the form feels long and complex.",
+            "ux_observations": [
+              {
+                "id": "ux_obs_1",
+                "name": "Long form fields",
+                "description": "The payment form has 12 fields, many of which are optional but not marked as such."
+              }
+            ],
+            "best_practices": [
+              {
+                "name": "Single-page checkout",
+                "description": "Reduces cognitive load by showing the finish line."
+              }
+            ]
+          },
+          "experiments": [
+            {
+              "id": "exp_single_page",
+              "name": "Single-page checkout redesign",
+              "description": "Consolidate the multi-step checkout into a single, streamlined page with clearer hierarchy.",
+              "component": {
+                "name": "Checkout form",
+                "description": "The main checkout form including contact, shipping, billing and payment details."
+              },
+              "score": 8.3,
+              "evidence": {
+                "insight": "Shorter, single-page checkouts reduce perceived effort and increase completion."
+              },
+              "variations": [
+                {
+                  "id": "var_single_column",
+                  "name": "Single-page layout",
+                  "description": "Merge all checkout steps into one page with a clear single-column layout."
+                }
+              ]
+            },
+            {
+              "id": "exp_guest_checkout",
+              "name": "Guest checkout option",
+              "description": "Add a clear 'Continue as guest' option before login to reduce friction for first-time buyers.",
+              "component": {
+                "name": "Account step",
+                "description": "The area where users are required to log in or create an account."
+              },
+              "score": 7.8,
+              "evidence": {
+                "insight": "Forced account creation is a known abandonment driver for first-time customers."
+              },
+              "variations": [
+                {
+                  "id": "var_guest_button",
+                  "name": "Primary 'Continue as guest' button",
+                  "description": "Show a primary 'Continue as guest' CTA next to secondary login options."
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "page_home",
+      "url": "https://www.acmerun.com/",
+      "type": "Homepage",
+      "title": "Acme Run | Performance running shoes",
+      "hypotheses": [
+        {
+          "id": "hyp_home_hero",
+          "master_lever": "Comprehension",
+          "lever": "Value proposition",
+          "sub_lever": "Clarity",
+          "name": "Clarifying the hero value prop will increase product exploration",
+          "description": "If we clarify what Acme Run sells and why it matters, new visitors will more quickly understand the offering.",
+          "evidence": {
+            "insight": "When the hero copy clearly communicates the product and value proposition, users understand the page faster.",
+            "ux_observations": [
+              {
+                "id": "ux_obs_hero_1",
+                "name": "Vague headline",
+                "description": "Current headline 'Run Fast' is too generic and doesn't explain the technology."
+              }
+            ]
+          },
+          "experiments": [
+            {
+              "id": "exp_hero_messaging",
+              "name": "Strengthen hero messaging",
+              "description": "Rework the hero headline and supporting copy to clearly state that Acme Run sells performance running shoes.",
+              "component": {
+                "name": "Hero section",
+                "description": "The above-the-fold hero banner containing headline, subtext, imagery and main call-to-action."
+              },
+              "score": 8.1,
+              "evidence": {
+                "insight": "When the hero communicates a clear product and value message, users understand the brand faster."
+              },
+              "variations": [
+                {
+                  "id": "var_direct_headline",
+                  "name": "Direct product headline",
+                  "description": "Replace the abstract hero headline with a direct product-focused statement."
+                },
+                {
+                  "id": "var_emotional_headline",
+                  "name": "Emotional benefit headline",
+                  "description": "Focus on the feeling of running effortlessly."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "hyp_social_proof",
+          "master_lever": "Motivation",
+          "lever": "Social Proof",
+          "sub_lever": "Authority",
+          "name": "Adding expert reviews will increase trust",
+          "description": "Displaying logos of running magazines and quotes from athletes will build credibility.",
+          "evidence": {
+            "insight": "Users are skeptical of new shoe brands without third-party validation."
+          },
+          "experiments": [
+            {
+              "id": "exp_media_logos",
+              "name": "Add 'As Seen In' banner",
+              "description": "Insert a banner below the hero with logos from Runner's World, Men's Health, etc.",
+              "component": {
+                "name": "Trust Bar",
+                "description": "A horizontal strip of logos."
+              },
+              "score": 7.5,
+              "evidence": {
+                "insight": "Recognizable logos act as a trust heuristic."
+              },
+              "variations": [
+                {
+                  "id": "var_logos_grayscale",
+                  "name": "Grayscale logos",
+                  "description": "Subtle, monochrome logos to not distract from the hero."
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "page_pdp",
+      "url": "https://www.acmerun.com/products/velocity-nitro",
+      "type": "Product Detail",
+      "title": "Velocity Nitro | Men's Running Shoe",
+      "hypotheses": [
+        {
+          "id": "hyp_size_guide",
+          "master_lever": "Anxiety",
+          "lever": "Fit Uncertainty",
+          "sub_lever": "Sizing",
+          "name": "Improving size guide visibility will reduce return rate",
+          "description": "Many users abandon PDPs because they are unsure if the shoe fits true to size.",
+          "evidence": {
+            "insight": "Fit is the #1 concern for online shoe buyers."
+          },
+          "experiments": [
+            {
+              "id": "exp_size_recommender",
+              "name": "AI Size Recommender",
+              "description": "Add a 'What's my size?' button that opens a quiz.",
+              "component": {
+                "name": "Size Selector",
+                "description": "The area where users pick their shoe size."
+              },
+              "score": 9.2,
+              "evidence": {
+                "insight": "Personalized sizing recommendations significantly increase conversion."
+              },
+              "variations": [
+                {
+                  "id": "var_quiz_modal",
+                  "name": "Quiz Modal",
+                  "description": "A 3-step quiz asking about current shoe brands."
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
