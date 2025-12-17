@@ -97,72 +97,159 @@
           data: {
             key: "new_checkout_v2",
             name: "New Checkout Flow V2",
+            description: "Redesigned checkout with 1-click purchase option",
+            tags: ["checkout", "payment", "q4-initiative"],
             status: "active",
             environment: "production",
-            variations: ["on", "off"]
+            variations: [
+              { id: 1, name: "Control", traffic: 50 },
+              { id: 2, name: "One-Click V1", traffic: 25 },
+              { id: 3, name: "One-Click V2", traffic: 25 }
+            ]
           },
           message: "✅ Feature Flag 'new_checkout_v2' created successfully."
         },
         wrap_code_in_flag: {
           snippet: `// Wrapped in Feature Flag: new_checkout_v2
+// ----------------------------------------
 if (kameleoon.isFeatureActive("new_checkout_v2")) {
-    // New Implementation
-    renderNewCheckout();
+    console.log("Rendering New Checkout V2");
+    
+    // Feature: One-Click Checkout
+    return (
+        <div className="checkout-v2-container">
+            <OneClickButton productId={properties.productId} />
+            <OrderSummary compact={true} />
+        </div>
+    );
 } else {
-    // Original Implementation
-    renderLegacyCheckout();
+    console.log("Rendering Legacy Checkout");
+    
+    // Fallback: Standard Multi-step
+    return (
+        <div className="checkout-legacy">
+            <StandardForm />
+            <button onClick={submitOrder}>Complete Purchase</button>
+        </div>
+    );
 }`
         },
         get_variant_code: {
-          css: `.checkout-btn { 
-    background-color: #00ff00; 
-    font-weight: bold; 
-    transform: scale(1.1); 
+          css: `/* Variant 2: Sticky Header Blue */
+.header-promo-banner {
+    position: sticky;
+    top: 0;
+    background: linear-gradient(90deg, #1e3a8a 0%, #3b82f6 100%);
+    color: white;
+    z-index: 1000;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.promo-text {
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
 }`,
-          js: `document.querySelector(".checkout-btn").addEventListener("click", () => {
-    trackEvent("checkout_clicked_variant_b");
+          js: `// Variant 2 Logic
+document.addEventListener("DOMContentLoaded", () => {
+    const banner = document.querySelector(".header-promo-banner");
+    if (!banner) return;
+    
+    // Animate on scroll
+    window.addEventListener("scroll", () => {
+        if (window.scrollY > 100) {
+            banner.classList.add("compact");
+        } else {
+            banner.classList.remove("compact");
+        }
+    });
+
+    // Track views
+    kameleoon.trackConversion("promo_banner_view", 1);
 });`
         },
         generate_production_code: {
-          snippet: `import React from 'react';
+          snippet: `/**
+ * Generated Component: CheckoutButton
+ * Source: Experiment 'checkout_redesign' (Var B)
+ */
+import React from 'react';
 import { useFeatureFlag } from '@kameleoon/react-sdk';
+import { trackEvent } from '../utils/analytics';
 
-export const CheckoutButton = () => {
-    const { isEnabled } = useFeatureFlag('checkout_redesign');
+interface CheckoutButtonProps {
+    amount: number;
+    currency: string;
+}
 
-    if (isEnabled) {
+export const CheckoutButton: React.FC<CheckoutButtonProps> = ({ amount, currency }) => {
+    const { isEnabled, variation } = useFeatureFlag('checkout_redesign');
+
+    const handleClick = () => {
+        // Automatically tracks the active variation
+        trackEvent('checkout_click', { amount, variation });
+    };
+
+    if (isEnabled && variation === 'bold_green') {
         return (
-            <button className="bg-green-500 font-bold px-4 py-2 rounded transform hover:scale-105 transition-all">
-                Checkout Now
+            <button 
+                onClick={handleClick}
+                className="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg shadow-lg transform transition hover:-translate-y-0.5"
+            >
+                Pay {currency}{amount} Now
             </button>
         );
     }
 
-    return <button className="bg-blue-500 px-4 py-2 rounded">Checkout</button>;
+    // Default Control
+    return (
+        <button 
+            onClick={handleClick}
+            className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700"
+        >
+            Proceed to Checkout
+        </button>
+    );
 };`
         },
         update_rollout: {
           success: true,
-          previous: "10%",
-          current: "50%",
-          message: "🚀 Rollout for 'checkout_redesign' increased to 50%."
+          flag: "checkout_redesign",
+          environment: "production",
+          changes: {
+            from: "10%",
+            to: "50%"
+          },
+          method: "ramp_up",
+          message: "🚀 Rollout for 'checkout_redesign' increased to 50% on Production."
         },
         check_script_usage: {
-          report: `Health Check Report
--------------------
-Script Size: 24.5 KB (Optimal)
-Active Experiments: 3
-Paused Experiments: 12
-Unused Flags: 5
+          report: `Health Check Report: Kameleoon Bundle
+------------------------------------
+Date: ${new Date().toLocaleDateString()}
+Total Bundle Size: 24.5 KB (Gzipped) - ✅ Optimal
 
-Recommendation: Archive 5 unused flags to save ~4KB.`
+Active Experiments (3):
+  1. [Live] Checkout Redesign (3.2KB)
+  2. [Live] Homepage Hero V2 (1.5KB)
+  3. [Live] Pricing Table Sort (0.8KB)
+
+Paused/Archived but Loaded (5) - ⚠️ ACTION NEEDED:
+  1. [Paused] Summer Sale Banner (Archived 2 months ago)
+  2. [Paused] Black Friday Modal
+  3. [Paused] Test Button Color
+  ... (2 others)
+
+Optimization Opportunity:
+> Archive these 5 flags to remove ~4.2KB of dead code from the bundle.`
         },
         scan_for_cleanup: {
           matches: [
-            { file: "src/components/Header.js", line: 45, code: "if (flags.holiday_banner) { ... }" },
-            { file: "src/utils/pricing.js", line: 12, code: "const useNewAlg = flags.pricing_v2;" }
+            { file: "src/components/Header.js", line: 45, code: "if (flags.holiday_banner) { ... }", status: "DELETED" },
+            { file: "src/utils/pricing.js", line: 12, code: "const useNewAlg = flags.pricing_v2;", status: "ARCHIVED" },
+            { file: "src/pages/Home.js", line: 102, code: "<Hero variant={flags.hero_v1} />", status: "ARCHIVED" }
           ],
-          message: "⚠️ Found 2 references to archived flags."
+          message: "⚠️ Found 3 references to dead feature flags in your codebase."
         }
       }
     };
@@ -355,7 +442,7 @@ Recommendation: Archive 5 unused flags to save ~4KB.`
             <div className="p-4 border-b border-[#333]">
               <div className="flex items-center justify-between">
                 <h1 className="font-semibold text-white font-sans">Kameleoon MCP</h1>
-                <span className="text-[10px] bg-blue-900 text-blue-200 px-1.5 rounded">v1.3</span>
+                <span className="text-[10px] bg-blue-900 text-blue-200 px-1.5 rounded">v1.4</span>
               </div>
               <div className="text-xs text-orange-400 mt-1 flex items-center gap-1">
                 <span className="w-2 h-2 rounded-full bg-orange-400"></span>
@@ -398,7 +485,7 @@ Recommendation: Archive 5 unused flags to save ~4KB.`
           </div>
 
           {/* Main Editor */}
-          <div className="flex-1 flex flex-col bg-[#1e1e1e] relative">
+          <div className="flex-1 flex flex-col bg-[#1e1e1e] relative min-w-0">
             <div className="flex items-center justify-between px-4 py-2 bg-[#2d2d2d] border-b border-[#333]">
               <div className="flex items-center gap-2">
                 <span className="text-white font-sans">index.js</span>
@@ -406,11 +493,11 @@ Recommendation: Archive 5 unused flags to save ~4KB.`
               <a href="../index.html" className="text-xs text-primary hover:underline font-sans">Back to Gallery</a>
             </div>
 
+            {/* Scrollable Container */}
             <div className="flex-1 relative overflow-auto">
-              {/* Editor Container - Simple Overlay approach */}
-              <div className="relative min-h-full">
+              <div className="relative min-h-[calc(100vh-40px)] w-full">
                 {/* Highlighting Layer */}
-                <pre ref={preRef} className="absolute inset-0 m-0 p-4 pointer-events-none text-transparent bg-transparent z-0 overflow-hidden language-javascript"
+                <pre ref={preRef} className="absolute inset-0 m-0 p-4 pointer-events-none text-transparent bg-transparent z-0 language-javascript"
                   style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word', color: 'transparent', fontFamily: 'inherit', fontSize: 'inherit', lineHeight: '1.5' }}></pre>
 
                 {/* Input Layer */}
