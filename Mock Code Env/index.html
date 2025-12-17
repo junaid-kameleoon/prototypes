@@ -215,70 +215,73 @@ Recommendation: Archive 5 unused flags to save ~4KB.`
 
     // Bridge Client
     const callMcpTool = async (name, args = {}) => {
-      try {
-        // Try connecting to local server
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 1000); // 1s timeout
+      // FORCE MOCK MODE: Skip local server connection
+      // try {
+      //   // Try connecting to local server
+      //   const controller = new AbortController();
+      //   const timeoutId = setTimeout(() => controller.abort(), 1000); // 1s timeout
 
-        const response = await fetch('http://localhost:3001/mcp', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            method: 'tools/call',
-            params: { name, arguments: args }
-          }),
-          signal: controller.signal
-        });
-        clearTimeout(timeoutId);
+      //   const response = await fetch('http://localhost:3001/mcp', {
+      //     method: 'POST',
+      //     headers: { 'Content-Type': 'application/json' },
+      //     body: JSON.stringify({
+      //       method: 'tools/call',
+      //       params: { name, arguments: args }
+      //     }),
+      //     signal: controller.signal
+      //   });
+      //   clearTimeout(timeoutId);
 
-        const data = await response.json();
-        return data.result.content[0].text;
-      } catch (err) {
-        console.warn('MCP connection failed, using mock fallback:', err);
+      //   const data = await response.json();
+      //   return data.result.content[0].text;
+      // } catch (err) {
+      //   console.warn('MCP connection failed, using mock fallback:', err);
+      // }
 
-        // --- LOT 0 (MVP) FALLBACKS ---
-        if (name === 'kameleoon_predictive_templates') {
-          const mvpSuggestions = MVP_MOCK_DATA;
-          const lot1Suggestions = LOT_1_MOCK_DATA.suggestions;
-          return JSON.stringify([...mvpSuggestions, ...lot1Suggestions]);
-        }
+      console.log('Mock Mode: Intercepting tool call', name);
 
-        if (name === 'kameleoon_generate_sdk_snippet') {
-          const key = args.key || 'generic';
-          // Lot 0 Snippets
-          if (key === 'list_feature_flags') return `// List all feature flags\nconst flags = await kameleoon.getFeatureFlags();\nconsole.table(flags);`;
-          if (key === 'get_feature_flag') return `// Get details for a specific flag\nconst flagKey = "cart_abandonment_promo";\nconst config = await kameleoon.getFeatureFlag(flagKey);\nconsole.log("Flag Config:", config);`;
-          if (key === 'search_flags') return `// Search for flags\nconst query = "header";\nconst results = await kameleoon.searchFlags(query);\nconsole.log(\`Found \${results.length} flags matching "\${query}"\`);`;
-          if (key === 'view_activity_logs') return `// View activity logs\nconst logs = await kameleoon.getFlagActivity("new_checkout_flow");\nconsole.table(logs);`;
-          if (key === 'request_results') return `// Request results\nconst results = await kameleoon.getExperimentResults("pricing_page_v2");\nconsole.log(results);`;
-
-          return `// Generic Kameleoon SDK Snippet\nconsole.log("Kameleoon SDK initialized for experiment: ${key}");`;
-        }
-
-        // --- LOT 1 (LOT 1) FALLBACKS ---
-        if (Object.keys(LOT_1_MOCK_DATA.responses).includes(name)) {
-          const mock = LOT_1_MOCK_DATA.responses[name];
-
-          // Format response based on type
-          if (mock.snippet) return mock.snippet;
-
-          if (mock.css || mock.js) {
-            return `/* CSS */\n${mock.css}\n\n// JavaScript\n${mock.js}`;
-          }
-
-          if (mock.report) return mock.report;
-
-          if (mock.matches) {
-            return mock.message + "\n" + JSON.stringify(mock.matches, null, 2);
-          }
-
-          if (mock.success) {
-            return `${mock.message}\n` + JSON.stringify(mock.data || {}, null, 2);
-          }
-        }
-
-        return `Error: Unknown tool ${name}`;
+      // --- LOT 0 (MVP) FALLBACKS ---
+      if (name === 'kameleoon_predictive_templates') {
+        const mvpSuggestions = MVP_MOCK_DATA;
+        const lot1Suggestions = LOT_1_MOCK_DATA.suggestions;
+        return JSON.stringify([...mvpSuggestions, ...lot1Suggestions]);
       }
+
+      if (name === 'kameleoon_generate_sdk_snippet') {
+        const key = args.key || 'generic';
+        // Lot 0 Snippets
+        if (key === 'list_feature_flags') return `// List all feature flags\nconst flags = await kameleoon.getFeatureFlags();\nconsole.table(flags);`;
+        if (key === 'get_feature_flag') return `// Get details for a specific flag\nconst flagKey = "cart_abandonment_promo";\nconst config = await kameleoon.getFeatureFlag(flagKey);\nconsole.log("Flag Config:", config);`;
+        if (key === 'search_flags') return `// Search for flags\nconst query = "header";\nconst results = await kameleoon.searchFlags(query);\nconsole.log(\`Found \${results.length} flags matching "\${query}"\`);`;
+        if (key === 'view_activity_logs') return `// View activity logs\nconst logs = await kameleoon.getFlagActivity("new_checkout_flow");\nconsole.table(logs);`;
+        if (key === 'request_results') return `// Request results\nconst results = await kameleoon.getExperimentResults("pricing_page_v2");\nconsole.log(results);`;
+
+        return `// Generic Kameleoon SDK Snippet\nconsole.log("Kameleoon SDK initialized for experiment: ${key}");`;
+      }
+
+      // --- LOT 1 (LOT 1) FALLBACKS ---
+      if (Object.keys(LOT_1_MOCK_DATA.responses).includes(name)) {
+        const mock = LOT_1_MOCK_DATA.responses[name];
+
+        // Format response based on type
+        if (mock.snippet) return mock.snippet;
+
+        if (mock.css || mock.js) {
+          return `/* CSS */\n${mock.css}\n\n// JavaScript\n${mock.js}`;
+        }
+
+        if (mock.report) return mock.report;
+
+        if (mock.matches) {
+          return mock.message + "\n" + JSON.stringify(mock.matches, null, 2);
+        }
+
+        if (mock.success) {
+          return `${mock.message}\n` + JSON.stringify(mock.data || {}, null, 2);
+        }
+      }
+
+      return `Error: Unknown tool ${name}`;
     };
 
     function App() {
@@ -324,11 +327,16 @@ Recommendation: Archive 5 unused flags to save ~4KB.`
         setLoading(true);
         addLog(`Executing: ${cmd.name}`);
 
+        // Determine if we use the generic snippet tool or the specific Lot 1 tool name
+        // For Lot 0, we mapped them to generating snippets. For Lot 1, we treat them as direct tool calls.
+
         let result = "";
 
         if (cmd.confidence === "MVP") {
+          // Use existing snippet generation for MVP ops
           result = await callMcpTool('kameleoon_generate_sdk_snippet', { key: cmd.code });
         } else {
+          // Direct tool call for Lot 1
           result = await callMcpTool(cmd.code, {});
         }
 
@@ -347,11 +355,11 @@ Recommendation: Archive 5 unused flags to save ~4KB.`
             <div className="p-4 border-b border-[#333]">
               <div className="flex items-center justify-between">
                 <h1 className="font-semibold text-white font-sans">Kameleoon MCP</h1>
-                <span className="text-[10px] bg-blue-900 text-blue-200 px-1.5 rounded">v1.2</span>
+                <span className="text-[10px] bg-blue-900 text-blue-200 px-1.5 rounded">v1.3</span>
               </div>
-              <div className="text-xs text-green-400 mt-1 flex items-center gap-1">
-                <span className="w-2 h-2 rounded-full bg-green-400"></span>
-                Connected to localhost:3001
+              <div className="text-xs text-orange-400 mt-1 flex items-center gap-1">
+                <span className="w-2 h-2 rounded-full bg-orange-400"></span>
+                Mock Mode Active
               </div>
             </div>
             <div className="flex-1 overflow-y-auto p-4 space-y-4">
