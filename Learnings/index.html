@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kameleoon - Learnings Prototype v4</title>
+    <title>Kameleoon - Learnings Prototype v5</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -27,11 +27,28 @@
             font-family: 'Inter', sans-serif;
             background-color: var(--background);
             color: var(--text);
-            overflow-y: auto; /* Enable page scroll */
+            overflow-y: auto;
         }
 
         .tab-active { color: var(--primary); border-bottom: 2px solid var(--primary); }
         
+        .sub-tab {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #6b7280;
+            cursor: pointer;
+            padding-bottom: 6px;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
+        }
+        .sub-tab:hover { color: #374151; }
+        .sub-tab.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
         .learning-card {
             transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
@@ -41,13 +58,31 @@
             transform: translateY(-2px);
         }
 
-        /* lucide icons sizing */
+        /* Lucide icon sizing */
         .icon-xs { width: 0.75rem; height: 0.75rem; }
         .icon-sm { width: 0.875rem; height: 0.875rem; }
         .icon-md { width: 1.125rem; height: 1.125rem; }
         .icon-lg { width: 1.5rem; height: 1.5rem; }
 
-        /* Custom scrollbar for better density */
+        /* Smooth reveal for cards */
+        [data-learning-group] {
+            display: none;
+            grid-template-columns: repeat(1, minmax(0, 1fr));
+            gap: 1.5rem;
+        }
+        @media (min-width: 768px) { [data-learning-group] { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+        @media (min-width: 1024px) { [data-learning-group] { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+
+        [data-learning-group].active {
+            display: grid;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #e5e7eb; border-radius: 10px; }
@@ -76,10 +111,10 @@
 </head>
 <body class="bg-background min-h-screen">
 
-    <!-- Top Bar (Full Width) -->
+    <!-- Top Bar -->
     <header class="h-14 bg-white border-b border-gray-200 flex items-center justify-between px-6 shadow-sm sticky top-0 z-50">
         <div class="flex items-center gap-4">
-            <div class="w-8 h-8 rounded bg-primary flex items-center justify-center font-bold text-white italic">K</div>
+            <div class="w-8 h-8 rounded bg-primary flex items-center justify-center font-bold text-white italic shadow-md">K</div>
             <div class="flex items-center gap-2 overflow-hidden border-l border-gray-200 pl-4">
                 <span class="text-sm font-semibold truncate text-gray-900">[FNAC FR] [DESKTOP] [FA] Slider iPad 15/12</span>
                 <span class="bg-gray-100 text-[10px] px-1.5 py-0.5 rounded text-gray-500 font-mono">354285</span>
@@ -98,7 +133,7 @@
         </div>
     </header>
 
-    <!-- Tabs Navigation (Sticky) -->
+    <!-- Navigation -->
     <nav class="bg-white border-b border-gray-200 px-6 flex gap-8 sticky top-14 z-40 shadow-sm">
         <div class="py-3 text-[11px] font-bold text-gray-400 cursor-pointer hover:text-gray-600 transition-colors uppercase tracking-wider">Overview</div>
         <div class="py-3 text-[11px] font-bold text-gray-400 cursor-pointer hover:text-gray-600 transition-colors uppercase tracking-wider">Health</div>
@@ -107,287 +142,157 @@
         <div class="py-3 text-[11px] font-bold text-gray-400 cursor-pointer hover:text-gray-600 transition-colors uppercase tracking-wider">Activity</div>
     </nav>
 
-    <!-- Main Content Container -->
+    <!-- Content Area -->
     <main class="w-full max-w-6xl mx-auto p-6 space-y-8">
         
-        <!-- Hypothesis Section (Validated Banner) -->
-        <section>
-            <div class="bg-green-50 border border-green-200 rounded-lg p-5 flex items-start gap-4 shadow-sm relative overflow-hidden">
-                <div class="flex-shrink-0 w-10 h-10 rounded-full bg-green-500 flex items-center justify-center text-white shadow-lg">
-                    <i data-lucide="check-check" class="icon-lg"></i>
-                </div>
-                <div class="flex-1 min-w-0">
-                    <div class="flex items-center justify-between mb-1">
-                        <div class="flex items-center gap-2">
-                            <span class="text-[10px] font-extrabold text-green-700 uppercase tracking-[0.2em]">Hypothesis Status</span>
-                            <span class="bg-green-600 text-white text-[9px] font-bold px-2 py-0.5 rounded-full uppercase tracking-tighter">Validated</span>
-                        </div>
-                        <div class="flex items-center gap-3">
-                            <div class="text-[11px] font-bold text-green-700">98.2% Confidence Level</div>
-                            <div class="w-24 h-1.5 bg-green-200 rounded-full overflow-hidden">
-                                <div class="h-full bg-green-600 w-[98.2%]"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <h2 class="text-base font-semibold text-green-900 leading-snug">
-                        "Implementing a sticky 'Add to Cart' button for high-value iPads will increase conversion because the CTA remains accessible at all scroll points."
-                    </h2>
-                </div>
+        <!-- Hypothesis -->
+        <div class="bg-green-50 border border-green-200 rounded-lg p-5 flex items-start gap-4 shadow-sm">
+            <div class="flex-shrink-0 w-10 h-10 rounded-full bg-green-500 flex items-center justify-center text-white shadow-lg">
+                <i data-lucide="check-check" class="icon-lg"></i>
             </div>
-        </section>
-
-        <!-- Insights & Recommendations Grid -->
-        <section class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <!-- Statistical Insights -->
-            <div class="bg-white border border-gray-200 rounded-lg p-5 shadow-sm hover:border-blue-200 transition-colors">
-                <div class="flex items-center gap-3 mb-4">
-                    <div class="w-8 h-8 rounded-md bg-blue-50 text-blue-600 flex items-center justify-center">
-                        <i data-lucide="zap" class="icon-md"></i>
+            <div class="flex-1 min-w-0">
+                <div class="flex items-center justify-between mb-1">
+                    <div class="flex items-center gap-2">
+                        <span class="text-[10px] font-extrabold text-green-700 uppercase tracking-[0.2em]">Hypothesis Status</span>
+                        <span class="bg-green-600 text-white text-[9px] font-bold px-2 py-0.5 rounded-full uppercase">Validated</span>
                     </div>
+                </div>
+                <h2 class="text-base font-semibold text-green-900 leading-snug">
+                    "Implementing a sticky 'Add to Cart' button for high-value iPads will increase conversion because the CTA remains accessible at all scroll points."
+                </h2>
+            </div>
+        </div>
+
+        <!-- Insights -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="bg-white border border-gray-200 rounded-lg p-5 shadow-sm">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-8 h-8 rounded-md bg-blue-50 text-blue-600 flex items-center justify-center"><i data-lucide="zap" class="icon-md"></i></div>
                     <h3 class="text-xs font-bold text-gray-900 uppercase tracking-widest font-mono">Statistical Insights</h3>
                 </div>
                 <ul class="space-y-3">
-                    <li class="flex items-start gap-3">
-                        <i data-lucide="trending-up" class="icon-sm text-green-500 mt-0.5 flex-shrink-0"></i>
-                        <p class="text-[12px] text-gray-700 leading-normal">
-                            <strong>Winning Variation:</strong> Variation B (Sticky CTA) outperformed Control by <strong>+5.4%</strong> in Add-to-Cart rate with 99% significance.
-                        </p>
-                    </li>
-                    <li class="flex items-start gap-3">
-                        <i data-lucide="shield-check" class="icon-sm text-blue-400 mt-0.5 flex-shrink-0"></i>
-                        <p class="text-[12px] text-gray-700 leading-normal">
-                            <strong>Data Reliability:</strong> Sample Ratio Mismatch (SRM) check passed (p-value: 0.88). Traffic was evenly distributed (49.9% vs 50.1%).
-                        </p>
-                    </li>
-                    <li class="flex items-start gap-3">
-                        <i data-lucide="bar-chart-3" class="icon-sm text-purple-400 mt-0.5 flex-shrink-0"></i>
-                        <p class="text-[12px] text-gray-700 leading-normal">
-                            <strong>Confidence Interval:</strong> The uplift is estimated between [+3.2%, +7.6%]. Result is stable across segments.
-                        </p>
-                    </li>
+                    <li class="flex items-start gap-3"><i data-lucide="trending-up" class="icon-sm text-green-500 mt-0.5"></i><p class="text-[12px] text-gray-700 leading-normal"><strong>Winning Variation:</strong> Variation B outperformed Control by <strong>+5.4%</strong>.</p></li>
+                    <li class="flex items-start gap-3"><i data-lucide="shield-check" class="icon-sm text-blue-400 mt-0.5"></i><p class="text-[12px] text-gray-700 leading-normal"><strong>Data Reliability:</strong> SRM check passed (p-value: 0.88).</p></li>
                 </ul>
             </div>
-
-            <!-- Next Actions -->
-            <div class="bg-white border border-gray-200 rounded-lg p-5 shadow-sm hover:border-green-200 transition-colors">
+            <div class="bg-white border border-gray-200 rounded-lg p-5 shadow-sm">
                 <div class="flex items-center gap-3 mb-4">
-                    <div class="w-8 h-8 rounded-md bg-green-50 text-green-600 flex items-center justify-center">
-                        <i data-lucide="map" class="icon-md"></i>
-                    </div>
+                    <div class="w-8 h-8 rounded-md bg-green-50 text-green-600 flex items-center justify-center"><i data-lucide="map" class="icon-md"></i></div>
                     <h3 class="text-xs font-bold text-gray-900 uppercase tracking-widest">Next Actions</h3>
                 </div>
                 <ul class="space-y-3">
-                    <li class="flex items-start gap-3">
-                        <i data-lucide="arrow-right-circle" class="icon-sm text-green-600 mt-0.5 flex-shrink-0"></i>
-                        <p class="text-[12px] text-gray-700 leading-normal">
-                            <strong>Deployment:</strong> 100% rollout recommended for iPad and Tablet users via the primary configuration.
-                        </p>
-                    </li>
-                    <li class="flex items-start gap-3">
-                        <i data-lucide="flask-round" class="icon-sm text-amber-500 mt-0.5 flex-shrink-0"></i>
-                        <p class="text-[12px] text-gray-700 leading-normal">
-                            <strong>Iterative Testing:</strong> Conduct a follow-up test specifically on mobile browsers with differing contrast ratios.
-                        </p>
-                    </li>
-                    <li class="flex items-start gap-3">
-                        <i data-lucide="database" class="icon-sm text-gray-400 mt-0.5 flex-shrink-0"></i>
-                        <p class="text-[12px] text-gray-700 leading-normal">
-                            <strong>Repository Update:</strong> Behavior logged as a certified fact for the 'Consumer Electronics' segment.
-                        </p>
-                    </li>
+                    <li class="flex items-start gap-3"><i data-lucide="arrow-right-circle" class="icon-sm text-green-600 mt-0.5"></i><p class="text-[12px] text-gray-700 leading-normal"><strong>Deployment:</strong> 100% rollout recommended for iPad users.</p></li>
+                    <li class="flex items-start gap-3"><i data-lucide="flask-round" class="icon-sm text-amber-500 mt-0.5"></i><p class="text-[12px] text-gray-700 leading-normal"><strong>Iterative Testing:</strong> Conduct a follow-up test on mobile contrast.</p></li>
                 </ul>
             </div>
-        </section>
+        </div>
 
-        <!-- Learnings Repository (Categorized Flashcards) -->
+        <!-- Repository -->
         <section class="pt-4 pb-12">
-            <div class="flex items-end justify-between mb-8 border-b border-gray-200 pb-3">
-                <div>
-                    <h2 class="text-xl font-bold text-gray-900 flex items-center gap-2">
-                        <i data-lucide="library" class="icon-md text-primary"></i>
-                        Learnings Repository
-                    </h2>
-                    <p class="text-xs text-gray-500 mt-1">Established business patterns and novel discoveries derived from your experimentation history.</p>
+            <div class="flex flex-col gap-6 mb-8 border-b border-gray-200 pb-3">
+                <div class="flex items-end justify-between w-full">
+                    <div>
+                        <h2 class="text-xl font-bold text-gray-900 flex items-center gap-2">
+                            <i data-lucide="library" class="icon-md text-primary"></i>
+                            Learnings Repository
+                        </h2>
+                        <p class="text-xs text-gray-500 mt-1">Established business patterns and novel discoveries from history.</p>
+                    </div>
+                    <button class="bg-primary text-white text-[11px] font-bold px-4 py-2 rounded-md hover:bg-primary-hover shadow-sm flex items-center gap-2">
+                        <i data-lucide="plus" class="icon-sm"></i> NEW LEARNING
+                    </button>
                 </div>
-                <button class="bg-primary text-white text-[11px] font-bold px-4 py-2 rounded-md hover:bg-primary-hover transition-all flex items-center gap-2 shadow-sm">
-                    <i data-lucide="plus" class="icon-sm"></i> NEW LEARNING
-                </button>
+                
+                <!-- Sub-Tabs Navigation -->
+                <div class="flex gap-8">
+                    <div class="sub-tab active" onclick="switchLearningTab('new')">New Discoveries <span class="ml-1 text-[9px] bg-gray-100 px-1.5 py-0.5 rounded-full text-gray-500">3</span></div>
+                    <div class="sub-tab" onclick="switchLearningTab('reinforced')">Reinforced Learnings <span class="ml-1 text-[9px] bg-gray-100 px-1.5 py-0.5 rounded-full text-gray-500">3</span></div>
+                </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- Case A: Reinforced Learning -->
-                <div class="learning-card bg-white border border-gray-200 rounded-md p-5 flex flex-col shadow-sm border-l-4 border-l-blue-500">
-                    <div class="flex items-center justify-between mb-4">
-                        <div class="flex items-center gap-1.5 bg-blue-50 px-2 py-0.5 rounded text-[9px] font-black text-blue-700 uppercase tracking-widest border border-blue-100">
-                            <i data-lucide="check-circle-2" class="icon-xs"></i>
-                            Reinforced Learning
-                        </div>
-                        <span class="text-[9px] text-gray-400 font-bold uppercase tracking-widest">Existing Theme</span>
-                    </div>
-                    <div class="flex-1">
-                        <p class="text-[13px] font-bold text-gray-900 leading-snug mb-4">
-                            "Above-the-fold CTA placement on PDP accounts for 65% of mobile engagement."
-                        </p>
-                        <p class="text-[11px] text-gray-500 leading-relaxed mb-4">
-                            This experiment confirms our previous findings from December. The sticky CTA behaves similarly to static ATF buttons in terms of user intent.
-                        </p>
-                        <div class="space-y-1.5 pt-3 border-t border-gray-100">
-                             <div class="text-[10px] text-blue-600 font-semibold italic flex items-center gap-1">
-                                <i data-lucide="history" class="icon-xs"></i> PREVIOUSLY RECORDED
-                             </div>
-                        </div>
-                    </div>
-                    <div class="mt-5 flex justify-between items-center text-[10px] text-gray-400 font-semibold uppercase tracking-tighter">
-                        <span>Reliability: 96%</span>
-                        <div class="flex gap-2">
-                             <i data-lucide="more-horizontal" class="icon-sm cursor-pointer hover:text-gray-600"></i>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Case B: New Discovery -->
+            <!-- New Discoveries Group -->
+            <div id="group-new" data-learning-group class="active">
                 <div class="learning-card bg-white border border-gray-200 rounded-md p-5 flex flex-col shadow-sm border-l-4 border-l-amber-500">
-                    <div class="flex items-center justify-between mb-4">
-                        <div class="flex items-center gap-1.5 bg-amber-50 px-2 py-0.5 rounded text-[9px] font-black text-amber-700 uppercase tracking-widest border border-amber-100">
-                            <i data-lucide="sparkles" class="icon-xs"></i>
-                            New Discovery
-                        </div>
-                        <span class="text-[9px] text-amber-600 font-bold uppercase tracking-widest">Novel Insight</span>
+                    <div class="flex justify-between mb-4">
+                        <div class="flex items-center gap-1.5 bg-amber-50 px-2 py-0.5 rounded text-[9px] font-black text-amber-700 uppercase border border-amber-100"><i data-lucide="sparkles" class="icon-xs"></i> New Discovery</div>
                     </div>
-                    <div class="flex-1">
-                        <p class="text-[13px] font-bold text-gray-900 leading-snug mb-4">
-                            "Users on tablet devices show 2x higher engagement with micro-animations on the Add-to-Cart button."
-                        </p>
-                        <p class="text-[11px] text-gray-500 leading-relaxed mb-4">
-                            A completely new finding. We previously thought animations were distracting on large screens, but data suggests they act as powerful affordances.
-                        </p>
-                        <div class="space-y-1.5 pt-3 border-t border-gray-100">
-                             <div class="text-[10px] text-amber-600 font-semibold italic flex items-center gap-1">
-                                <i data-lucide="info" class="icon-xs"></i> UNEXPECTED UPLIFT
-                             </div>
-                        </div>
-                    </div>
-                    <div class="mt-5 flex justify-between items-center text-[10px] text-gray-400 font-semibold uppercase tracking-tighter">
-                        <span>Confidence: 91%</span>
-                        <div class="flex gap-2 text-amber-600">
-                             <i data-lucide="star" class="icon-sm cursor-pointer fill-amber-500"></i>
-                             <i data-lucide="more-horizontal" class="icon-sm cursor-pointer hover:text-gray-600 text-gray-400"></i>
-                        </div>
-                    </div>
+                    <p class="text-[13px] font-bold text-gray-900 leading-snug mb-4">"Users on tablet devices show 2x higher engagement with micro-animations."</p>
+                    <p class="text-[11px] text-gray-500 leading-relaxed mb-4">A novel insight highlighting animations as powerful affordances on large touchscreens.</p>
                 </div>
-
-                <!-- Another Reinforced Learning -->
-                <div class="learning-card bg-white border border-gray-200 rounded-md p-5 flex flex-col shadow-sm border-l-4 border-l-blue-500">
-                    <div class="flex items-center justify-between mb-4">
-                        <div class="flex items-center gap-1.5 bg-blue-50 px-2 py-0.5 rounded text-[9px] font-black text-blue-700 uppercase tracking-widest border border-blue-100">
-                            <i data-lucide="check-circle-2" class="icon-xs"></i>
-                            Reinforced Learning
-                        </div>
-                        <span class="text-[9px] text-gray-400 font-bold uppercase tracking-widest">Catalog Wide</span>
-                    </div>
-                    <div class="flex-1">
-                        <p class="text-[13px] font-bold text-gray-900 leading-snug mb-4">
-                            "Guest checkout options reduce cart abandonment by 18% in the electronics category."
-                        </p>
-                        <p class="text-[11px] text-gray-500 leading-relaxed mb-4">
-                            Consistently observed pattern. This experiment on iPad specific flows confirms that friction reduction is device-agnostic for high-value items.
-                        </p>
-                    </div>
-                    <div class="mt-5 flex justify-between items-center text-[10px] text-gray-400 font-semibold uppercase tracking-tighter">
-                        <span>Tests: 8</span>
-                        <i data-lucide="more-horizontal" class="icon-sm cursor-pointer"></i>
-                    </div>
-                </div>
-
-                <!-- More cards to ensure scrollability -->
                 <div class="learning-card bg-white border border-gray-200 rounded-md p-5 flex flex-col shadow-sm border-l-4 border-l-amber-500">
-                    <div class="flex items-center justify-between mb-4">
-                        <div class="flex items-center gap-1.5 bg-amber-50 px-2 py-0.5 rounded text-[9px] font-black text-amber-700 uppercase tracking-widest border border-amber-100">
-                            <i data-lucide="sparkles" class="icon-xs"></i>
-                            New Discovery
-                        </div>
-                        <span class="text-[9px] text-amber-600 font-bold uppercase tracking-widest">Engagement</span>
+                    <div class="flex justify-between mb-4">
+                        <div class="flex items-center gap-1.5 bg-amber-50 px-2 py-0.5 rounded text-[9px] font-black text-amber-700 uppercase border border-amber-100"><i data-lucide="sparkles" class="icon-xs"></i> New Discovery</div>
                     </div>
-                    <div class="flex-1">
-                        <p class="text-[13px] font-bold text-gray-900 leading-snug mb-4">
-                            "Horizontal scrollable product carousels outperform grid lists by 22% for upsells on iOS."
-                        </p>
-                         <p class="text-[11px] text-gray-500 leading-relaxed mb-4">
-                            Mobile specific data suggests swipe gestures are more natural for browsing similar items than vertical scrolling.
-                        </p>
-                    </div>
-                    <div class="mt-5 flex justify-between items-center text-[10px] text-gray-400 font-semibold uppercase tracking-tighter">
-                        <span>New Fact</span>
-                        <i data-lucide="more-horizontal" class="icon-sm cursor-pointer"></i>
-                    </div>
+                    <p class="text-[13px] font-bold text-gray-900 leading-snug mb-4">"Horizontal product carousels outperform grid lists by 22% for upsells on iOS."</p>
+                    <p class="text-[11px] text-gray-500 leading-relaxed mb-4">Swipe gestures are more natural for browsing similar items than vertical scrolling.</p>
                 </div>
+                <div class="learning-card bg-white border border-gray-200 rounded-md p-5 flex flex-col shadow-sm border-l-4 border-l-amber-500">
+                    <div class="flex justify-between mb-4">
+                        <div class="flex items-center gap-1.5 bg-amber-50 px-2 py-0.5 rounded text-[9px] font-black text-amber-700 uppercase border border-amber-100"><i data-lucide="sparkles" class="icon-xs"></i> New Discovery</div>
+                    </div>
+                    <p class="text-[13px] font-bold text-gray-900 leading-snug mb-4">"Voice-to-search usage increased when placed inside the search bar on tablets."</p>
+                    <p class="text-[11px] text-gray-500 leading-relaxed">Discovery: Users holding tablets prefer voice input over thumb typing.</p>
+                </div>
+            </div>
 
+            <!-- Reinforced Learnings Group -->
+            <div id="group-reinforced" data-learning-group>
                 <div class="learning-card bg-white border border-gray-200 rounded-md p-5 flex flex-col shadow-sm border-l-4 border-l-blue-500">
-                    <div class="flex items-center justify-between mb-4">
-                        <div class="flex items-center gap-1.5 bg-blue-50 px-2 py-0.5 rounded text-[9px] font-black text-blue-700 uppercase tracking-widest border border-blue-100">
-                            <i data-lucide="check-circle-2" class="icon-xs"></i>
-                            Reinforced Learning
-                        </div>
+                    <div class="flex justify-between mb-4">
+                        <div class="flex items-center gap-1.5 bg-blue-50 px-2 py-0.5 rounded text-[9px] font-black text-blue-700 uppercase border border-blue-100"><i data-lucide="check-circle-2" class="icon-xs"></i> Reinforced Learning</div>
                     </div>
-                    <div class="flex-1">
-                        <p class="text-[13px] font-bold text-gray-900 leading-snug mb-4">
-                            "Free shipping thresholds prominently displayed at checkout increase AOV by 12%."
-                        </p>
-                        <p class="text-[11px] text-gray-500 leading-relaxed">
-                            Reinforced by latest data from the iPad checkout flow optimization. Standardized pattern for FR market.
-                        </p>
-                    </div>
-                     <div class="mt-5 flex justify-between items-center text-[10px] text-gray-400 font-semibold uppercase tracking-tighter">
-                        <span>Reliability: High</span>
-                        <i data-lucide="more-horizontal" class="icon-sm cursor-pointer"></i>
-                    </div>
+                    <p class="text-[13px] font-bold text-gray-900 leading-snug mb-4">"Above-the-fold CTA placement on PDP accounts for 65% of mobile engagement."</p>
+                    <p class="text-[11px] text-gray-500 leading-relaxed mb-4">This experiment confirms previous findings from December regarding CTA positioning.</p>
                 </div>
-
-                 <div class="learning-card bg-white border border-gray-200 rounded-md p-5 flex flex-col shadow-sm border-l-4 border-l-amber-500">
-                    <div class="flex items-center justify-between mb-4">
-                        <div class="flex items-center gap-1.5 bg-amber-50 px-2 py-0.5 rounded text-[9px] font-black text-amber-700 uppercase tracking-widest border border-amber-100">
-                            <i data-lucide="sparkles" class="icon-xs"></i>
-                            New Discovery
-                        </div>
+                <div class="learning-card bg-white border border-gray-200 rounded-md p-5 flex flex-col shadow-sm border-l-4 border-l-blue-500">
+                    <div class="flex justify-between mb-4">
+                        <div class="flex items-center gap-1.5 bg-blue-50 px-2 py-0.5 rounded text-[9px] font-black text-blue-700 uppercase border border-blue-100"><i data-lucide="check-circle-2" class="icon-xs"></i> Reinforced Learning</div>
                     </div>
-                    <div class="flex-1">
-                        <p class="text-[13px] font-bold text-gray-900 leading-snug mb-4">
-                            "Voice-to-search usage increased when placed inside the search bar on tablet devices."
-                        </p>
-                        <p class="text-[11px] text-gray-500 leading-relaxed">
-                           Discovery: Users holding tablets with two hands prefer voice input over thumb typing for complex product names.
-                        </p>
+                    <p class="text-[13px] font-bold text-gray-900 leading-snug mb-4">"Guest checkout options reduce cart abandonment by 18% in electronics."</p>
+                    <p class="text-[11px] text-gray-500 leading-relaxed mb-4">Consistently observed pattern. Confirms friction reduction is device-agnostic.</p>
+                </div>
+                <div class="learning-card bg-white border border-gray-200 rounded-md p-5 flex flex-col shadow-sm border-l-4 border-l-blue-500">
+                    <div class="flex justify-between mb-4">
+                        <div class="flex items-center gap-1.5 bg-blue-50 px-2 py-0.5 rounded text-[9px] font-black text-blue-700 uppercase border border-blue-100"><i data-lucide="check-circle-2" class="icon-xs"></i> Reinforced Learning</div>
                     </div>
-                     <div class="mt-5 flex justify-between items-center text-[10px] text-gray-400 font-semibold uppercase tracking-tighter">
-                        <span>Novel Pattern</span>
-                        <i data-lucide="more-horizontal" class="icon-sm cursor-pointer"></i>
-                    </div>
+                    <p class="text-[13px] font-bold text-gray-900 leading-snug mb-4">"Free shipping thresholds prominently displayed increase AOV by 12%."</p>
+                    <p class="text-[11px] text-gray-500 leading-relaxed">Standardized pattern for FR market, reinforced by latest checkout flow data.</p>
                 </div>
             </div>
         </section>
     </main>
 
     <script>
-        // Initialize Lucide icons
         lucide.createIcons();
 
-        // Interaction logic
+        function switchLearningTab(tabId) {
+            // Update Tab Buttons
+            document.querySelectorAll('.sub-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
+
+            // Update Groups
+            document.querySelectorAll('[data-learning-group]').forEach(group => {
+                group.classList.remove('active');
+            });
+            document.getElementById(`group-${tabId}`).classList.add('active');
+            
+            lucide.createIcons(); // Re-init icons for revealed elements
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
-             // Simulation of "Export" button
-            const exportBtn = document.querySelector('button');
-            if (exportBtn && exportBtn.innerText.includes('EXPORT')) {
+            const exportBtn = document.querySelector('header button');
+            if (exportBtn) {
                 exportBtn.addEventListener('click', () => {
-                    const originalHtml = exportBtn.innerHTML;
+                    const original = exportBtn.innerHTML;
                     exportBtn.innerHTML = '<i data-lucide="refresh-cw" class="icon-sm animate-spin"></i> PREPARING...';
                     lucide.createIcons();
                     setTimeout(() => {
                         exportBtn.innerHTML = '<i data-lucide="check" class="icon-sm text-green-500"></i> READY';
                         lucide.createIcons();
-                        setTimeout(() => {
-                            exportBtn.innerHTML = originalHtml;
-                            lucide.createIcons();
-                        }, 2000);
-                    }, 1500);
+                        setTimeout(() => { exportBtn.innerHTML = original; lucide.createIcons(); }, 1500);
+                    }, 1000);
                 });
             }
         });
