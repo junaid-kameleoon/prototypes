@@ -3,188 +3,316 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Learnings Prototype - Kameleoon</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Kameleoon - Learnings Prototype v2</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #3838E7;
+            --primary-hover: #2b2bb5;
+            --background: #FAFAFA;
+            --surface: #FFFFFF;
+            --sidebar: #181B21;
+            --text: #000000;
+            --text-secondary: #555555;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--background);
+            color: var(--text);
+        }
+
+        .sidebar-item:hover { background-color: rgba(255, 255, 255, 0.1); }
+        .sidebar-item.active { background-color: var(--primary); color: white; }
+        
+        .tab-active { color: var(--primary); border-bottom: 2px solid var(--primary); }
+        
+        /* High Density Utility */
+        .density-tight { padding: 0.5rem 0.75rem; }
+        .density-normal { padding: 1rem; }
+
+        .learning-card {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .learning-card:hover {
+            border-color: #3838E7;
+            box-shadow: 0 4px 12px rgba(56, 56, 231, 0.08);
+        }
+
+        /* lucide icons sizing */
+        .icon-sm { width: 0.875rem; height: 0.875rem; }
+        .icon-md { width: 1.125rem; height: 1.125rem; }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3838E7',
+                        'primary-hover': '#2b2bb5',
+                        background: '#FAFAFA',
+                        surface: '#FFFFFF',
+                        sidebar: '#181B21',
+                        'k-green': '#10b981',
+                        'k-amber': '#f59e0b',
+                    }
+                }
+            }
+        }
+    </script>
 </head>
-<body>
-    <div class="app-container">
-        <!-- Sidebar Placeholder -->
-        <aside class="sidebar">
-            <div class="logo">
-                <div class="logo-icon"></div>
-                <span>Kameleoon</span>
+<body class="flex h-screen overflow-hidden">
+
+    <!-- Dark Sidebar -->
+    <aside class="w-56 bg-sidebar text-white flex flex-col flex-shrink-0">
+        <div class="p-6 flex items-center gap-3">
+            <div class="w-8 h-8 rounded bg-primary flex items-center justify-center font-bold text-white italic">K</div>
+            <span class="text-lg font-bold tracking-tight">Kameleoon</span>
+        </div>
+        <nav class="flex-1 px-4 py-2 space-y-1">
+            <div class="sidebar-item flex items-center gap-3 p-2.5 rounded text-sm text-gray-400 cursor-pointer">
+                <i data-lucide="layout-dashboard" class="icon-md"></i> <span>Dashboard</span>
             </div>
-            <nav>
-                <div class="nav-item"><i class="fas fa-th-large"></i><span>Dashboard</span></div>
-                <div class="nav-item active"><i class="fas fa-flask"></i><span>Experiments</span></div>
-                <div class="nav-item"><i class="fas fa-chart-line"></i><span>Analytics</span></div>
-                <div class="nav-item"><i class="fas fa-bullseye"></i><span>Goals</span></div>
-                <div class="nav-item"><i class="fas fa-users"></i><span>Audiences</span></div>
-                <div class="nav-sep"></div>
-                <div class="nav-item"><i class="fas fa-cog"></i><span>Settings</span></div>
-            </nav>
-        </aside>
+            <div class="sidebar-item active flex items-center gap-3 p-2.5 rounded text-sm cursor-pointer">
+                <i data-lucide="flask-conical" class="icon-md"></i> <span>Experiments</span>
+            </div>
+            <div class="sidebar-item flex items-center gap-3 p-2.5 rounded text-sm text-gray-400 cursor-pointer">
+                <i data-lucide="line-chart" class="icon-md"></i> <span>Analytics</span>
+            </div>
+            <div class="sidebar-item flex items-center gap-3 p-2.5 rounded text-sm text-gray-400 cursor-pointer">
+                <i data-lucide="target" class="icon-md"></i> <span>Goals</span>
+            </div>
+            <div class="sidebar-item flex items-center gap-3 p-2.5 rounded text-sm text-gray-400 cursor-pointer">
+                <i data-lucide="users" class="icon-md"></i> <span>Audiences</span>
+            </div>
+            <div class="my-4 border-t border-gray-800"></div>
+            <div class="sidebar-item flex items-center gap-3 p-2.5 rounded text-sm text-gray-400 cursor-pointer">
+                <i data-lucide="settings" class="icon-md"></i> <span>Settings</span>
+            </div>
+        </nav>
+    </aside>
 
-        <main class="content">
-            <header class="main-header">
-                <div class="header-left">
-                    <div class="breadcrumb">
-                        <span class="project-name">[FNAC FR] [DESKTOP] [FA] Slider iPad 15/12</span>
-                        <span class="id-badge">354285 <i class="far fa-copy"></i></span>
+    <!-- Main Content -->
+    <main class="flex-1 flex flex-col min-w-0 bg-background overflow-hidden">
+        <!-- Top Bar -->
+        <header class="h-14 bg-white border-bottom border-gray-200 flex items-center justify-between px-6 shadow-sm z-10 flex-shrink-0">
+            <div class="flex items-center gap-2 overflow-hidden">
+                <span class="text-sm font-semibold truncate">[FNAC FR] [DESKTOP] [FA] Slider iPad 15/12</span>
+                <span class="bg-gray-100 text-[10px] px-1.5 py-0.5 rounded text-gray-500 font-mono">354285</span>
+            </div>
+            <div class="flex items-center gap-4">
+                <span class="text-[11px] text-gray-400 italic">Last sync: Jan 15, 2026, 12:24 pm</span>
+                <div class="flex items-center gap-2">
+                    <button class="text-xs border border-gray-200 px-3 py-1.5 rounded flex items-center gap-1.5 hover:bg-gray-50 transition-colors font-medium">
+                        <i data-lucide="download" class="icon-sm"></i> EXPORT
+                    </button>
+                    <div class="flex items-center gap-1 px-2 py-1.5 border border-green-100 bg-green-50 rounded text-[10px] font-bold text-green-600 uppercase tracking-widest">
+                        <span class="w-1.5 h-1.5 rounded-full bg-green-500"></span> ONLINE
                     </div>
                 </div>
-                <div class="header-right">
-                    <span class="update-ts">Last data update: Jan 15, 2026, 12:24 pm</span>
-                    <div class="header-actions">
-                        <button class="btn btn-secondary"><i class="fas fa-upload"></i> EXPORT</button>
-                        <button class="btn btn-icon"><i class="fas fa-ellipsis-v"></i></button>
-                        <div class="status-indicator online">
-                            <span class="dot"></span> ONLINE <i class="fas fa-chevron-down"></i>
+            </div>
+        </header>
+
+        <!-- Tabs Navigation -->
+        <nav class="bg-white border-b border-gray-200 px-6 flex gap-8 z-10 flex-shrink-0">
+            <div class="py-3 text-xs font-bold text-gray-400 cursor-pointer hover:text-gray-600 transition-colors">OVERVIEW</div>
+            <div class="py-3 text-xs font-bold text-gray-400 cursor-pointer hover:text-gray-600 transition-colors">HEALTH</div>
+            <div class="py-3 text-xs font-bold text-gray-400 cursor-pointer hover:text-gray-600 transition-colors">METRICS</div>
+            <div class="py-3 text-xs font-bold text-primary border-b-2 border-primary cursor-pointer uppercase tracking-wider">Learnings</div>
+            <div class="py-3 text-xs font-bold text-gray-400 cursor-pointer hover:text-gray-600 transition-colors">ACTIVITY</div>
+        </nav>
+
+        <!-- Scrollable Area -->
+        <div class="flex-1 overflow-y-auto p-4 space-y-4">
+            <!-- Hypothesis Section (Compact & Inset) -->
+            <div class="bg-indigo-50 border border-indigo-100 rounded-md p-3 relative overflow-hidden group">
+                <div class="absolute top-0 left-0 w-1 h-full bg-primary"></div>
+                <div class="flex items-center justify-between mb-2">
+                    <div class="flex items-center gap-2">
+                        <i data-lucide="sparkles" class="icon-sm text-primary"></i>
+                        <span class="text-[10px] font-bold text-primary uppercase tracking-widest">Hypothesis Status</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-[11px] font-bold text-primary">VALIDATED</span>
+                        <div class="w-16 h-1.5 bg-indigo-200 rounded-full overflow-hidden">
+                            <div class="h-full bg-primary w-[92%]"></div>
                         </div>
+                        <span class="text-[10px] text-primary font-mono">92%</span>
                     </div>
                 </div>
-            </header>
+                <p class="text-sm text-indigo-900 font-medium leading-relaxed italic">
+                    "Implementing a sticky 'Add to Cart' button for high-value iPads will increase conversion because the CTA remains accessible at all scroll points."
+                </p>
+            </div>
 
-            <nav class="tabs-nav">
-                <div class="tab">OVERVIEW</div>
-                <div class="tab">HEALTH</div>
-                <div class="tab">METRICS</div>
-                <div class="tab">COMPARE</div>
-                <div class="tab active">LEARNINGS</div>
-                <div class="tab">ACTIVITY</div>
-            </nav>
-
-            <div class="scroll-area">
-                <section class="ai-summary-section">
-                    <div class="section-title">
-                        <h2>AI Summary <i class="far fa-question-circle"></i></h2>
-                        <div class="last-sync">Last update: - <i class="fas fa-redo"></i></div>
+            <!-- AI Summary Row -->
+            <div class="flex gap-4">
+                <div class="flex-1 bg-white border border-gray-201 rounded-md p-4 min-h-[160px] flex flex-col items-center justify-center text-center">
+                    <div class="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center mb-3">
+                        <i data-lucide="lightbulb" class="text-blue-500 icon-md"></i>
                     </div>
+                    <h3 class="text-xs font-bold text-gray-900 mb-1">INSIGHTS</h3>
+                    <p class="text-[11px] text-gray-400 max-w-[200px]">Still collecting data. Once we reach significance, insights will appear here.</p>
+                </div>
+                <div class="flex-1 bg-white border border-gray-201 rounded-md p-4 min-h-[160px] flex flex-col items-center justify-center text-center">
+                    <div class="w-10 h-10 rounded-full bg-green-50 flex items-center justify-center mb-3">
+                        <i data-lucide="thumbs-up" class="text-green-500 icon-md"></i>
+                    </div>
+                    <h3 class="text-xs font-bold text-gray-900 mb-1">RECOMMENDATIONS</h3>
+                    <p class="text-[11px] text-gray-400 max-w-[200px]">Recommendations will be generated based on insight performance.</p>
+                </div>
+            </div>
 
-                    <!-- HYPOTHESIS SECTION -->
-                    <div class="hypothesis-banner">
-                        <div class="banner-accent"></div>
-                        <div class="banner-content">
-                            <div class="banner-header">
-                                <div class="hypo-label">
-                                    <i class="fas fa-sparkles"></i>
-                                    HYPOTHESIS: <span class="status-validated">VALIDATED</span>
-                                </div>
-                                <div class="confidence-score">
-                                    <div class="confidence-bar"><div class="fill" style="width: 92%"></div></div>
-                                    <span>92% Confidence</span>
-                                </div>
+            <!-- Learnings Repository -->
+            <div class="pt-2">
+                <div class="flex items-end justify-between mb-4 border-b border-gray-200 pb-2">
+                    <div>
+                        <h2 class="text-lg font-bold flex items-center gap-2">
+                            <i data-lucide="book-open" class="icon-md text-primary"></i>
+                            Learnings Repository
+                        </h2>
+                        <p class="text-[11px] text-gray-500 mt-1">Established business patterns and certified facts derived from your experimentation history.</p>
+                    </div>
+                    <button class="bg-primary text-white text-[11px] font-bold px-3 py-1.5 rounded hover:bg-primary-hover transition-colors flex items-center gap-2">
+                        <i data-lucide="plus" class="icon-sm"></i> ADD NEW
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pb-8">
+                    <!-- Learning Card 1 (Observation Style) -->
+                    <div class="learning-card bg-amber-50 border border-amber-100 rounded-md overflow-hidden flex flex-col group">
+                        <div class="p-3 bg-amber-100/30 border-b border-amber-100 flex justify-between items-center">
+                            <div class="flex items-center gap-2">
+                                <i data-lucide="eye" class="icon-sm text-amber-600"></i>
+                                <span class="text-[10px] font-bold text-amber-800 uppercase tracking-widest">UX Pattern</span>
                             </div>
-                            <p class="hypo-text">
-                                "If we implement a sticky 'Add to Cart' button for high-value iPad products on desktop, then conversion rates will increase because users will have a constant call-to-action regardless of their scroll position."
+                            <span class="text-[10px] text-amber-600 font-medium italic">High Consistency</span>
+                        </div>
+                        <div class="p-3 flex-1">
+                            <p class="text-xs font-bold text-gray-900 leading-normal mb-3">
+                                "Above-the-fold CTA placement on PDP accounts for 65% of mobile engagement."
                             </p>
+                            <!-- Mock Visualization -->
+                            <div class="h-24 bg-white border border-amber-100 rounded flex items-center justify-center relative group-hover:bg-amber-100/20 transition-colors overflow-hidden">
+                                <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#d97706_1px,transparent_1px)] [background-size:10px_10px]"></div>
+                                <div class="relative w-full px-4 text-center">
+                                    <div class="h-1 bg-amber-500 w-3/4 mx-auto rounded-full mb-1"></div>
+                                    <div class="h-1 bg-amber-300 w-1/2 mx-auto rounded-full"></div>
+                                </div>
+                                <div class="absolute top-1 right-1 text-[9px] font-mono text-amber-600">v12.4.2</div>
+                            </div>
+                        </div>
+                        <div class="p-2.5 bg-white flex justify-between items-center border-t border-amber-100 text-[10px]">
+                            <div class="flex gap-3 text-gray-500 font-medium">
+                                <span class="flex items-center gap-1"><i data-lucide="vial" class="icon-sm"></i> 14 Tests</span>
+                                <span class="flex items-center gap-1"><i data-lucide="trending-up" class="icon-sm text-green-500"></i> +2.4% Avg</span>
+                            </div>
+                            <i data-lucide="more-horizontal" class="icon-sm text-gray-300 cursor-pointer"></i>
                         </div>
                     </div>
 
-                    <div class="main-grid">
-                        <!-- INSIGHTS -->
-                        <div class="data-group insights">
-                            <div class="group-header">
-                                <i class="fas fa-lightbulb"></i>
-                                <span>INSIGHTS</span>
+                    <!-- Learning Card 2 (Observation Style) -->
+                    <div class="learning-card bg-amber-50 border border-amber-100 rounded-md overflow-hidden flex flex-col group">
+                        <div class="p-3 bg-amber-100/30 border-b border-amber-100 flex justify-between items-center">
+                            <div class="flex items-center gap-2">
+                                <i data-lucide="credit-card" class="icon-sm text-amber-600"></i>
+                                <span class="text-[10px] font-bold text-amber-800 uppercase tracking-widest">Checkout Behavior</span>
                             </div>
-                            <div class="empty-state">
-                                <i class="fas fa-hourglass-start"></i>
-                                <h3>Still collecting your data</h3>
-                                <p>Once we get more conversions, you will find information about your insights.</p>
+                            <span class="text-[10px] text-amber-600 font-medium italic">Emerging Trend</span>
+                        </div>
+                        <div class="p-3 flex-1">
+                            <p class="text-xs font-bold text-gray-900 leading-normal mb-3">
+                                "Guest checkout options reduce cart abandonment by 18% in the electronics category."
+                            </p>
+                            <!-- Mock Visualization -->
+                            <div class="h-24 bg-white border border-amber-100 rounded flex items-center justify-center relative group-hover:bg-amber-100/20 transition-colors">
+                                <div class="flex gap-1 items-end h-12">
+                                    <div class="w-2 bg-amber-200 h-1/2"></div>
+                                    <div class="w-2 bg-amber-400 h-3/4"></div>
+                                    <div class="w-2 bg-amber-600 h-full"></div>
+                                    <div class="w-2 bg-amber-300 h-1/4"></div>
+                                </div>
+                                <div class="absolute bottom-1 left-2 text-[8px] text-amber-400">Cart Exit Rate Trend</div>
                             </div>
                         </div>
-
-                        <!-- RECOMMENDATIONS -->
-                        <div class="data-group recommendations">
-                            <div class="group-header">
-                                <i class="fas fa-thumbs-up"></i>
-                                <span>RECOMMENDATIONS</span>
+                        <div class="p-2.5 bg-white flex justify-between items-center border-t border-amber-100 text-[10px]">
+                            <div class="flex gap-3 text-gray-500 font-medium">
+                                <span class="flex items-center gap-1"><i data-lucide="vial" class="icon-sm"></i> 6 Tests</span>
+                                <span class="flex items-center gap-1"><i data-lucide="trending-up" class="icon-sm text-green-500"></i> +5.1% Avg</span>
                             </div>
-                            <div class="empty-state">
-                                <i class="fas fa-hourglass-start"></i>
-                                <h3>Still collecting your data</h3>
-                                <p>Once we get more conversions, you will find information about your recommendations.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- LEARNINGS REPOSITORY -->
-                    <div class="learnings-repository">
-                        <div class="repo-header">
-                            <div>
-                                <h3>Learnings Repository</h3>
-                                <p>Established patterns and certified business facts derived from your experimentation history.</p>
-                            </div>
-                            <button class="btn btn-primary"><i class="fas fa-plus"></i> NEW LEARNING</button>
-                        </div>
-
-                        <div class="learning-cards">
-                            <div class="learning-card">
-                                <div class="card-top">
-                                    <span class="category-tag ux">UX Pattern</span>
-                                    <span class="date">Jan 10, 2026</span>
-                                </div>
-                                <div class="card-body">
-                                    <p>"Changes made above the fold on the home page have a significant impact on the conversation rate."</p>
-                                </div>
-                                <div class="card-footer">
-                                    <div class="impact high">High Impact</div>
-                                    <div class="meta">
-                                        <span><i class="fas fa-vial"></i> 12 Tests</span>
-                                        <span><i class="fas fa-bullseye"></i> 85% Match</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="learning-card">
-                                <div class="card-top">
-                                    <span class="category-tag pricing">Pricing Strategy</span>
-                                    <span class="date">Dec 15, 2025</span>
-                                </div>
-                                <div class="card-body">
-                                    <p>"Bundling high-value accessories with flagship electronics increases AOV by 14% on average."</p>
-                                </div>
-                                <div class="card-footer">
-                                    <div class="impact medium">Medium Impact</div>
-                                    <div class="meta">
-                                        <span><i class="fas fa-vial"></i> 5 Tests</span>
-                                        <span><i class="fas fa-bullseye"></i> 72% Match</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="learning-card">
-                                <div class="card-top">
-                                    <span class="category-tag mobile">Mobile UI</span>
-                                    <span class="date">Nov 22, 2025</span>
-                                </div>
-                                <div class="card-body">
-                                    <p>"Bottom navigation menus outperform hamburger menus for product discovery on mobile devices."</p>
-                                </div>
-                                <div class="card-footer">
-                                    <div class="impact high">High Impact</div>
-                                    <div class="meta">
-                                        <span><i class="fas fa-vial"></i> 8 Tests</span>
-                                        <span><i class="fas fa-bullseye"></i> 91% Match</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="learning-card empty-add">
-                                <div class="add-content">
-                                    <i class="fas fa-circle-plus"></i>
-                                    <span>Discover more patterns</span>
-                                </div>
-                            </div>
+                            <i data-lucide="more-horizontal" class="icon-sm text-gray-300 cursor-pointer"></i>
                         </div>
                     </div>
-                </section>
+
+                    <!-- Learning Card 3 -->
+                    <div class="learning-card bg-amber-50 border border-amber-100 rounded-md overflow-hidden flex flex-col group">
+                        <div class="p-3 bg-amber-100/30 border-b border-amber-100 flex justify-between items-center">
+                            <div class="flex items-center gap-2">
+                                <i data-lucide="smartphone" class="icon-sm text-amber-600"></i>
+                                <span class="text-[10px] font-bold text-amber-800 uppercase tracking-widest">Mobile Engagement</span>
+                            </div>
+                            <span class="text-[10px] text-amber-600 font-medium italic">High Consistency</span>
+                        </div>
+                        <div class="p-3 flex-1">
+                            <p class="text-xs font-bold text-gray-900 leading-normal mb-3">
+                                "Horizontal scrollable product carousels outperform grid lists by 22% for upsells."
+                            </p>
+                             <div class="h-24 bg-white border border-amber-100 rounded flex items-center justify-center relative p-2 overflow-hidden">
+                                <div class="w-full h-full border border-dashed border-amber-200 rounded flex items-center p-2 gap-2">
+                                    <div class="w-1/3 h-full bg-amber-100 rounded"></div>
+                                    <div class="w-1/3 h-full bg-amber-100 rounded"></div>
+                                    <div class="w-1/3 h-full bg-amber-100 rounded"></div>
+                                </div>
+                             </div>
+                        </div>
+                        <div class="p-2.5 bg-white flex justify-between items-center border-t border-amber-100 text-[10px]">
+                            <div class="flex gap-3 text-gray-500 font-medium">
+                                <span class="flex items-center gap-1"><i data-lucide="vial" class="icon-sm"></i> 9 Tests</span>
+                                <span class="flex items-center gap-1"><i data-lucide="trending-up" class="icon-sm text-green-500"></i> +3.2% Avg</span>
+                            </div>
+                            <i data-lucide="more-horizontal" class="icon-sm text-gray-300 cursor-pointer"></i>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </main>
-    </div>
-    <script src="script.js"></script>
+        </div>
+    </main>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // Interaction logic
+        document.addEventListener('DOMContentLoaded', () => {
+             // Simulation of "Export" button
+            const exportBtn = document.querySelector('button');
+            if (exportBtn && exportBtn.innerText.includes('EXPORT')) {
+                exportBtn.addEventListener('click', () => {
+                    const originalHtml = exportBtn.innerHTML;
+                    exportBtn.innerHTML = '<i data-lucide="refresh-cw" class="icon-sm animate-spin"></i> PREPARING...';
+                    lucide.createIcons();
+                    setTimeout(() => {
+                        exportBtn.innerHTML = '<i data-lucide="check" class="icon-sm text-green-500"></i> READY';
+                        lucide.createIcons();
+                        setTimeout(() => {
+                            exportBtn.innerHTML = originalHtml;
+                            lucide.createIcons();
+                        }, 2000);
+                    }, 1500);
+                });
+            }
+
+            // Tab switching logic (simple simulation)
+            const tabs = document.querySelectorAll('nav div');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    if (tab.innerText === 'LEARNINGS') return;
+                    alert(`Switching to ${tab.innerText}...`);
+                });
+            });
+        });
+    </script>
 </body>
 </html>
