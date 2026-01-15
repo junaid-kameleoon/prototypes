@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learnings Prototype - Kameleoon</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Placeholder -->
+        <aside class="sidebar">
+            <div class="logo">
+                <div class="logo-icon"></div>
+                <span>Kameleoon</span>
+            </div>
+            <nav>
+                <div class="nav-item"><i class="fas fa-th-large"></i><span>Dashboard</span></div>
+                <div class="nav-item active"><i class="fas fa-flask"></i><span>Experiments</span></div>
+                <div class="nav-item"><i class="fas fa-chart-line"></i><span>Analytics</span></div>
+                <div class="nav-item"><i class="fas fa-bullseye"></i><span>Goals</span></div>
+                <div class="nav-item"><i class="fas fa-users"></i><span>Audiences</span></div>
+                <div class="nav-sep"></div>
+                <div class="nav-item"><i class="fas fa-cog"></i><span>Settings</span></div>
+            </nav>
+        </aside>
+
+        <main class="content">
+            <header class="main-header">
+                <div class="header-left">
+                    <div class="breadcrumb">
+                        <span class="project-name">[FNAC FR] [DESKTOP] [FA] Slider iPad 15/12</span>
+                        <span class="id-badge">354285 <i class="far fa-copy"></i></span>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <span class="update-ts">Last data update: Jan 15, 2026, 12:24 pm</span>
+                    <div class="header-actions">
+                        <button class="btn btn-secondary"><i class="fas fa-upload"></i> EXPORT</button>
+                        <button class="btn btn-icon"><i class="fas fa-ellipsis-v"></i></button>
+                        <div class="status-indicator online">
+                            <span class="dot"></span> ONLINE <i class="fas fa-chevron-down"></i>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <nav class="tabs-nav">
+                <div class="tab">OVERVIEW</div>
+                <div class="tab">HEALTH</div>
+                <div class="tab">METRICS</div>
+                <div class="tab">COMPARE</div>
+                <div class="tab active">LEARNINGS</div>
+                <div class="tab">ACTIVITY</div>
+            </nav>
+
+            <div class="scroll-area">
+                <section class="ai-summary-section">
+                    <div class="section-title">
+                        <h2>AI Summary <i class="far fa-question-circle"></i></h2>
+                        <div class="last-sync">Last update: - <i class="fas fa-redo"></i></div>
+                    </div>
+
+                    <!-- HYPOTHESIS SECTION -->
+                    <div class="hypothesis-banner">
+                        <div class="banner-accent"></div>
+                        <div class="banner-content">
+                            <div class="banner-header">
+                                <div class="hypo-label">
+                                    <i class="fas fa-sparkles"></i>
+                                    HYPOTHESIS: <span class="status-validated">VALIDATED</span>
+                                </div>
+                                <div class="confidence-score">
+                                    <div class="confidence-bar"><div class="fill" style="width: 92%"></div></div>
+                                    <span>92% Confidence</span>
+                                </div>
+                            </div>
+                            <p class="hypo-text">
+                                "If we implement a sticky 'Add to Cart' button for high-value iPad products on desktop, then conversion rates will increase because users will have a constant call-to-action regardless of their scroll position."
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="main-grid">
+                        <!-- INSIGHTS -->
+                        <div class="data-group insights">
+                            <div class="group-header">
+                                <i class="fas fa-lightbulb"></i>
+                                <span>INSIGHTS</span>
+                            </div>
+                            <div class="empty-state">
+                                <i class="fas fa-hourglass-start"></i>
+                                <h3>Still collecting your data</h3>
+                                <p>Once we get more conversions, you will find information about your insights.</p>
+                            </div>
+                        </div>
+
+                        <!-- RECOMMENDATIONS -->
+                        <div class="data-group recommendations">
+                            <div class="group-header">
+                                <i class="fas fa-thumbs-up"></i>
+                                <span>RECOMMENDATIONS</span>
+                            </div>
+                            <div class="empty-state">
+                                <i class="fas fa-hourglass-start"></i>
+                                <h3>Still collecting your data</h3>
+                                <p>Once we get more conversions, you will find information about your recommendations.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- LEARNINGS REPOSITORY -->
+                    <div class="learnings-repository">
+                        <div class="repo-header">
+                            <div>
+                                <h3>Learnings Repository</h3>
+                                <p>Established patterns and certified business facts derived from your experimentation history.</p>
+                            </div>
+                            <button class="btn btn-primary"><i class="fas fa-plus"></i> NEW LEARNING</button>
+                        </div>
+
+                        <div class="learning-cards">
+                            <div class="learning-card">
+                                <div class="card-top">
+                                    <span class="category-tag ux">UX Pattern</span>
+                                    <span class="date">Jan 10, 2026</span>
+                                </div>
+                                <div class="card-body">
+                                    <p>"Changes made above the fold on the home page have a significant impact on the conversation rate."</p>
+                                </div>
+                                <div class="card-footer">
+                                    <div class="impact high">High Impact</div>
+                                    <div class="meta">
+                                        <span><i class="fas fa-vial"></i> 12 Tests</span>
+                                        <span><i class="fas fa-bullseye"></i> 85% Match</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="learning-card">
+                                <div class="card-top">
+                                    <span class="category-tag pricing">Pricing Strategy</span>
+                                    <span class="date">Dec 15, 2025</span>
+                                </div>
+                                <div class="card-body">
+                                    <p>"Bundling high-value accessories with flagship electronics increases AOV by 14% on average."</p>
+                                </div>
+                                <div class="card-footer">
+                                    <div class="impact medium">Medium Impact</div>
+                                    <div class="meta">
+                                        <span><i class="fas fa-vial"></i> 5 Tests</span>
+                                        <span><i class="fas fa-bullseye"></i> 72% Match</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="learning-card">
+                                <div class="card-top">
+                                    <span class="category-tag mobile">Mobile UI</span>
+                                    <span class="date">Nov 22, 2025</span>
+                                </div>
+                                <div class="card-body">
+                                    <p>"Bottom navigation menus outperform hamburger menus for product discovery on mobile devices."</p>
+                                </div>
+                                <div class="card-footer">
+                                    <div class="impact high">High Impact</div>
+                                    <div class="meta">
+                                        <span><i class="fas fa-vial"></i> 8 Tests</span>
+                                        <span><i class="fas fa-bullseye"></i> 91% Match</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="learning-card empty-add">
+                                <div class="add-content">
+                                    <i class="fas fa-circle-plus"></i>
+                                    <span>Discover more patterns</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
