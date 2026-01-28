@@ -1,0 +1,124 @@
+.lupine-card {
+    max-width: 380px;
+    background: linear-gradient(135deg, rgba(23, 25, 35, 0.95), rgba(45, 55, 72, 0.95));
+}
+
+.lupine-brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.sparkle-icon {
+    font-size: 18px;
+    animation: pulse 2s infinite ease-in-out;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        opacity: 0.8;
+    }
+
+    50% {
+        transform: scale(1.1);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 0.8;
+    }
+}
+
+.brand-name {
+    font-weight: 800;
+    letter-spacing: 1px;
+    background: linear-gradient(90deg, #63b3ed, #b794f4);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.score-badge {
+    text-align: right;
+}
+
+.score-label {
+    display: block;
+    font-size: 8px;
+    color: #718096;
+}
+
+.score-value {
+    font-size: 20px;
+    font-weight: 800;
+    color: #63b3ed;
+}
+
+.lever-tag {
+    display: inline-block;
+    font-size: 9px;
+    font-weight: 700;
+    color: #b794f4;
+    border: 1px solid rgba(183, 148, 244, 0.3);
+    padding: 2px 8px;
+    border-radius: 20px;
+    margin-bottom: 12px;
+}
+
+.evidence-section {
+    margin-top: 16px;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 12px;
+}
+
+.evidence-section label {
+    font-size: 10px;
+    color: #718096;
+    font-weight: 600;
+    margin-bottom: 4px;
+    display: block;
+}
+
+.evidence-section p {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.5;
+    color: #cbd5e0;
+}
+
+.widget-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+.apply-btn {
+    flex: 2;
+    background: #3182ce;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.apply-btn:hover {
+    background: #2b6cb0;
+    transform: translateY(-1px);
+}
+
+.dismiss-btn {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.05);
+    color: #a0aec0;
+    border: none;
+    padding: 12px;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+}

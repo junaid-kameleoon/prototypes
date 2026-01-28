@@ -1,0 +1,9 @@
+[79988] Using automatically selected callback port: 9944
+[79988] Using custom headers: {"X-Kameleoon-Auth":"18414-jgmalik-kameleoon-com:8U-31wBaWb-frtlcRYoeDooHz9YNIjexj53zh5PqUVo"}
+[79988] Discovering OAuth server configuration...
+[79988] [79988] Connecting to remote server: https://mcp.aitools-mvp-39914.preview.kameleoon.net/mcp
+[79988] Using transport strategy: http-first
+[79988] Connected to remote server using StreamableHTTPClientTransport
+[79988] Local STDIO server running
+[79988] Proxy established successfully between local STDIO and remote StreamableHTTPClientTransport
+[79988] Press Ctrl+C to exit

@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kameleoon PBX - Master Prompt v3 (Merged)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .pbx-sidebar {
+            width: 640px;
+            background: white;
+            border-left: 1px solid #e5e7eb;
+            display: flex;
+            flex-direction: column;
+            box-shadow: -4px 0 10px rgba(0, 0, 0, 0.05);
+            z-index: 50;
+            transition: all 0.3s ease;
+        }
+
+        .pbx-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid #e5e7eb;
+            position: relative;
+            background: #3838E7;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .pbx-content {
+            flex-grow: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background-color: #FAFAFA;
+        }
+
+        .pbx-footer {
+            padding: 16px 20px;
+            border-top: 1px solid #e5e7eb;
+            background: white;
+        }
+
+        /* Config View Styles */
+        .config-view {
+            display: none;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .config-view.active {
+            display: flex;
+        }
+
+        .chat-view.hidden {
+            display: none;
+        }
+
+        .config-header {
+            padding: 20px;
+            border-bottom: 1px solid #e5e7eb;
+            background: white;
+        }
+
+        .config-content {
+            flex-grow: 1;
+            padding: 24px;
+            overflow-y: auto;
+        }
+
+        .config-footer {
+            padding: 16px 24px;
+            border-top: 1px solid #e5e7eb;
+            background: white;
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        .master-prompt-area {
+            width: 100%;
+            min-height: 300px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 13px;
+            resize: vertical;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .master-prompt-area:focus {
+            outline: none;
+            border-color: #3838E7;
+            box-shadow: 0 0 0 3px rgba(56, 56, 231, 0.1);
+        }
+
+        .header-btn {
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .header-btn.settings {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .header-btn.settings:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .header-btn.settings.active {
+            background: white;
+            color: #3838E7;
+        }
+
+        .btn {
+            padding: 10px 24px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: #3838E7;
+            color: white;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background: #2b2bb5;
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #4B5563;
+            border: 1px solid #E5E7EB;
+        }
+
+        .btn-secondary:hover {
+            background: #F9FAFB;
+        }
+
+        .info-card {
+            background: #F0F9FF;
+            border: 1px solid #BAE6FD;
+            border-radius: 8px;
+            padding: 16px;
+            margin-top: 16px;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        .main-content {
+            flex-grow: 1;
+            opacity: 0.3;
+            pointer-events: none;
+            display: flex;
+            flex-direction: column;
+            padding: 40px;
+        }
+
+        .ai-message {
+            background: #F0F0FF;
+            padding: 12px 16px;
+            border-radius: 12px;
+            font-size: 13px;
+            line-height: 1.5;
+            color: #181B21;
+            margin-bottom: 16px;
+        }
+
+        .action-row {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .action-btn {
+            padding: 6px 14px;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            color: #4b5563;
+            background: white;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+        }
+
+        .input-box {
+            position: relative;
+            background: white;
+            border: 2px solid #3838E7;
+            border-radius: 12px;
+            padding: 16px;
+            min-height: 120px;
+        }
+
+        .input-box textarea {
+            width: 100%;
+            border: none;
+            resize: none;
+            font-size: 14px;
+            outline: none;
+            padding: 0;
+            background: transparent;
+            color: #9CA3AF;
+            min-height: 60px;
+        }
+
+        .credits {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            color: #3838E7;
+            font-weight: 600;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="main-content">
+        <div class="h-10 bg-blue-900 mb-8 rounded"></div>
+        <div class="h-64 bg-white shadow rounded p-8 flex flex-col gap-4">
+            <div class="h-8 bg-gray-200 w-1/3 rounded"></div>
+            <div class="h-4 bg-gray-100 w-2/3 rounded"></div>
+        </div>
+    </div>
+
+    <aside class="pbx-sidebar">
+        <!-- Header -->
+        <header class="pbx-header">
+            <div class="flex items-center gap-2">
+                <div class="w-8 h-8 rounded bg-white/20 flex items-center justify-center font-bold text-xs text-white">P
+                </div>
+                <div>
+                    <div class="text-sm font-semibold text-white">My 2nd PBX</div>
+                    <div class="text-[11px] text-white/70">Variation 1 <span class="text-xs">▾</span></div>
+                </div>
+            </div>
+            <button id="toggle-config" class="header-btn settings">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+                Master Prompt
+            </button>
+        </header>
+
+        <!-- Chat View -->
+        <div id="chat-view" class="chat-view" style="display: flex; flex-direction: column; flex-grow: 1;">
+            <div class="pbx-content">
+                <div class="ai-message">
+                    <div class="font-semibold text-xs mb-1 text-indigo-600">KAI</div>
+                    In the chatbox at the bottom right, revamp the UI to make it look more like this screenshot I've
+                    attached.
+                </div>
+
+                <div class="bg-white border border-gray-200 rounded-lg p-4 mb-4">
+                    <div class="text-xs font-semibold text-gray-500 uppercase tracking-tight mb-2">Summary</div>
+                    <div class="text-xs text-gray-700 leading-relaxed">
+                        We will restyle and enhance the bottom-right KAI chatbox to match the provided mockup without
+                        changing server code.
+                    </div>
+                </div>
+            </div>
+
+            <footer class="pbx-footer">
+                <div class="flex justify-end items-center mb-3">
+                    <div class="credits">
+                        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5L12 2Z"
+                                fill="currentColor" />
+                        </svg>
+                        <span>9998 AI credits left</span>
+                    </div>
+                </div>
+
+                <div class="action-row">
+                    <button class="action-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                        </svg>
+                        Start new variation
+                    </button>
+                </div>
+
+                <div class="input-box">
+                    <textarea placeholder="Ask me anything, upload a design or sketch directly on the page"></textarea>
+                </div>
+                <div class="text-[11px] text-gray-500 mt-2 text-center">
+                    Our AI can do almost anything except back-end changes. Check <span
+                        class="underline cursor-pointer">our guidelines</span>.
+                </div>
+            </footer>
+        </div>
+
+        <!-- Config View -->
+        <div id="config-view" class="config-view">
+            <div class="config-header">
+                <h2 class="text-lg font-bold mb-1">Master Prompt Configuration</h2>
+                <p class="text-xs text-gray-500">Define the global context for all AI-generated variations</p>
+            </div>
+
+            <div class="config-content">
+                <label class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2 block">Master
+                    Prompt</label>
+                <textarea id="master-prompt-input" class="master-prompt-area"
+                    placeholder="Enter context, guidelines, or persona instructions here..."></textarea>
+
+                <div class="info-card">
+                    <div class="font-semibold mb-2">💡 Tips for an effective Master Prompt:</div>
+                    <ul class="text-xs space-y-1 ml-4 list-disc">
+                        <li><strong>Role:</strong> "You are an expert Kameleoon engineer..."</li>
+                        <li><strong>Constraints:</strong> "Never use deprecated SDK methods..."</li>
+                        <li><strong>Knowledge:</strong> Include your internal API documentation links.</li>
+                        <li><strong>Formatting:</strong> "Always respond using Kameleoon brand tone."</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="config-footer">
+                <button id="cancel-config" class="btn btn-secondary">Cancel</button>
+                <button id="save-config" class="btn btn-primary">Save Configuration</button>
+            </div>
+        </div>
+    </aside>
+
+    <script>
+        const toggleBtn = document.getElementById('toggle-config');
+        const chatView = document.getElementById('chat-view');
+        const configView = document.getElementById('config-view');
+        const masterPromptInput = document.getElementById('master-prompt-input');
+        const saveBtn = document.getElementById('save-config');
+        const cancelBtn = document.getElementById('cancel-config');
+
+        // Load saved prompt
+        function loadPrompt() {
+            const saved = localStorage.getItem('kameleoon_master_prompt');
+            if (saved) {
+                masterPromptInput.value = saved;
+            }
+        }
+
+        // Toggle between views
+        toggleBtn.addEventListener('click', () => {
+            const isConfigActive = configView.classList.contains('active');
+
+            if (isConfigActive) {
+                // Switch to chat
+                configView.classList.remove('active');
+                chatView.classList.remove('hidden');
+                toggleBtn.classList.remove('active');
+            } else {
+                // Switch to config
+                chatView.classList.add('hidden');
+                configView.classList.add('active');
+                toggleBtn.classList.add('active');
+                loadPrompt();
+            }
+        });
+
+        // Save configuration
+        saveBtn.addEventListener('click', () => {
+            const content = masterPromptInput.value.trim();
+            if (content) {
+                localStorage.setItem('kameleoon_master_prompt', content);
+            } else {
+                localStorage.removeItem('kameleoon_master_prompt');
+            }
+
+            // Switch back to chat
+            configView.classList.remove('active');
+            chatView.classList.remove('hidden');
+            toggleBtn.classList.remove('active');
+
+            // Show toast
+            showToast('Master Prompt saved successfully!');
+        });
+
+        // Cancel configuration
+        cancelBtn.addEventListener('click', () => {
+            configView.classList.remove('active');
+            chatView.classList.remove('hidden');
+            toggleBtn.classList.remove('active');
+        });
+
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.className = 'fixed bottom-8 left-1/2 -translate-x-1/2 bg-gray-900 text-white px-6 py-3 rounded-full text-sm font-medium shadow-2xl z-50';
+            toast.innerText = message;
+            document.body.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transition = 'all 0.3s ease';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        loadPrompt();
+    </script>
+</body>
+
+</html>

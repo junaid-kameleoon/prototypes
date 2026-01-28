@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kameleoon PBX - Master Prompt v1</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .pbx-sidebar {
+            width: 640px;
+            background: white;
+            border-left: 1px solid #e5e7eb;
+            display: flex;
+            flex-direction: column;
+            box-shadow: -4px 0 10px rgba(0, 0, 0, 0.05);
+            z-index: 50;
+        }
+
+        .pbx-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid #e5e7eb;
+            position: relative;
+            background: #3838E7;
+        }
+
+        .pbx-content {
+            flex-grow: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background-color: #FAFAFA;
+        }
+
+        .pbx-footer {
+            padding: 16px 20px;
+            border-top: 1px solid #e5e7eb;
+            background: white;
+        }
+
+        .ai-message {
+            background: #F0F0FF;
+            padding: 12px 16px;
+            border-radius: 12px;
+            font-size: 13px;
+            line-height: 1.5;
+            color: #181B21;
+            margin-bottom: 16px;
+        }
+
+        .action-row {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            padding: 6px 14px;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            color: #4b5563;
+            background: white;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+        }
+
+        .action-btn:hover {
+            background-color: #f9fafb;
+            border-color: #d1d5db;
+        }
+
+        .action-btn.active-prompt {
+            background-color: #EEF2FF;
+            color: #4F46E5;
+            border-color: #C7D2FE;
+        }
+
+        .input-box {
+            position: relative;
+            background: white;
+            border: 2px solid #3838E7;
+            border-radius: 12px;
+            padding: 16px;
+            min-height: 120px;
+        }
+
+        .input-box textarea {
+            width: 100%;
+            border: none;
+            resize: none;
+            font-size: 14px;
+            outline: none;
+            padding: 0;
+            background: transparent;
+            color: #9CA3AF;
+            min-height: 60px;
+        }
+
+        .input-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 8px;
+        }
+
+        .icon-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .icon-btn.plus {
+            border: 1px solid #e5e7eb;
+            color: #9ca3af;
+            background: white;
+        }
+
+        .icon-btn.send {
+            background: #E5E7EB;
+            color: white;
+        }
+
+        .badge {
+            display: inline-flex;
+            width: 6px;
+            height: 6px;
+            background-color: #10b981;
+            border-radius: 50%;
+        }
+
+        .main-content {
+            flex-grow: 1;
+            opacity: 0.3;
+            pointer-events: none;
+            display: flex;
+            flex-direction: column;
+            padding: 40px;
+        }
+
+        .credits {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            color: #3838E7;
+            font-weight: 600;
+        }
+
+        .sparkle-icon {
+            width: 16px;
+            height: 16px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Fake Background Page -->
+    <div class="main-content">
+        <div class="h-10 bg-blue-900 mb-8 rounded"></div>
+        <div class="h-64 bg-white shadow rounded p-8 flex flex-col gap-4">
+            <div class="h-8 bg-gray-200 w-1/3 rounded"></div>
+            <div class="h-4 bg-gray-100 w-2/3 rounded"></div>
+            <div class="h-4 bg-gray-100 w-1/2 rounded"></div>
+            <div class="h-12 bg-blue-600 w-32 rounded mt-4"></div>
+        </div>
+    </div>
+
+    <!-- PBX Sidebar -->
+    <aside class="pbx-sidebar">
+        <!-- Header -->
+        <header class="pbx-header">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <div
+                        class="w-8 h-8 rounded bg-white/20 flex items-center justify-center font-bold text-xs text-white">
+                        P</div>
+                    <div>
+                        <div class="text-sm font-semibold text-white">My 2nd PBX</div>
+                        <div class="text-[11px] text-white/70">Variation 1 <span class="text-xs">▾</span></div>
+                    </div>
+                </div>
+                <div class="text-white/70 cursor-pointer hover:text-white">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </div>
+            </div>
+        </header>
+
+        <!-- Chat Content -->
+        <div class="pbx-content">
+            <div class="ai-message">
+                <div class="font-semibold text-xs mb-1 text-indigo-600">KAI</div>
+                In the chatbox at the bottom right, revamp the UI to make it look more like this screenshot I've
+                attached.
+            </div>
+
+            <div class="bg-white border border-gray-200 rounded-lg p-4 mb-4">
+                <div class="text-xs font-semibold text-gray-500 uppercase tracking-tight mb-2">Summary</div>
+                <div class="text-xs text-gray-700 leading-relaxed">
+                    We will restyle and enhance the bottom-right KAI chatbox to match the provided mockup without
+                    changing server code.
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer / Input Area -->
+        <footer class="pbx-footer">
+            <div class="flex justify-end items-center mb-3">
+                <div class="credits">
+                    <svg class="sparkle-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5L12 2Z"
+                            fill="currentColor" />
+                    </svg>
+                    <span>9998 AI credits left</span>
+                </div>
+            </div>
+
+            <!-- ACTION ROW -->
+            <div class="action-row">
+                <button class="action-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                    </svg>
+                    Start new variation
+                </button>
+
+                <a href="index.html" id="master-prompt-entry" class="action-btn group">
+                    <span class="group-hover:scale-110 transition-transform">🧠</span>
+                    Master Prompt
+                    <span id="active-indicator" class="badge hidden"></span>
+                </a>
+            </div>
+
+            <div class="input-box">
+                <textarea placeholder="Ask me anything, upload a design or sketch directly on the page"></textarea>
+                <div class="input-actions">
+                    <div class="icon-btn plus">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                        </svg>
+                    </div>
+                    <div class="icon-btn send">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M5 10l7-7m0 0l7 7m-7-7v18" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+            <div class="text-[11px] text-gray-500 mt-2 text-center">
+                Our AI can do almost anything except back-end changes. Check <span class="underline cursor-pointer">our
+                    guidelines</span>.
+            </div>
+        </footer>
+    </aside>
+
+    <script>
+        function checkActivePrompt() {
+            const savedPrompt = localStorage.getItem('kameleoon_master_prompt');
+            const entryBtn = document.getElementById('master-prompt-entry');
+            const indicator = document.getElementById('active-indicator');
+
+            if (savedPrompt && savedPrompt.trim() !== '') {
+                entryBtn.classList.add('active-prompt');
+                indicator.classList.remove('hidden');
+            } else {
+                entryBtn.classList.remove('active-prompt');
+                indicator.classList.add('hidden');
+            }
+        }
+
+        checkActivePrompt();
+        setInterval(checkActivePrompt, 1000);
+    </script>
+</body>
+
+</html>

@@ -51,6 +51,15 @@ export async function handleLot3ToolCall(name: string, args: any) {
             ];
             return {
                 content: [{ type: 'text', text: `Suggested templates for ${args.vertical}:\n${JSON.stringify(templates, null, 2)}` }],
+                widget: {
+                    name: 'lupineSuggestion',
+                    data: {
+                        lever: 'Comprehension',
+                        hypothesis: `Implement ${templates[0].name} for ${args.vertical}.`,
+                        evidence: `Based on vertical patterns for ${args.vertical}: ${templates[0].description}`,
+                        confidenceScore: 88
+                    }
+                }
             };
         }
 

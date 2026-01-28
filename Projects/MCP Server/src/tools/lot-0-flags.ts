@@ -49,6 +49,15 @@ export async function handleLot0ToolCall(name: string, args: any) {
             }
             return {
                 content: [{ type: 'text', text: JSON.stringify(flag, null, 2) }],
+                widget: {
+                    name: 'flagStatus',
+                    data: {
+                        name: flag.name,
+                        flagKey: flag.key,
+                        status: flag.status === 'active',
+                        environment: 'production'
+                    }
+                }
             };
         }
 

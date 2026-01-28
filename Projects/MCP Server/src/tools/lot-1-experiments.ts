@@ -53,6 +53,18 @@ export async function handleLot1ToolCall(name: string, args: any) {
             }
             return {
                 content: [{ type: 'text', text: JSON.stringify(exp.results, null, 2) }],
+                widget: {
+                    name: 'experimentResults',
+                    data: {
+                        experimentName: exp.name,
+                        status: exp.status,
+                        totalVisitors: exp.results.visitors,
+                        variations: [
+                            { name: 'Baseline', conversionRate: 3.8, isWinning: false, confidence: 0, conversions: 3200 },
+                            { name: 'Variation A', conversionRate: exp.results.improvement > 0 ? 5.3 : 3.2, isWinning: exp.results.improvement > 0, confidence: exp.results.confidence, conversions: 4500 }
+                        ]
+                    }
+                }
             };
         }
 
