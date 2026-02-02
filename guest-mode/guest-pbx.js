@@ -121,3 +121,4 @@ function showConversionModal() {
     document.body.appendChild(modal);
 }
 // Triggering re-build to resolve transient GitHub Actions error
+// Deployment retry - Tue Feb  3 00:10:08 CET 2026
