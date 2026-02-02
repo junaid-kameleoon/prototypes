@@ -82,6 +82,39 @@
       { url: "https://www.acmerun.com/", status: "In progress", name: "Homepage" },
     ];
 
+    const LEVER_DATA = {
+      "Comprehension": {
+        label: "Comprehension",
+        question: "Can the user understand what is being offered?",
+        description: "Addresses clarity of messaging, product information, and transactional details. When users struggle to comprehend the offering or how transactions work, conversion friction increases regardless of other factors."
+      },
+      "Motivation": {
+        label: "Motivation",
+        question: "Does the user want to take action?",
+        description: "Encompasses value perception, urgency, social proof, and incentive structures. Even when users understand an offering, insufficient motivation prevents action."
+      },
+      "Trust": {
+        label: "Trust",
+        question: "Does the user believe and accept the offering?",
+        description: "Covers legitimacy signals, credibility indicators, and security assurances. Users may understand and want something but hesitate due to concerns about authenticity or safety."
+      },
+      "Cost": {
+        label: "Cost",
+        question: "Can the user afford it (financially, cognitively, temporally)?",
+        description: "Addresses pricing clarity, perceived effort, and commitment concerns. High cost (financial, cognitive, or temporal) creates barriers even when other factors align."
+      },
+      "Anxiety": {
+        label: "Cost (Anxiety)",
+        question: "Can the user afford it (financially, cognitively, temporally)?",
+        description: "Addresses pricing clarity, perceived effort, and commitment concerns. High cost (financial, cognitive, or temporal) creates barriers even when other factors align."
+      },
+      "Usability": {
+        label: "Usability",
+        question: "Can the user interact with the interface easily?",
+        description: "Covers navigation, findability, visual attention, and interaction friction. Poor usability prevents users from completing intended actions."
+      }
+    };
+
     // --- Components ---
 
     function InfoTooltip({ label, content, children }) {
@@ -122,7 +155,7 @@
               <div className="bg-gray-900 text-white text-[10px] rounded-lg shadow-xl p-3 w-64 mb-2">
                 {label && <div className="font-bold mb-1 text-blue-200">{label}</div>}
                 <div className="leading-relaxed opacity-90">
-                  {typeof content === 'object' ? (
+                  {typeof content === 'object' && !React.isValidElement(content) ? (
                     <pre className="whitespace-pre-wrap font-mono text-[9px]">{JSON.stringify(content, null, 2)}</pre>
                   ) : content}
                 </div>
@@ -913,9 +946,25 @@
                 {/* SECTION 1: HYPOTHESIS */}
                 <AccordionSection title="Hypothesis" icon={Lightbulb} defaultOpen={true}>
                   <div className="flex items-center gap-2 mb-2">
-                    <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-blue-50 text-blue-700">
-                      {(selectedExperiment || selectedHypothesis).hypothesis.master_lever}
-                    </span>
+                    {(() => {
+                      const masterLever = (selectedExperiment || selectedHypothesis).hypothesis.master_lever;
+                      const data = LEVER_DATA[masterLever];
+                      return (
+                        <InfoTooltip
+                          label={data?.label || masterLever}
+                          content={data ? (
+                            <div>
+                              <div className="font-semibold text-blue-100 mb-1">{data.question}</div>
+                              <div>{data.description}</div>
+                            </div>
+                          ) : "No definition available."}
+                        >
+                          <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-blue-50 text-blue-700 cursor-help">
+                            {masterLever}
+                          </span>
+                        </InfoTooltip>
+                      );
+                    })()}
                     <span className="text-gray-300">›</span>
                     <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-blue-50 text-blue-700">
                       {(selectedExperiment || selectedHypothesis).hypothesis.lever}
