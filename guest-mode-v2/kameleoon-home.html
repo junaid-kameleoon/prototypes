@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Build experiments in minutes by chatting with AI | Kameleoon</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&family=Noto+Sans+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: '#DAE995', // Lime Green
+                        dark: '#1D342F',  // Deep Dark Green
+                        slate: '#262E2C', // Dark Slate
+                    },
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        mono: ['"Noto Sans Mono"', 'monospace'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        .btn-primary {
+            @apply bg-brand text-dark px-6 py-3 rounded-xl font-mono font-bold uppercase tracking-wider hover:bg-opacity-90 transition-all flex items-center gap-2;
+            box-shadow: 0 4px 14px 0 rgba(218, 233, 149, 0.39);
+        }
+
+        .btn-outline {
+            @apply border border-dark text-dark px-6 py-3 rounded-xl font-mono font-bold uppercase tracking-wider hover:bg-dark hover:text-white transition-all flex items-center gap-2;
+        }
+
+        .nav-link {
+            @apply text-dark font-medium hover:text-opacity-70 transition-colors;
+        }
+
+        .pbx-drawer {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 450px;
+            height: 100vh;
+            background: white;
+            box-shadow: -10px 0 30px rgba(0, 0, 0, 0.1);
+            transform: translateX(100%);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 100;
+        }
+
+        .pbx-drawer.open {
+            transform: translateX(0);
+        }
+
+        @keyframes pulse-brand {
+            0% {
+                box-shadow: 0 0 0 0 rgba(218, 233, 149, 0.7);
+            }
+
+            70% {
+                box-shadow: 0 0 0 15px rgba(218, 233, 149, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(218, 233, 149, 0);
+            }
+        }
+
+        .btn-pulse {
+            animation: pulse-brand 2s infinite;
+        }
+
+        .btn-glow:hover {
+            box-shadow: 0 0 20px rgba(218, 233, 149, 0.5);
+            transform: translateY(-1px);
+        }
+    </style>
+</head>
+
+<body class="bg-white text-dark font-sans overflow-x-hidden">
+
+    <!-- Header -->
+    <header class="sticky top-0 w-full bg-white/80 backdrop-blur-md z-50 border-b border-gray-100">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+            <div class="flex items-center gap-12">
+                <div class="text-2xl font-bold tracking-tighter">Kameleoon</div>
+                <nav class="hidden lg:flex items-center gap-8 text-sm">
+                    <a href="#" class="nav-link">Platform</a>
+                    <a href="#" class="nav-link">Solutions</a>
+                    <a href="#" class="nav-link">Plans</a>
+                    <a href="#" class="nav-link">Customers</a>
+                    <a href="#" class="nav-link">Resources</a>
+                </nav>
+            </div>
+            <div class="flex items-center gap-4">
+                <button onclick="togglePBX()" class="btn-primary text-[10px] py-2 px-4">
+                    <svg class="w-3 h-3" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+                    </svg>
+                    Try PBX Now
+                </button>
+                <button
+                    class="bg-dark text-white text-[10px] py-2 px-5 rounded-xl font-mono font-bold uppercase tracking-wider hover:bg-slate transition-all">Book
+                    a demo</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="relative pt-24 pb-32 px-6 overflow-hidden">
+        <div class="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 items-center">
+            <div class="space-y-8">
+                <div
+                    class="inline-block px-4 py-1.5 bg-brand/30 rounded-full text-xs font-mono font-bold tracking-wider uppercase">
+                    AI-Driven Personalization
+                </div>
+                <h1 class="text-6xl font-bold leading-[1.1] tracking-tight">
+                    Build experiments in <br> <span class="text-brand bg-dark px-2">minutes</span> by chatting <br> with
+                    AI.
+                </h1>
+                <p class="text-xl text-dark/70 max-w-lg leading-relaxed">
+                    Say goodbye to manual coding. Describe your experiment in plain English and let PBX handle the rest.
+                    Try it free in guest mode today.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <button onclick="togglePBX()" class="btn-primary text-sm px-8 py-4">
+                        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+                        </svg>
+                        Launch Guest PBX
+                    </button>
+                    <button class="btn-outline text-sm px-8 py-4">See how it works</button>
+                </div>
+                <div class="flex items-center gap-4 pt-4">
+                    <div class="flex -space-x-3">
+                        <img src="https://i.pravatar.cc/40?u=1" class="w-10 h-10 rounded-full border-2 border-white"
+                            alt="User">
+                        <img src="https://i.pravatar.cc/40?u=2" class="w-10 h-10 rounded-full border-2 border-white"
+                            alt="User">
+                        <img src="https://i.pravatar.cc/40?u=3" class="w-10 h-10 rounded-full border-2 border-white"
+                            alt="User">
+                    </div>
+                    <p class="text-sm font-medium">Joined by <span class="font-bold">+1,000</span> experimenters this
+                        month</p>
+                </div>
+            </div>
+
+            <!-- Hero Illustration / Mock AI -->
+            <div class="relative">
+                <div
+                    class="bg-dark rounded-3xl p-8 shadow-2xl transform lg:rotate-2 hover:rotate-0 transition-transform duration-700">
+                    <div class="space-y-6">
+                        <div class="flex items-center justify-between">
+                            <div class="flex gap-2">
+                                <div class="w-3 h-3 rounded-full bg-red-400"></div>
+                                <div class="w-3 h-3 rounded-full bg-amber-400"></div>
+                                <div class="w-3 h-3 rounded-full bg-green-400"></div>
+                            </div>
+                            <div class="text-[10px] text-white/40 font-mono">PBX ASSISTANT v2.4</div>
+                        </div>
+                        <div class="space-y-4">
+                            <div class="flex justify-end">
+                                <div
+                                    class="bg-brand/10 text-brand text-xs p-3 rounded-2xl rounded-tr-none max-w-[80%] font-mono">
+                                    "Change the hero title to 'Shop Smarter, Run Faster' and make the button lime
+                                    green."
+                                </div>
+                            </div>
+                            <div class="flex justify-start">
+                                <div
+                                    class="bg-white/5 text-white/90 text-xs p-3 rounded-2xl rounded-tl-none max-w-[80%] leading-relaxed">
+                                    <div class="flex items-center gap-2 mb-2 font-bold text-brand">
+                                        <div class="w-2 h-2 rounded-full bg-brand animate-pulse"></div>
+                                        PBX Assistant
+                                    </div>
+                                    Understood. I've updated the selector <code
+                                        class="bg-white/10 px-1 rounded text-white font-mono">.hero-title</code> and
+                                    modified the background-color of <code
+                                        class="bg-white/10 px-1 rounded text-white font-mono">.cta-button</code>. Would
+                                    you like to preview this variation?
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Floating Labels -->
+                <div
+                    class="absolute -bottom-6 -left-6 bg-brand text-dark px-4 py-2 rounded-lg shadow-lg font-mono text-[10px] font-bold animate-bounce">
+                    ⚡ 3 FREE PROMPTS
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Social Proof Section -->
+    <section class="py-20 border-t border-gray-100">
+        <div class="max-w-7xl mx-auto px-6 text-center space-y-12">
+            <h2 class="text-dark/40 font-mono text-sm tracking-widest uppercase">Trusted by 1000+ Performance Brands
+            </h2>
+            <div class="flex flex-wrap justify-center items-center gap-16 grayscale opacity-50">
+                <div class="text-3xl font-extrabold">SEPHORA</div>
+                <div class="text-3xl font-extrabold">LIDL</div>
+                <div class="text-3xl font-extrabold">TOYOTA</div>
+                <div class="text-3xl font-extrabold">FOSSIL</div>
+                <div class="text-3xl font-extrabold">TIFFANY & CO.</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PBX Guest Mode Drawer -->
+    <aside id="pbxDrawer" class="pbx-drawer flex flex-col">
+        <!-- Close Button -->
+        <button onclick="togglePBX()"
+            class="absolute top-6 right-6 w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center hover:bg-gray-50 transition-colors z-[110]">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </button>
+
+        <header class="p-8 pb-4 border-b border-gray-100 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-dark text-brand flex items-center justify-center text-xl">🧠</div>
+                <div>
+                    <h3 class="font-bold text-lg">PBX Assistant</h3>
+                    <div class="flex items-center gap-2">
+                        <span class="text-[10px] font-mono font-bold text-brand bg-dark px-1.5 py-0.5 rounded">GUEST
+                            MODE</span>
+                        <span id="promptCounter" class="text-[10px] text-gray-500 font-mono">3 PROMPTS LEFT</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Extension Warning -->
+        <div id="extWarning"
+            class="mx-6 mt-4 p-4 bg-amber-50 border border-amber-200 rounded-xl flex items-start gap-3">
+            <div class="text-amber-600 mt-1">⚠️</div>
+            <div>
+                <div class="text-xs font-bold text-amber-900">Chrome Extension Required</div>
+                <div class="text-[11px] text-amber-700 leading-relaxed mb-2">To apply changes directly to your site,
+                    please install the Kameleoon PBX extension.</div>
+                <button
+                    class="text-[11px] font-bold text-amber-900 underline bg-transparent border-none p-0 cursor-pointer">Add
+                    to Chrome (Free)</button>
+            </div>
+        </div>
+
+        <!-- Chat History -->
+        <div id="chatHistory" class="flex-1 overflow-y-auto p-6 space-y-6">
+            <div class="flex justify-start">
+                <div class="bg-gray-100 text-dark text-xs p-4 rounded-2xl rounded-tl-none max-w-[90%] leading-relaxed">
+                    <div class="text-[10px] font-bold text-dark/40 mb-1 uppercase tracking-wider">PBX Assistant</div>
+                    Hello! I'm your Prompt-based experimentation (PBX) assistant. <br><br>
+                    I've already analyzed your landing page and detected a few optimization opportunities. For example,
+                    I can help you <b>personalize the hero headline</b> or <b>optimize the CTA button colors</b> based
+                    on brand guidelines. <br><br>
+                    In Guest Mode, you can try up to <b>3 free prompts</b>. What would you like to change?
+                </div>
+            </div>
+            <div class="flex justify-start">
+                <div class="bg-gray-100 text-dark text-xs p-4 rounded-2xl rounded-tl-none max-w-[90%] leading-relaxed">
+                    <div class="text-[10px] font-bold text-dark/40 mb-1 uppercase tracking-wider">PBX Assistant</div>
+                    <div class="italic text-gray-500 mb-2">Pre-calculated suggestion:</div>
+                    "Change the hero title to 'Shop Smarter, Run Faster' and make the button lime green."
+                </div>
+            </div>
+        </div>
+
+        <!-- Input Area -->
+        <footer class="p-6 border-t border-gray-100">
+            <div class="relative">
+                <textarea id="pbxInput"
+                    class="w-full h-32 p-4 pb-12 bg-gray-100 rounded-2xl text-xs outline-none focus:ring-2 focus:ring-brand/50 transition-all resize-none"
+                    placeholder="e.g. Change the 'Shop Now' button to blue and center it..."></textarea>
+                <div class="absolute bottom-4 right-4 flex items-center gap-3">
+                    <span id="charCount" class="text-[10px] text-gray-400 font-mono">0 / 500</span>
+                    <button onclick="handleSend()"
+                        class="w-10 h-10 rounded-full bg-dark text-brand flex items-center justify-center shadow-lg hover:scale-110 active:scale-95 transition-all">
+                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <p class="text-center text-[9px] text-gray-400 mt-4 leading-relaxed">
+                Guest mode allows 3 free experiments.
+            </p>
+        </footer>
+    </aside>
+
+    <!-- FAB -->
+    <button onclick="togglePBX()"
+        class="fixed bottom-8 right-8 w-16 h-16 rounded-full bg-dark text-brand shadow-2xl flex items-center justify-center text-3xl z-40 hover:scale-110 active:scale-95 transition-all border-4 border-brand/20">
+        🧠
+    </button>
+
+    <script src="guest-pbx.js"></script>
+    <script>
+        function togglePBX() {
+            const drawer = document.getElementById('pbxDrawer');
+            drawer.classList.toggle('open');
+        }
+
+        // Simple input tracking
+        const input = document.getElementById('pbxInput');
+        if (input) {
+            input.addEventListener('input', (e) => {
+                document.getElementById('charCount').textContent = `${e.target.value.length} / 500`;
+            });
+        }
+    </script>
+</body>
+
+</html>

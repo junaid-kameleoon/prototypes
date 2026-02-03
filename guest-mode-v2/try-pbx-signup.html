@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Save Your PBX Progress | Kameleoon</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&family=Noto+Sans+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: '#DAE995', // Lime Green
+                        dark: '#1D342F',  // Deep Dark Green
+                        slate: '#262E2C', // Dark Slate
+                    },
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        mono: ['"Noto Sans Mono"', 'monospace'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        .input-field {
+            @apply w-full bg-gray-100 border-none rounded-2xl px-6 py-4 outline-none focus:ring-2 focus:ring-brand/50 transition-all text-sm;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50 min-h-screen flex items-center justify-center p-6 font-sans">
+
+    <div class="max-w-4xl w-full bg-white rounded-[40px] shadow-2xl overflow-hidden flex flex-col md:flex-row">
+        <!-- Left Side: Promo/Progress -->
+        <div class="md:w-1/2 bg-dark p-12 text-white space-y-12">
+            <div class="text-2xl font-bold tracking-tighter">Kameleoon</div>
+
+            <div class="space-y-4">
+                <h1 class="text-4xl font-bold leading-tight">Don't lose your experiments.</h1>
+                <p class="text-white/60 text-lg">Sign up now to save the 3 variations you just created and continue
+                    optimizing your site for free.</p>
+            </div>
+
+            <div class="space-y-6">
+                <div class="flex items-center gap-4 p-4 bg-white/5 rounded-2xl border border-white/10">
+                    <div
+                        class="w-12 h-12 bg-brand text-dark rounded-xl flex items-center justify-center text-xl font-bold">
+                        1</div>
+                    <div class="text-sm">
+                        <div class="font-bold">Project Initialized</div>
+                        <div class="text-white/40">Context and brand rules applied.</div>
+                    </div>
+                </div>
+                <div class="flex items-center gap-4 p-4 bg-white/5 rounded-2xl border border-white/10">
+                    <div
+                        class="w-12 h-12 bg-brand text-dark rounded-xl flex items-center justify-center text-xl font-bold">
+                        2</div>
+                    <div class="text-sm">
+                        <div class="font-bold">3 Variations Drafted</div>
+                        <div class="text-white/40">Ready to be deployed via extension.</div>
+                    </div>
+                </div>
+                <div class="flex items-center gap-4 p-4 bg-white/5 rounded-2xl border border-white/10">
+                    <div
+                        class="w-12 h-12 bg-brand text-dark rounded-xl flex items-center justify-center text-xl font-bold">
+                        3</div>
+                    <div class="text-sm">
+                        <div class="font-bold">Full Dashboard Access</div>
+                        <div class="text-white/40">Analyze impact and run A/B tests.</div>
+                    </div>
+                </div>
+            </div>
+
+            <p class="text-[10px] text-white/30 font-mono uppercase tracking-widest">Powered by Lupine AI Engine</p>
+        </div>
+
+        <!-- Right Side: Signup Form -->
+        <div class="md:w-1/2 p-12 space-y-8 flex flex-col justify-center">
+            <div class="space-y-2">
+                <h2 class="text-2xl font-bold text-dark">Create your account</h2>
+                <p class="text-xs text-gray-500">Already have an account? <a href="#"
+                        class="text-dark font-bold underline">Log in</a></p>
+            </div>
+
+            <form class="space-y-4"
+                onsubmit="event.preventDefault(); alert('Account created! Experiments saved.'); location.href='/master-prompt/v5/index.html';">
+                <div>
+                    <input type="text" placeholder="Full Name" class="input-field" required>
+                </div>
+                <div>
+                    <input type="email" placeholder="Work Email" class="input-field" required>
+                </div>
+                <div>
+                    <input type="password" placeholder="Password" class="input-field" required>
+                </div>
+
+                <div class="flex items-start gap-3 pt-2">
+                    <input type="checkbox" class="mt-1 w-4 h-4 rounded border-gray-300 text-dark focus:ring-dark"
+                        id="terms" required>
+                    <label for="terms" class="text-[10px] text-gray-500 leading-relaxed">
+                        I agree to the <a href="#" class="underline">Terms of Service</a> and <a href="#"
+                            class="underline">Privacy Policy</a>. I understand my guest data will be merged into this
+                        account.
+                    </label>
+                </div>
+
+                <button type="submit"
+                    class="w-full bg-brand text-dark py-4 rounded-full font-bold text-lg hover:scale-105 transition-transform mt-4">
+                    Complete Setup
+                </button>
+            </form>
+
+            <div class="pt-4 flex items-center gap-4 justify-center">
+                <div class="h-px bg-gray-200 flex-1"></div>
+                <span class="text-[10px] text-gray-400 font-mono uppercase">Or sign up with</span>
+                <div class="h-px bg-gray-200 flex-1"></div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <button
+                    class="flex items-center justify-center gap-2 py-3 border border-gray-200 rounded-full hover:bg-gray-50 transition-colors">
+                    <img src="https://www.google.com/favicon.ico" class="w-4 h-4" alt="Google">
+                    <span class="text-xs font-bold">Google</span>
+                </button>
+                <button
+                    class="flex items-center justify-center gap-2 py-3 border border-gray-200 rounded-full hover:bg-gray-50 transition-colors">
+                    <img src="https://www.microsoft.com/favicon.ico" class="w-4 h-4" alt="Microsoft">
+                    <span class="text-xs font-bold">Microsoft</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
