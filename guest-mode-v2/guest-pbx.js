@@ -1,10 +1,10 @@
 // Guest Mode PBX Logic
 // Tracks usage and mocks the experience for kameleoon.com
 
-let promptCount = parseInt(localStorage.getItem('pbx_guest_prompts') || '0');
-let isExtensionPrompted = localStorage.getItem('pbx_extension_prompted') === 'true';
+let promptCount = 0;
+let isExtensionPrompted = false;
 const MAX_PROMPTS = 3;
-const IS_EXTENSION_INSTALLED = false; // Mocking extinction status
+const IS_EXTENSION_INSTALLED = false; // Mocking extension status
 
 document.addEventListener('DOMContentLoaded', () => {
     updateUI();
@@ -44,11 +44,11 @@ function handleSend() {
     // Add user message to UI
     appendMessage('user', text);
     input.value = '';
-    document.getElementById('charCount').textContent = '0 / 500';
+    const charCountEl = document.getElementById('charCount');
+    if (charCountEl) charCountEl.textContent = '0 / 500';
 
     // Increment count
     promptCount++;
-    localStorage.setItem('pbx_guest_prompts', promptCount);
     updateUI();
 
     // Mock AI response
@@ -91,8 +91,8 @@ function installAndContinue() {
 
 function skipExtension() {
     isExtensionPrompted = true;
-    localStorage.setItem('pbx_extension_prompted', 'true');
-    document.getElementById('extensionModal').remove();
+    const modal = document.getElementById('extensionModal');
+    if (modal) modal.remove();
     // Re-trigger the send
     handleSend();
 }
@@ -127,36 +127,34 @@ function getMockResponse(input) {
 }
 
 function showConversionModal() {
-    // FRED'S JOURNEY: Enhanced value summary
     const modal = document.createElement('div');
     modal.className = 'fixed inset-0 bg-dark/95 z-[200] flex items-center justify-center p-6 animate-in fade-in duration-300';
     modal.innerHTML = `
         <div class="bg-white rounded-3xl p-10 max-w-lg w-full text-center space-y-8 shadow-2xl border-4 border-brand">
             <div class="w-20 h-20 bg-brand rounded-full flex items-center justify-center mx-auto text-4xl shadow-lg">⚡</div>
             <div class="space-y-2">
-                <h2 class="text-3xl font-bold text-dark">Limit Reached!</h2>
+                <h2 class="text-3xl font-bold text-dark italic tracking-tight">You're doing great!</h2>
                 <p class="text-dark/60">You've reached your guest limit, but your work is ready to go.</p>
             </div>
             
             <div class="bg-gray-50 rounded-2xl p-6 text-left space-y-4 border border-gray-100">
-                <div class="text-[10px] font-bold text-brand bg-dark px-2 py-1 inline-block rounded uppercase tracking-widest">Aha! Moment Summary</div>
-                <ul class="space-y-3">
+                <ul class="space-y-4">
                     <li class="flex items-center gap-3 text-xs font-bold text-dark">
                         <span class="text-green-500 text-lg">✓</span> 3 Variations Drafted for kameleoon.com
                     </li>
-                    <li class="flex items-center gap-2 text-[11px] text-gray-500 pl-7">
-                        Impact Analysis: Predicted +4.2% Conversion Lift
+                    <li class="flex items-center gap-3 text-xs font-bold text-dark">
+                        <span class="text-green-500 text-lg">✓</span> Impact Analysis: Predicted +4.2% Conversion Lift
                     </li>
-                    <li class="flex items-center gap-2 text-[11px] text-gray-500 pl-7">
-                        Technical Feasibility: Verified for all devices
+                    <li class="flex items-center gap-3 text-xs font-bold text-dark">
+                        <span class="text-green-500 text-lg">✓</span> Technical Feasibility: Verified for all devices
                     </li>
                 </ul>
             </div>
 
             <div class="space-y-4">
-                <p class="text-sm font-medium text-dark">Save these 3 experiments to a permanent project.</p>
+                <p class="text-sm font-medium text-dark leading-relaxed">Save your work to a permanent project and continue prompting!</p>
                 <div class="flex flex-col gap-3">
-                    <button onclick="location.href='try-pbx-signup.html'" class="w-full bg-dark text-brand py-4 rounded-full font-bold text-lg hover:scale-105 transition-transform shadow-xl">Complete Signup & Save</button>
+                    <button onclick="location.href='try-pbx-signup.html'" class="w-full bg-dark text-brand py-4 rounded-full font-bold text-lg hover:scale-105 transition-transform shadow-xl">Start a Free PBX Trial</button>
                     <button onclick="location.reload()" class="text-xs text-gray-400 hover:text-dark">Start Over (Clears History)</button>
                 </div>
             </div>
