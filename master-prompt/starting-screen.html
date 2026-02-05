@@ -126,58 +126,106 @@
                     <div class="text-[11px] text-white/70">Starting Screen Mock</div>
                 </div>
             </div>
-            <div class="version-dropdown-container">
-                <select onchange="window.location.href=this.value">
-                    <option value="v0/index.html">v0: Original</option>
-                    <option value="v1/index.html">v1: Figma</option>
-                    <option value="v2/index.html">v2: Fabien</option>
-                    <option value="v3/index.html">v3: Merged</option>
-                    <option value="v4/index.html">v4: Popup</option>
-                    <option value="starting-screen.html" selected>Starting Screen</option>
-                    <option value="../index.html">← Gallery</option>
-                </select>
-            </div>
         </header>
 
         <div class="pbx-content">
-            <div class="start-panel">
-                <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-600" fill="none"
-                        viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M13 10V3L4 14h7v7l9-11h-7z" />
+            <div class="start-panel"
+                style="background: transparent; box-shadow: none; padding: 0; max-width: 600px; width: 100%;">
+                <div class="w-10 h-10 bg-[#D4E788] rounded-lg flex items-center justify-center mx-auto mb-4">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M10 3H3V10H10V3Z" fill="#1E293B" />
+                        <path d="M21 3H14V10H21V3Z" fill="#1E293B" />
+                        <path d="M10 14H3V21H10V14Z" fill="#1E293B" />
+                        <path d="M21 14H14V21H21V14Z" fill="#1E293B" />
                     </svg>
                 </div>
-                <h2 class="text-lg font-bold mb-2">What are we optimizing?</h2>
-                <p class="text-sm text-gray-500 mb-6">Choose how you'd like to start your experiment</p>
+                <h2 class="text-2xl font-bold mb-6 text-gray-900">What are we optimizing?</h2>
 
-                <button class="option-btn">
-                    <svg class="h-5 w-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                    </svg>
-                    <div class="text-left flex-grow">
-                        <div class="font-medium text-sm">Upload image</div>
-                        <div class="text-xs text-gray-500">Start from a design file</div>
+                <!-- Master Prompt Badge -->
+                <div class="w-full text-left">
+                    <div id="master-prompt-badge"
+                        class="inline-flex items-center gap-1.5 bg-[#EEF2FF] border border-[#C7D2FE] rounded-full px-3 py-1 cursor-pointer group relative select-none mb-4 transition-all hover:bg-[#E0E7FF]"
+                        onclick="window.location.href='v4/index.html'">
+                        <span class="text-sm">🧠</span>
+                        <span class="text-xs font-semibold text-[#3838E7]">Master Prompt</span>
+                        <!-- Hover X Button -->
+                        <div onclick="event.stopPropagation(); removeMasterPrompt()"
+                            class="absolute -top-1.5 -right-1.5 w-4 h-4 bg-white border border-gray-200 shadow-sm rounded-full hidden group-hover:flex items-center justify-center text-gray-400 hover:text-red-500 transition-colors z-10">
+                            <svg class="w-2.5 h-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M18 6L6 18M6 6l12 12"></path>
+                            </svg>
+                        </div>
                     </div>
-                </button>
+                </div>
 
-                <button class="option-btn border-2 border-indigo-200 bg-indigo-50"
-                    onclick="window.location.href='v2/settings.html?from=starting-screen'">
-                    <span class="text-xl">🧠</span>
-                    <div class="text-left flex-grow">
-                        <div class="font-medium text-sm text-indigo-900">Attach master-prompt</div>
-                        <div class="text-xs text-indigo-600">Use your predefined context</div>
+                <div
+                    class="relative bg-white rounded-xl border border-gray-200 shadow-sm transition-all focus-within:ring-2 focus-within:ring-indigo-500 focus-within:border-indigo-500">
+                    <textarea
+                        class="w-full p-4 min-h-[140px] resize-none outline-none text-sm text-gray-700 bg-transparent rounded-xl"
+                        placeholder="Ask me anything about starting your optimization journey..."></textarea>
+
+                    <div class="flex justify-between items-center px-3 pb-3">
+                        <div class="flex gap-2">
+                            <button
+                                class="w-8 h-8 flex items-center justify-center rounded-lg border border-gray-200 hover:bg-gray-50 text-gray-500 transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                                </svg>
+                            </button>
+                            <button
+                                class="w-8 h-8 flex items-center justify-center rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/3/33/Figma-logo.svg"
+                                    alt="Figma" class="w-4 h-4">
+                            </button>
+                        </div>
+                        <button
+                            class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 text-gray-400 hover:bg-[#3838E7] hover:text-white transition-all">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M5 10l7-7m0 0l7 7m-7-7v18" />
+                            </svg>
+                        </button>
                     </div>
-                </button>
+                </div>
 
-                <div class="mt-6 text-xs text-gray-500">
-                    Our AI can do almost anything except back-end changes. <span
-                        class="text-blue-600 underline cursor-pointer">See our guidelines</span>.
+                <div class="mt-8 text-xs text-gray-400">
+                    Our AI can do almost anything, except back-end changes. <span
+                        class="underline cursor-pointer hover:text-gray-600">See our guidelines</span>.
                 </div>
             </div>
         </div>
     </aside>
+
+    <script>
+        // Dummy Prompt Injection (New Brand Tone Version)
+        const LONG_PROMPT = `Always write new copy using our brand tone: friendly, professional, and clear. The language should feel approachable without being casual, and confident without sounding promotional. Avoid jargon where possible, and prefer simple, direct phrasing that communicates value quickly. The goal of the copy is to guide users smoothly through the experience, not to persuade aggressively or overwhelm with detail.
+
+All copy changes must be compatible with responsive layouts. Text should be concise enough to adapt well across breakpoints, including smaller screens. Avoid overly long sentences, nested clauses, or formatting that depends on fixed widths. Assume that copy may wrap, truncate, or reflow, and ensure that meaning is preserved even when space is constrained. Headlines and labels should remain understandable when shortened or displayed on a single line.
+
+Use active voice and present tense wherever possible. Prioritize clarity over cleverness. Each sentence should have a clear purpose, whether it is explaining a state, setting an expectation, or prompting an action. When describing system behavior or waiting states, be reassuring and transparent about what is happening, without implying unnecessary urgency.
+
+CTAs should be descriptive and action-oriented, clearly indicating what will happen next. Avoid vague labels such as “Learn more” or “Click here” unless context already makes the action obvious. Error states, empty states, and loading messages should be calm and helpful, focusing on what the user can expect or do next rather than what went wrong.
+
+Assume the copy will live inside a product interface and will be read quickly. Avoid humor, emojis, or personality flourishes that could distract from usability. The overall tone should feel consistent across the product, so that each new piece of copy feels like it belongs to the same system and supports a coherent, professional user experience.`;
+
+        if (!localStorage.getItem('kameleoon_master_prompt')) {
+            localStorage.setItem('kameleoon_master_prompt', LONG_PROMPT);
+        }
+
+        function removeMasterPrompt() {
+            if (confirm('Remove Master Prompt?')) {
+                localStorage.removeItem('kameleoon_master_prompt');
+                document.getElementById('master-prompt-badge').style.display = 'none';
+            }
+        }
+
+        // Always show for demo
+        document.getElementById('master-prompt-badge').style.display = 'inline-flex';
+    </script>
 </body>
 
 </html>

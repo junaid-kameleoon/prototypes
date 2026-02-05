@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Master Prompt v2 - Fabien's Feedback</title>
+    <title>Master Prompt v3 - Merged Flow</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -41,6 +41,8 @@
             padding: 20px;
             overflow-y: auto;
             background-color: #FAFAFA;
+            display: flex;
+            flex-direction: column;
         }
 
         .pbx-footer {
@@ -66,17 +68,15 @@
 
         .action-btn:hover {
             background-color: #f9fafb;
-            border-color: #3838E7;
-            color: #3838E7;
         }
 
         .input-box {
             background: white;
             border: 1px solid #E5E7EB;
             border-radius: 12px;
-            padding: 16px;
-            min-height: 100px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+            padding: 12px;
+            min-height: 80px;
+            position: relative;
         }
 
         .input-box textarea {
@@ -124,6 +124,61 @@
             pointer-events: none;
             font-size: 10px;
         }
+
+        /* Master Prompt Button next to + */
+        .input-toolbar {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .tool-btn {
+            width: 32px;
+            height: 32px;
+            border: 1px solid #E5E7EB;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6B7280;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        .tool-btn:hover {
+            background: #F9FAFB;
+            border-color: #3838E7;
+        }
+
+        .master-prompt-pill {
+            padding: 4px 12px;
+            background: #EEF2FF;
+            border: 1px solid #C7D2FE;
+            border-radius: 20px;
+            color: #3838E7;
+            font-size: 12px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+        }
+
+        /* Inline Editor */
+        .inline-editor {
+            flex-grow: 1;
+            background: white;
+            border-radius: 8px;
+            padding: 16px;
+            border: 1px solid #E5E7EB;
+            display: none;
+        }
+
+        .inline-editor.active {
+            display: flex;
+            flex-direction: column;
+        }
     </style>
 </head>
 
@@ -133,75 +188,171 @@
         <div class="h-64 bg-white shadow rounded p-8"></div>
     </div>
 
-    <aside class="pbx-sidebar">
+    <aside class="pbx-sidebar relative">
         <header class="pbx-header">
             <div class="flex items-center gap-2">
                 <div class="w-8 h-8 rounded bg-white/20 flex items-center justify-center font-bold text-xs text-white">P
                 </div>
                 <div>
-                    <div class="text-sm font-semibold text-white">My 2nd PBX</div>
-                    <div class="text-[11px] text-white/70">v2: Fabien's Feedback</div>
+                    <div class="text-xs font-bold text-white">My 2nd PBX</div>
+                    <div class="text-[10px] text-white/70">v2: Merged Flow</div>
                 </div>
-            </div>
-            <div class="version-dropdown-container">
-                <select onchange="window.location.href=this.value">
-                    <option value="../v0/index.html">v0: Original</option>
-                    <option value="../v1/index.html">v1: Figma</option>
-                    <option value="index.html" selected>v2: Fabien</option>
-                    <option value="../v3/index.html">v3: Merged</option>
-                    <option value="../v4/index.html">v4: Popup</option>
-                    <option value="../../index.html">← Gallery</option>
-                </select>
             </div>
         </header>
 
         <div class="pbx-content">
-            <div class="bg-indigo-50 border border-indigo-100 rounded-lg p-4 mb-4">
+            <div id="summary-card" class="bg-indigo-50 border border-indigo-100 rounded-lg p-4 mb-4">
                 <div class="font-semibold text-xs mb-2 text-indigo-600">KAI - v2 Summary</div>
                 <ul class="text-xs text-indigo-900 space-y-1 ml-4 list-disc opacity-80">
-                    <li>Refined layout addressing all feedback points:</li>
-                    <li>Removed redundant project blocks & moved to sidebar.</li>
-                    <li>Simplified "What is a Master Prompt?" to 2 essential points.</li>
-                    <li>Clearer definition of persistent prompt attachment.</li>
+                    <li>Redesigned full-height sidebar for Master Prompt configuration.</li>
+                    <li>Easily accessible from the chat interface via the 🧠 badge.</li>
+                    <li>Transparent read-only state with links to admin controls.</li>
                 </ul>
             </div>
         </div>
 
-        <footer class="pbx-footer">
-            <div class="flex justify-between items-center mb-4">
-                <div class="flex gap-2">
-                    <button class="action-btn">
-                        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                        </svg>
-                        Start new variation
-                    </button>
-                    <button onclick="window.location.href='settings.html?from=v2'"
-                        class="action-btn text-indigo-600 border-indigo-100 bg-indigo-50 hover:bg-indigo-100">
-                        <span>🧠</span>
-                        Master Prompt
-                        <span id="active-indicator" class="w-1.5 h-1.5 rounded-full bg-green-500 ml-1 hidden"></span>
-                    </button>
+        <!-- Full-Height Config View -->
+        <div id="inline-editor"
+            class="absolute inset-0 bg-white z-[60] flex flex-col hidden [&.active]:flex transition-all">
+            <div class="pbx-header !bg-white !border-b !border-gray-200">
+                <div class="flex items-center gap-2">
+                    <div
+                        class="w-8 h-8 rounded bg-indigo-50 flex items-center justify-center font-bold text-xs text-indigo-600">
+                        🧠</div>
+                    <div class="text-gray-900">
+                        <div class="text-xs font-bold">Master Prompt</div>
+                        <div class="text-[10px] text-gray-400">Read-only View</div>
+                    </div>
                 </div>
-                <div class="text-[11px] font-semibold text-indigo-600 flex items-center gap-1">
-                    <svg class="w-3 h-3" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5L12 2Z" />
+                <button onclick="toggleEditor(false)"
+                    class="p-2 hover:bg-gray-100 rounded-full transition-colors text-gray-400">
+                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <path d="M18 6L6 18M6 6l12 12"></path>
                     </svg>
-                    9998 credits
+                </button>
+            </div>
+            <div class="flex-grow p-6 overflow-y-auto space-y-6">
+                <div>
+                    <h3 class="text-xs font-bold text-gray-900 uppercase tracking-wider mb-2">Global Rules</h3>
+                    <p class="text-xs text-gray-500 leading-relaxed">
+                        These rules are automatically attached to every prompt in this project to maintain brand
+                        consistency.
+                    </p>
+                </div>
+
+                <div class="bg-gray-50 border border-gray-200 rounded-xl p-4">
+                    <textarea id="prompt-input"
+                        class="w-full bg-transparent border-none text-xs text-gray-500 leading-relaxed outline-none resize-none cursor-not-allowed h-64"
+                        readonly></textarea>
+                </div>
+
+                <div class="bg-indigo-50 border border-indigo-100 rounded-xl p-4 flex gap-3">
+                    <span class="text-sm">🔒</span>
+                    <div class="space-y-1">
+                        <div class="text-xs font-bold text-indigo-900">Permissions Required</div>
+                        <div class="text-[11px] text-indigo-700 opacity-80">To edit these rules, please visit the global
+                            AI Settings page in the Admin section.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="p-6 border-t border-gray-100">
+                <button onclick="window.location.href='../v4/index.html'"
+                    class="w-full bg-[#3838E7] text-white text-xs font-bold py-3.5 rounded-xl hover:shadow-lg transition-all transform hover:-translate-y-0.5">
+                    Navigate to Admin Settings
+                </button>
+            </div>
+        </div>
+
+        <footer class="pbx-footer">
+            <!-- Master Prompt Badge (Above Input) -->
+            <div id="master-prompt-badge"
+                class="inline-flex items-center gap-1.5 bg-[#EEF2FF] border border-[#C7D2FE] rounded-full px-3 py-1 cursor-pointer group relative select-none mb-3 transition-all hover:bg-[#E0E7FF]"
+                onclick="toggleEditor(true)">
+                <span class="text-sm">🧠</span>
+                <span class="text-xs font-semibold text-[#3838E7]">Master Prompt</span>
+                <div onclick="event.stopPropagation(); removeMasterPrompt()"
+                    class="absolute -top-1.5 -right-1.5 w-4 h-4 bg-white border border-gray-200 shadow-sm rounded-full hidden group-hover:flex items-center justify-center text-gray-400 hover:text-red-500 transition-colors z-10">
+                    <svg class="w-2.5 h-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M18 6L6 18M6 6l12 12"></path>
+                    </svg>
                 </div>
             </div>
 
-            <div class="input-box">
-                <textarea placeholder="Ask me anything..."></textarea>
+            <div
+                class="relative bg-white rounded-xl border border-gray-200 shadow-sm transition-all focus-within:ring-2 focus-within:ring-indigo-500 focus-within:border-indigo-500">
+                <textarea
+                    class="w-full p-4 min-h-[80px] resize-none outline-none text-sm text-gray-700 bg-transparent rounded-xl"
+                    placeholder="Ask me anything about Version 2 (Sidebar)..."></textarea>
+
+                <div class="flex justify-between items-center px-3 pb-3">
+                    <div class="flex gap-2">
+                        <button
+                            class="w-8 h-8 flex items-center justify-center rounded-lg border border-gray-200 hover:bg-gray-50 text-gray-500 transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                            </svg>
+                        </button>
+                        <button
+                            class="w-8 h-8 flex items-center justify-center rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/3/33/Figma-logo.svg" alt="Figma"
+                                class="w-4 h-4">
+                        </button>
+                    </div>
+                    <button
+                        class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 text-gray-400 hover:bg-[#3838E7] hover:text-white transition-all">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M5 10l7-7m0 0l7 7m-7-7v18" />
+                        </svg>
+                    </button>
+                </div>
             </div>
         </footer>
     </aside>
 
     <script>
-        const saved = localStorage.getItem('kameleoon_master_prompt');
-        if (saved && saved.trim()) {
-            document.getElementById('active-indicator').classList.remove('hidden');
+        const editor = document.getElementById('inline-editor');
+        const input = document.getElementById('prompt-input');
+
+        // Dummy Prompt Injection (New Brand Tone Version)
+        const LONG_PROMPT = `Always write new copy using our brand tone: friendly, professional, and clear. The language should feel approachable without being casual, and confident without sounding promotional. Avoid jargon where possible, and prefer simple, direct phrasing that communicates value quickly. The goal of the copy is to guide users smoothly through the experience, not to persuade aggressively or overwhelm with detail.
+
+All copy changes must be compatible with responsive layouts. Text should be concise enough to adapt well across breakpoints, including smaller screens. Avoid overly long sentences, nested clauses, or formatting that depends on fixed widths. Assume that copy may wrap, truncate, or reflow, and ensure that meaning is preserved even when space is constrained. Headlines and labels should remain understandable when shortened or displayed on a single line.
+
+Use active voice and present tense wherever possible. Prioritize clarity over cleverness. Each sentence should have a clear purpose, whether it is explaining a state, setting an expectation, or prompting an action. When describing system behavior or waiting states, be reassuring and transparent about what is happening, without implying unnecessary urgency.
+
+CTAs should be descriptive and action-oriented, clearly indicating what will happen next. Avoid vague labels such as “Learn more” or “Click here” unless context already makes the action obvious. Error states, empty states, and loading messages should be calm and helpful, focusing on what the user can expect or do next rather than what went wrong.
+
+Assume the copy will live inside a product interface and will be read quickly. Avoid humor, emojis, or personality flourishes that could distract from usability. The overall tone should feel consistent across the product, so that each new piece of copy feels like it belongs to the same system and supports a coherent, professional user experience.`;
+
+        function toggleEditor(show) {
+            editor.classList.toggle('active', show);
+            if (show) {
+                const saved = localStorage.getItem('kameleoon_master_prompt');
+                input.value = saved || LONG_PROMPT;
+            }
         }
+
+        function removeMasterPrompt() {
+            if (confirm('Remove Master Prompt?')) {
+                localStorage.removeItem('kameleoon_master_prompt');
+                document.getElementById('master-prompt-badge').style.display = 'none';
+                input.value = '';
+                toggleEditor(false);
+            }
+        }
+
+        // Init
+        if (!localStorage.getItem('kameleoon_master_prompt')) {
+            localStorage.setItem('kameleoon_master_prompt', LONG_PROMPT);
+        }
+        document.getElementById('master-prompt-badge').style.display = 'inline-flex';
+
+
     </script>
 </body>
 
