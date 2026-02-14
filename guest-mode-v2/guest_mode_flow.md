@@ -1,22 +1,37 @@
 # Guest Mode User Flow (Flowchart)
 
+![Guest Mode Flowchart](guest_mode_flow_visual.svg)
+
 This diagram maps the intended user journey for the Guest Mode on the Kameleoon corporate site.
 
 ## User Journey Overview
 
 ```mermaid
 flowchart TD
-    Start["User Enters Corporate Site"] --> ShowUI["Show Guest Mode PBX UI"]
-    ShowUI --> InputURL["User Inputs Target URL + Prompt"]
-    InputURL --> CheckExt{"Extension Detected?"}
+    %% Nodes
+    Start["User Enters Landing Page"]:::dark --> PBX_Init["PBX Assistant Greeting"]:::lime
+    PBX_Init --> Input["User Inputs URL + Prompt"]:::lime
+    Input --> ExtCheck{Extension Found?}:::dark
     
-    CheckExt -- "No" --> Store["Redirect to Chrome Web Store"]
-    Store --> Install["User Installs Extension"]
-    Install --> Return["User Returns / Re-inputs Prompt"]
-    Return --> CheckExt
+    %% Extension Path
+    ExtCheck -- "No" --> CWS["Redirect to Chrome Store"]:::dark
+    CWS --> Install["User Installs Extension"]:::lime
+    Install --> AutoRedirect["Automatic Redirection to Target Site"]:::lime
+    AutoRedirect --> ExtCheck
     
-    CheckExt -- "Yes" --> NewTab["Open Target URL in New Tab"]
-    NewTab --> ApplySuccess["PBX Drawer Opens & Applies Changes"]
+    %% Usage Path
+    ExtCheck -- "Yes" --> TargetSite["Load PBX on Target Site"]:::lime
+    TargetSite --> Prompts{< 3 Prompts?}:::dark
+    Prompts -- "Yes" --> Process["Analyze & Preview Changes"]:::lime
+    Process --> TargetSite
+    
+    Prompts -- "No" --> ConvModal["Show Branded Conversion Modal"]:::lime
+    ConvModal --> Trial["Start Free Trial"]:::dark
+    ConvModal --> Later["Maybe Later (View Results)"]:::lime
+
+    %% Styling
+    classDef lime fill:#DAE995,stroke:#1D342F,stroke-width:2px,color:#1D342F,font-weight:bold
+    classDef dark fill:#1D342F,stroke:#DAE995,stroke-width:2px,color:#DAE995,font-weight:bold
 ```
 
 ---
