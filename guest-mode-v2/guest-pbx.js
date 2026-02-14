@@ -1,10 +1,7 @@
-// Guest Mode PBX Logic
-// Tracks usage and mocks the experience for kameleoon.com
-
-let promptCount = 0;
-let isExtensionPrompted = false;
 const MAX_PROMPTS = 3;
-const IS_EXTENSION_INSTALLED = false; // Mocking extension status
+let promptCount = parseInt(localStorage.getItem('pbx_prompt_count')) || 0;
+let isExtensionPrompted = false;
+const IS_EXTENSION_INSTALLED = window.location.pathname.includes('mock-target-site'); // Extension "installed" on the target site
 
 document.addEventListener('DOMContentLoaded', () => {
     updateUI();
@@ -13,11 +10,19 @@ document.addEventListener('DOMContentLoaded', () => {
 function updateUI() {
     const counter = document.getElementById('promptCounter');
     if (counter) {
-        const remaining = MAX_PROMPTS - promptCount;
+        const remaining = Math.max(0, MAX_PROMPTS - promptCount);
         counter.textContent = `${remaining} PROMPT${remaining !== 1 ? 'S' : ''} LEFT`;
+
+        // Highlight in red if 0
+        if (remaining === 0) {
+            counter.classList.remove('text-gray-400', 'text-gray-500');
+            counter.classList.add('text-red-500', 'font-bold');
+        } else {
+            counter.classList.remove('text-red-500', 'font-bold');
+            counter.classList.add('text-gray-400');
+        }
     }
 
-    // Show/hide extension warning based on mock status
     const extWarning = document.getElementById('extWarning');
     if (extWarning) {
         extWarning.style.display = IS_EXTENSION_INSTALLED ? 'none' : 'flex';
@@ -30,75 +35,100 @@ function handleSend() {
 
     if (!text) return;
 
-    // FRED'S JOURNEY: Prompt for extension on first interaction
-    if (!isExtensionPrompted) {
-        showExtensionModal();
+    if (!IS_EXTENSION_INSTALLED) {
+        showExtensionModal(text);
         return;
     }
 
     if (promptCount >= MAX_PROMPTS) {
+        updateUI(); // Ensure it shows RED 0
         showConversionModal();
         return;
     }
 
-    // Add user message to UI
-    appendMessage('user', text);
-    input.value = '';
-    const charCountEl = document.getElementById('charCount');
-    if (charCountEl) charCountEl.textContent = '0 / 500';
-
-    // Increment count
-    promptCount++;
-    updateUI();
-
-    // Mock AI response
-    setTimeout(() => {
-        const response = getMockResponse(text);
-        appendMessage('assistant', response);
-
-        // If it was the last prompt, show the bridge after a small delay
-        if (promptCount >= MAX_PROMPTS) {
-            setTimeout(showConversionModal, 2000);
-        }
-    }, 1000);
+    processPrompt(text);
 }
 
-function showExtensionModal() {
+function showExtensionModal(pendingPrompt) {
+    // Store prompt temporarily to use after "installation"
+    localStorage.setItem('pbx_pending_prompt', pendingPrompt);
+
     const modal = document.createElement('div');
     modal.id = 'extensionModal';
-    modal.className = 'fixed inset-0 bg-dark/90 z-[200] flex items-center justify-center p-6 animate-in fade-in duration-300';
+    modal.className = 'fixed inset-0 bg-dark/95 z-[200] flex items-center justify-center p-6 animate-in fade-in duration-300';
     modal.innerHTML = `
-        <div class="bg-white rounded-3xl p-10 max-w-lg w-full text-center space-y-8 shadow-2xl">
-            <div class="w-16 h-16 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mx-auto text-3xl">🧩</div>
+        <div class="bg-white rounded-3xl p-10 max-w-lg w-full text-center space-y-8 shadow-2xl border-4 border-brand">
+            <div class="w-20 h-20 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mx-auto text-4xl shadow-inner italic font-serif">K</div>
             <div class="space-y-2">
-                <h2 class="text-2xl font-bold text-dark">Apply changes live?</h2>
-                <p class="text-dark/60 text-sm">To see your prompts applied directly to this site, you'll need the free Kameleoon PBX extension.</p>
+                <h2 class="text-2xl font-bold text-dark">Extension Required</h2>
+                <p class="text-dark/60 text-sm">To analyze <span class="font-mono text-dark bg-gray-100 px-1 rounded">${extractUrl(pendingPrompt) || 'your site'}</span> and apply changes, you'll need to install the Kameleoon PBX Extension.</p>
             </div>
             
+            <div class="p-4 bg-gray-50 rounded-2xl text-left border border-gray-100">
+                <div class="text-[10px] uppercase font-bold text-gray-400 mb-2">Saved Intent</div>
+                <div class="text-xs text-dark font-medium italic opacity-70">"${pendingPrompt}"</div>
+            </div>
+
             <div class="flex flex-col gap-3">
-                <button onclick="installAndContinue()" class="w-full bg-blue-600 text-white py-4 rounded-full font-bold hover:scale-105 transition-all">Add to Chrome (Free)</button>
-                <button onclick="skipExtension()" class="text-xs text-gray-400 hover:text-dark font-medium">Continue without extension</button>
+                <button onclick="redirectToStore()" class="w-full bg-blue-600 text-white py-4 rounded-full font-bold hover:scale-105 transition-all shadow-lg">Download from Chrome Store</button>
+                <p class="text-[10px] text-gray-400">Once installed, return here to resume your experiment instantly.</p>
             </div>
         </div>
     `;
     document.body.appendChild(modal);
 }
 
-function installAndContinue() {
-    alert("Redirecting to Chrome Web Store...");
-    skipExtension(); // Proceed after "install"
+function extractUrl(text) {
+    const urlRegex = /(https?:\/\/[^\s]+)|([a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?)/ig;
+    const match = text.match(urlRegex);
+    return match ? match[0] : null;
 }
 
-function skipExtension() {
-    isExtensionPrompted = true;
+function redirectToStore() {
     const modal = document.getElementById('extensionModal');
-    if (modal) modal.remove();
-    // Re-trigger the send
-    handleSend();
+    if (modal) {
+        modal.innerHTML = `
+            <div class="bg-white rounded-3xl p-10 max-w-lg w-full text-center space-y-6 shadow-2xl">
+                <div class="flex justify-center">
+                    <div class="w-12 h-12 border-4 border-brand border-t-transparent rounded-full animate-spin"></div>
+                </div>
+                <h2 class="text-xl font-bold text-dark">Waiting for Extension...</h2>
+                <p class="text-dark/60 text-sm">Install the extension in the other tab. This page will automatically refresh once detected.</p>
+            </div>
+        `;
+    }
+
+    // Simulate detection and transition to the MOCK TARGET SITE
+    setTimeout(() => {
+        const prompt = localStorage.getItem('pbx_pending_prompt') || '';
+        // Redirect to mock-target-site with the prompt
+        location.href = `mock-target-site.html?prompt=${encodeURIComponent(prompt)}`;
+    }, 2500);
+}
+
+function processPrompt(text) {
+    const input = document.getElementById('pbxInput');
+    appendMessage('user', text);
+    input.value = '';
+
+    promptCount++;
+    localStorage.setItem('pbx_prompt_count', promptCount.toString());
+    updateUI();
+
+    setTimeout(() => {
+        const response = getMockResponse(text);
+        appendMessage('assistant', response);
+
+        if (promptCount >= MAX_PROMPTS) {
+            setTimeout(showConversionModal, 2000);
+        }
+    }, 1000);
 }
 
 function appendMessage(role, text) {
     const history = document.getElementById('chatHistory');
+    if (!history) return;
+
     const div = document.createElement('div');
     div.className = `flex ${role === 'user' ? 'justify-end' : 'justify-start'}`;
 
@@ -127,35 +157,52 @@ function getMockResponse(input) {
 }
 
 function showConversionModal() {
+    const existing = document.getElementById('conversionModal');
+    if (existing) return;
+
     const modal = document.createElement('div');
-    modal.className = 'fixed inset-0 bg-dark/95 z-[200] flex items-center justify-center p-6 animate-in fade-in duration-300';
+    modal.id = 'conversionModal';
+    modal.className = 'fixed inset-0 bg-dark/95 z-[200] flex items-center justify-center p-4 animate-in fade-in duration-300';
     modal.innerHTML = `
-        <div class="bg-white rounded-3xl p-10 max-w-lg w-full text-center space-y-8 shadow-2xl border-4 border-brand">
-            <div class="w-20 h-20 bg-brand rounded-full flex items-center justify-center mx-auto text-4xl shadow-lg">⚡</div>
+        <div class="bg-white rounded-[32px] max-w-md w-full p-8 text-center space-y-6 shadow-2xl border-[5px] border-[#DAE995] font-sans relative">
+            <!-- Icon -->
+            <div class="w-16 h-16 bg-[#E5F2A8] rounded-full flex items-center justify-center mx-auto text-3xl shadow-sm">
+                <span class="text-[#F5C71A]">⚡</span>
+            </div>
+
+            <!-- Title & Subtitle -->
             <div class="space-y-2">
-                <h2 class="text-3xl font-bold text-dark italic tracking-tight">You're doing great!</h2>
-                <p class="text-dark/60">You've reached your guest limit, but your work is ready to go.</p>
+                <h2 class="text-2xl font-extrabold text-[#1D342F] italic tracking-tight leading-none">You're doing great!</h2>
+                <p class="text-[#1D342F] opacity-70 text-sm font-medium leading-tight px-4">
+                    You've reached your guest limit, but your work is ready to go.
+                </p>
             </div>
             
-            <div class="bg-gray-50 rounded-2xl p-6 text-left space-y-4 border border-gray-100">
-                <ul class="space-y-4">
-                    <li class="flex items-center gap-3 text-xs font-bold text-dark">
-                        <span class="text-green-500 text-lg">✓</span> 3 Variations Drafted for kameleoon.com
+            <!-- Checklist Box -->
+            <div class="bg-[#F9FAFB] rounded-[24px] p-6 text-left space-y-3 border border-gray-100">
+                <ul class="space-y-3">
+                    <li class="flex items-center gap-3 text-xs font-bold text-[#1D342F]">
+                        <span class="text-[#4ADE80] text-lg">✓</span> 3 Variations Drafted
                     </li>
-                    <li class="flex items-center gap-3 text-xs font-bold text-dark">
-                        <span class="text-green-500 text-lg">✓</span> Impact Analysis: Predicted +4.2% Conversion Lift
+                    <li class="flex items-center gap-3 text-xs font-bold text-[#1D342F]">
+                        <span class="text-[#4ADE80] text-lg">✓</span> Impact Analysis ready
                     </li>
-                    <li class="flex items-center gap-3 text-xs font-bold text-dark">
-                        <span class="text-green-500 text-lg">✓</span> Technical Feasibility: Verified for all devices
+                    <li class="flex items-center gap-3 text-xs font-bold text-[#1D342F]">
+                        <span class="text-[#4ADE80] text-lg">✓</span> Technical Feasibility Verified
                     </li>
                 </ul>
             </div>
 
+            <!-- CTA & Links -->
             <div class="space-y-4">
-                <p class="text-sm font-medium text-dark leading-relaxed">Save your work to a permanent project and continue prompting!</p>
+                <p class="text-[11px] font-bold text-[#1D342F] px-4">Save your work to a permanent project and continue prompting!</p>
                 <div class="flex flex-col gap-3">
-                    <button onclick="location.href='try-pbx-signup.html'" class="w-full bg-dark text-brand py-4 rounded-full font-bold text-lg hover:scale-105 transition-transform shadow-xl">Start a Free PBX Trial</button>
-                    <button onclick="location.reload()" class="text-xs text-gray-400 hover:text-dark">Start Over (Clears History)</button>
+                    <button onclick="location.href='try-pbx-signup.html'" class="w-full bg-[#1D342F] text-[#DAE995] py-4 rounded-full font-bold text-lg hover:scale-[1.02] transition-all shadow-lg">
+                        Start a Free Trial
+                    </button>
+                    <button onclick="document.getElementById('conversionModal').remove()" class="text-xs text-gray-400 hover:text-dark font-medium underline underline-offset-4 decoration-gray-200">
+                        Maybe later
+                    </button>
                 </div>
             </div>
         </div>

@@ -5,74 +5,31 @@ This diagram maps the intended user journey for the Guest Mode on the Kameleoon 
 ## User Journey Overview
 
 ```mermaid
-swimlane
-    title Guest Mode: PBX Experimentation Flow
+flowchart TD
+    Start["User Enters Corporate Site"] --> ShowUI["Show Guest Mode PBX UI"]
+    ShowUI --> InputURL["User Inputs Target URL + Prompt"]
+    InputURL --> CheckExt{"Extension Detected?"}
     
-    lane User
-        Start["Enter Site"]
-        InputPrompt["Types Prompt (e.g. 'Change button to Lime')"]
-        ClickSend["Clicks Send"]
-        DecideExtension["Decides on Extension"]
-        UsePrompts["Uses 2nd/3rd Prompt"]
-        ReachLimit["Reaches 3-Prompt Limit"]
-        ClickSignup["Clicks 'Save Work / Sign Up'"]
-
-    lane Site (Frontend)
-        ShowDrawer["Opens PBX Drawer"]
-        DetectExt["Check for Extension"]
-        ShowExtPrompt["Show 'Extension Required' Modal"]
-        ShowMockResult["Show Mocked Result (Option A)"]
-        ApplyLive["Apply Change Live via Extension"]
-        CheckLimit["Check Prompt Counter (LocalStorage)"]
-        ShowConversion["Show Conversion Modal (Trial Bridge)"]
-
-    lane Extension
-        Interception["Intercept Commands"]
-        DOMManipulation["Execute DOM Changes"]
-
-    lane Backend
-        GenerateLogic["KAI Logic Engine"]
-        CreateTrial["Create Trial Account"]
-
-    Start -> ShowDrawer
-    ShowDrawer -> InputPrompt
-    InputPrompt -> ClickSend
-    ClickSend -> DetectExt
+    CheckExt -- "No" --> Store["Redirect to Chrome Web Store"]
+    Store --> Install["User Installs Extension"]
+    Install --> Return["User Returns / Re-inputs Prompt"]
+    Return --> CheckExt
     
-    DetectExt -- "No Extension" --> ShowExtPrompt
-    ShowExtPrompt -- "User Skips" --> ShowMockResult
-    ShowExtPrompt -- "User Installs" --> ApplyLive
-    
-    ShowMockResult -> UsePrompts
-    ApplyLive -> UsePrompts
-    
-    UsePrompts -> CheckLimit
-    CheckLimit -- "Count < 3" --> InputPrompt
-    CheckLimit -- "Count == 3" --> ShowConversion
-    
-    ShowConversion -> ClickSignup
-    ClickSignup -> CreateTrial
+    CheckExt -- "Yes" --> NewTab["Open Target URL in New Tab"]
+    NewTab --> ApplySuccess["PBX Drawer Opens & Applies Changes"]
 ```
 
 ---
 
-## Addressing the "No Extension" Caveat
+## The "Extension Mandatory" Policy
 
-If a user cannot or will not install the Chrome extension, we have three primary strategies to preserve the "Aha" moment:
+Update: Following technical review, Guest Mode now requires the Kameleoon Chrome Extension for all interactions.
 
-### Option A: The "Mocked" Sandbox (Safety Net)
-- **Mechanic**: Instead of modifying the live site, the PBX assistant provides a code/visual breakdown and a **simulated preview** within the drawer itself.
-*   **Pros**: Zero friction, works instantly.
-*   **Cons**: Lacks the true "Magic" of seeing the live site change.
-
-### Option B: Pre-Instrumented Demo Page (Best "Aha")
-- **Mechanic**: Redirect the user to `kameleoon.com/sandbox` where the Kameleoon script is **already hard-coded**.
-- **Pros**: PBX works perfectly without any extension for this specific URL.
-- **Cons**: User can't test it on *their* specific choice of page (e.g., their own company site) unless they install the extension.
-
-### Option C: The "Apply Pending" Flow
-- **Mechanic**: Let the user chat and "build" the experiment. KAI confirms: *"Variation 1 is ready! I've optimized your headline. Install the extension to toggle this change live."*
-- **Pros**: Builds anticipation and value before requiring the friction of installation.
+### The Onboarding Flow
+1. **Interactive Greeting**: Users see the PBX drawer immediately on the landing page.
+2. **Context Selection**: The chat asks: *"Which website would you like to optimize today?"*
+3. **The Gateway**: Upon sending a prompt, if the extension is missing, the user is redirected to the Chrome Web Store.
+4. **Resumption**: After installation, the system detects the extension and automatically launches the target site with the PBX drawer active.
 
 ---
 

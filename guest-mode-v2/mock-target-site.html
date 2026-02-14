@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acme Run | Performance Footwear</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&family=Noto+Sans+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: '#DAE995', // Lime Green
+                        dark: '#1D342F',  // Deep Dark Green
+                        slate: '#262E2C', // Dark Slate
+                    },
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        mono: ['"Noto Sans Mono"', 'monospace'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        .pbx-sidebar {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 400px;
+            height: 100vh;
+            background: #fdfdfd;
+            border-left: 1px solid #e5e7eb;
+            box-shadow: -10px 0 30px rgba(0, 0, 0, 0.05);
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .main-content {
+            margin-right: 400px;
+        }
+    </style>
+</head>
+
+<body class="bg-white text-gray-900">
+    <!-- Mock Website Content -->
+    <main class="main-content">
+        <header class="p-6 border-b border-gray-100 flex justify-between items-center">
+            <div class="text-xl font-bold italic">ACME RUN</div>
+            <nav class="flex gap-8 text-sm font-medium">
+                <a href="#">Road</a>
+                <a href="#">Trail</a>
+                <a href="#">Race</a>
+                <a href="#">Community</a>
+            </nav>
+            <div class="flex gap-4">
+                <button class="w-5 h-5">🔍</button>
+                <button class="w-5 h-5">🛒</button>
+            </div>
+        </header>
+
+        <section class="py-20 px-12 max-w-4xl">
+            <h1 id="hero-title" class="text-6xl font-extrabold tracking-tight mb-6">Built for the <br>Unstoppable.</h1>
+            <p class="text-xl text-gray-500 mb-10 max-w-xl">The new Velocity Nitro 3. Maximum cushioning. Minimum
+                weight. Push your limits with our most advanced foam ever.</p>
+            <button id="cta-button"
+                class="bg-black text-white px-10 py-4 rounded-full font-bold hover:scale-105 transition-transform">SHOP
+                COLLECTION</button>
+
+            <div class="mt-20 grid grid-cols-2 gap-12">
+                <div class="bg-gray-100 aspect-square rounded-3xl flex items-center justify-center text-4xl">👟</div>
+                <div class="space-y-4">
+                    <h3 class="text-2xl font-bold">Velocity Nitro 3</h3>
+                    <p class="text-gray-500">Industry-leading energy return and grip for your fastest miles yet.</p>
+                    <div class="text-xl font-bold">$160.00</div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- PBX Sidebar -->
+    <aside class="pbx-sidebar">
+        <header class="p-6 border-b border-gray-100 flex items-center gap-3">
+            <div class="w-8 h-8 rounded-lg bg-[#1D342F] text-[#DAE995] flex items-center justify-center text-lg">🧠
+            </div>
+            <div>
+                <h3 class="font-bold text-sm">PBX Assistant</h3>
+                <div class="flex items-center gap-2">
+                    <span
+                        class="text-[9px] font-mono font-bold text-[#DAE995] bg-[#1D342F] px-1 py-0.5 rounded uppercase">Guest
+                        Mode</span>
+                    <span id="promptCounter" class="text-[9px] text-gray-400 font-mono">2 PROMPTS LEFT</span>
+                </div>
+            </div>
+        </header>
+
+        <div id="chatHistory" class="flex-1 overflow-y-auto p-6 space-y-4">
+            <!-- Messages will be injected here -->
+        </div>
+
+        <footer class="p-4 border-t border-gray-100 bg-white">
+            <div class="relative">
+                <textarea id="pbxInput"
+                    class="w-full h-24 p-3 pb-10 bg-gray-50 rounded-xl text-xs outline-none focus:ring-1 focus:ring-[#DAE995] transition-all resize-none border border-gray-200"
+                    placeholder="Describe a change..."></textarea>
+                <button onclick="handleSend()"
+                    class="absolute bottom-3 right-3 w-8 h-8 rounded-full bg-[#1D342F] text-[#DAE995] flex items-center justify-center shadow-lg hover:scale-105 active:scale-95 transition-all">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                    </svg>
+                </button>
+            </div>
+        </footer>
+    </aside>
+
+    <script src="guest-pbx.js"></script>
+    <script>
+        // Initialize the sidebar state for the mock site
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const initialPrompt = urlParams.get('prompt');
+
+            // Set internal count to 1 (first prompt already used to trigger install)
+            localStorage.setItem('pbx_prompt_count', '1');
+
+            if (initialPrompt) {
+                appendMessage('user', initialPrompt);
+                setTimeout(() => {
+                    appendMessage('assistant', "I'm connected and analyzing Acme Run. I've prepared a variation based on your request. Should I apply it?");
+                }, 800);
+            }
+        });
+    </script>
+</body>
+
+</html>
