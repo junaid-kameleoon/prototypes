@@ -4,35 +4,11 @@
 
 This diagram maps the intended user journey for the Guest Mode on the Kameleoon corporate site.
 
-## User Journey Overview
+## User Journey Flowchart
 
-```mermaid
-flowchart TD
-    %% Nodes
-    Start["User Enters Landing Page"]:::dark --> PBX_Init["PBX Assistant Greeting"]:::lime
-    PBX_Init --> Input["User Inputs URL + Prompt"]:::lime
-    Input --> ExtCheck{Extension Found?}:::dark
-    
-    %% Extension Path
-    ExtCheck -- "No" --> CWS["Redirect to Chrome Store"]:::dark
-    CWS --> Install["User Installs Extension"]:::lime
-    Install --> AutoRedirect["Automatic Redirection to Target Site"]:::lime
-    AutoRedirect --> ExtCheck
-    
-    %% Usage Path
-    ExtCheck -- "Yes" --> TargetSite["Load PBX on Target Site"]:::lime
-    TargetSite --> Prompts{< 3 Prompts?}:::dark
-    Prompts -- "Yes" --> Process["Analyze & Preview Changes"]:::lime
-    Process --> TargetSite
-    
-    Prompts -- "No" --> ConvModal["Show Branded Conversion Modal"]:::lime
-    ConvModal --> Trial["Start Free Trial"]:::dark
-    ConvModal --> Later["Maybe Later (View Results)"]:::lime
+The following diagram outlines the logic and decision points for the Guest Mode v2 flow.
 
-    %% Styling
-    classDef lime fill:#DAE995,stroke:#1D342F,stroke-width:2px,color:#1D342F,font-weight:bold
-    classDef dark fill:#1D342F,stroke:#DAE995,stroke-width:2px,color:#DAE995,font-weight:bold
-```
+![Guest Mode User Journey](guest_mode_flow_visual.svg)
 
 ---
 
