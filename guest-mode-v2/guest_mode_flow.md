@@ -1,31 +1,34 @@
-# Guest Mode User Flow (Flowchart)
+# Guest Mode: Tracking & Rate-Limiting Flow
 
-![Guest Mode Flowchart](guest_mode_flow_visual.svg)
+![Guest Mode Flowchart](guest_mode_flow_tracking.svg)
 
-This diagram maps the intended user journey for the Guest Mode on the Kameleoon corporate site.
+This document outlines the high-security tracking and rate-limiting strategy for unauthenticated Guest Mode users, as per the recent technical architecture review.
 
-## User Journey Flowchart
+## Architecture Overview
 
-The following diagram outlines the logic and decision points for the Guest Mode v2 flow.
+To prevent trivial bypasses (incognito, clearing cache), the system uses a multi-layered identification approach:
 
-![Guest Mode User Journey](guest_mode_flow_visual.svg)
-
----
-
-## The "Extension Mandatory" Policy
-
-Update: Following technical review, Guest Mode now requires the Kameleoon Chrome Extension for all interactions.
-
-### The Onboarding Flow
-1. **Interactive Greeting**: Users see the PBX drawer immediately on the landing page.
-2. **Context Selection**: The chat asks: *"Which website would you like to optimize today?"*
-3. **The Gateway**: Upon sending a prompt, if the extension is missing, the user is redirected to the Chrome Web Store.
-4. **Resumption**: After installation, the system detects the extension and automatically launches the target site with the PBX drawer active.
+1.  **Client-Side (PBX Extension)**: Generates a persistent `installId` stored in `chrome.storage.local`.
+2.  **Edge Layer (Gravitee)**: Enforces IP-based rate limiting (1-3 trial tokens per IP per month).
+3.  **Token Layer (JWT)**: Issues temporary trial tokens where `sub = installId`, allowing the backend to track prompt usage accurately.
 
 ---
 
-## Technical Edge Cases & Questions
+## Technical Flow
 
-1.  **3-Prompt Enforcement**: We will use `localStorage` to track indices of prompts. If a user clears cache or returns on a new device, we let them start over (as per Fred's suggestion).
-2.  **Sign-up Timing**: Sign-up is triggered **after** the 3rd prompt (The "Conversion Bridge"). 
-3.  **Data Retention**: To save "v1.0" complexity, we may skip historical retention in the account, but we should at least pass the last 3 prompts via URL parameters or SessionStorage to the signup page so the trial starts with those "pre-loaded".
+1.  **Extension Logic**: On first launch, the extension checks for an `installId`. If missing, it generates a `crypto.randomUUID()`.
+2.  **Token Request**: The extension requests a free token from `/issue-free-token`, passing the `installId`.
+3.  **Gravitee Verification**:
+    -   **IP Check**: Verifies the request IP hasn't exceeded the monthly trial limit.
+    -   **Auth Check**: Confirms the user isn't already authenticated.
+4.  **JWT Issuance**: Gravitee issues a JWT with the `sub` claim set to the `installId`.
+5.  **Prompt Submission**: All `POST /generate` requests are validated against the JWT.
+6.  **Quota Enforcement**: Gravitee allows a maximum of **3 prompts per 12 months** linked to that specific `installId`.
+
+---
+
+## Error Handling & UX
+
+-   **IP Limit Reached**: If the IP quota is exceeded, the user receives a "Too many trials from this network" message and is prompted to register.
+-   **Prompt Limit Reached**: After the 3rd prompt, the PBX drawer displays the "Step 2: Sign up for 15 more credits" conversion bridge.
+-   **Incognito Mode**: The extension detects incognito state. Since `chrome.storage.local` is cleared on exit, Guest Mode is restricted or blocked to prevent infinite loops.
