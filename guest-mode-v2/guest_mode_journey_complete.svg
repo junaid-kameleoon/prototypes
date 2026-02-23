@@ -112,7 +112,7 @@
   <!-- Success Path -->
   <rect x="80" y="790" width="180" height="60" rx="4" fill="white" stroke="#10B981"/>
   <text x="170" y="815" class="node-text" text-anchor="middle" font-weight="bold">Account Active</text>
-  <text x="170" y="835" class="node-text" text-anchor="middle" font-size="10">History & credits synced</text>
+  <text x="170" y="835" class="node-text" text-anchor="middle" font-size="10">History &amp; credits synced</text>
 
   <line x1="500" y1="820" x2="265" y2="820" stroke="#6B7280" marker-end="url(#arrowhead)"/>
 
