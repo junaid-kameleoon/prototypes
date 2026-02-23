@@ -1,0 +1,91 @@
+<svg width="800" height="700" viewBox="0 0 800 700" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="800" height="700" fill="white"/>
+  
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#6B7280" />
+    </marker>
+    <style>
+      .lane-label { font-family: 'Inter', sans-serif; font-size: 13px; font-weight: bold; fill: #4B5563; text-transform: uppercase; letter-spacing: 0.05em; }
+      .node-text { font-family: 'Inter', sans-serif; font-size: 11px; fill: #1F2937; }
+      .code-text { font-family: 'Monaco', 'Consolas', monospace; font-size: 10px; fill: #4338CA; }
+    </style>
+  </defs>
+
+  <!-- Swim Lanes -->
+  <!-- Lane 1: Client -->
+  <rect x="20" y="20" width="370" height="660" rx="12" fill="#F0F9FF" stroke="#BAE6FD"/>
+  <text x="40" y="50" class="lane-label">PBX EXTENSION (CLIENT SIDE)</text>
+
+  <!-- Lane 2: Server -->
+  <rect x="410" y="20" width="370" height="660" rx="12" fill="#F5F3FF" stroke="#DDD6FE"/>
+  <text x="430" y="50" class="lane-label">GRAVITEE / SERVER SIDE</text>
+
+  <!-- Entry Point -->
+  <rect x="130" y="70" width="150" height="40" rx="20" fill="#E5E7EB" stroke="#9CA3AF"/>
+  <text x="205" y="95" class="node-text" text-anchor="middle">Entry: Extension Installed</text>
+
+  <!-- Client: ID Check/Gen -->
+  <rect x="115" y="140" width="180" height="50" rx="4" fill="white" stroke="#3B82F6"/>
+  <text x="205" y="165" class="node-text" text-anchor="middle">Check chrome.storage.local</text>
+  <text x="205" y="180" class="code-text" text-anchor="middle">Get or Gen installId</text>
+  <line x1="205" y1="110" x2="205" y2="135" stroke="#6B7280" marker-end="url(#arrowhead)"/>
+
+  <!-- Client: GET Token -->
+  <rect x="115" y="220" width="180" height="50" rx="4" fill="white" stroke="#3B82F6"/>
+  <text x="205" y="245" class="node-text" text-anchor="middle">GET /issue-free-token</text>
+  <text x="205" y="260" class="code-text" text-anchor="middle">Header: X-Install-Id</text>
+  <line x1="205" y1="190" x2="205" y2="215" stroke="#6B7280" marker-end="url(#arrowhead)"/>
+
+  <!-- Server: Process Token -->
+  <rect x="505" y="220" width="180" height="60" rx="4" fill="white" stroke="#8B5CF6"/>
+  <text x="595" y="240" class="node-text" text-anchor="middle">Verify: No active session</text>
+  <text x="595" y="255" class="node-text" text-anchor="middle">Check: IP-based trial limit</text>
+  <line x1="295" y1="245" x2="500" y2="245" stroke="#6B7280" marker-end="url(#arrowhead)"/>
+
+  <!-- Server: Issue JWT -->
+  <rect x="505" y="310" width="180" height="50" rx="4" fill="#ECFDF5" stroke="#10B981"/>
+  <text x="595" y="335" class="node-text" text-anchor="middle">Return Trial JWT</text>
+  <text x="595" y="350" class="code-text" text-anchor="middle">sub = installId</text>
+  <line x1="595" y1="280" x2="595" y2="305" stroke="#6B7280" marker-end="url(#arrowhead)"/>
+
+  <!-- Client: User Action -->
+  <rect x="115" y="390" width="180" height="50" rx="4" fill="#DBEAFE" stroke="#3B82F6"/>
+  <text x="205" y="415" class="node-text" text-anchor="middle">User Submits Prompt</text>
+  <text x="205" y="430" class="code-text" text-anchor="middle">POST /generate</text>
+  <line x1="505" y1="335" x2="245" y2="335" stroke="#6B7280"/>
+  <line x1="205" y1="335" x2="205" y2="385" stroke="#6B7280" marker-end="url(#arrowhead)"/>
+
+  <!-- Server: Quota Check -->
+  <rect x="505" y="390" width="180" height="60" rx="4" fill="white" stroke="#8B5CF6"/>
+  <text x="595" y="415" class="node-text" text-anchor="middle">Link key to installId</text>
+  <text x="595" y="430" class="node-text" text-anchor="middle">Quota &lt; 3 (12 months)?</text>
+  <line x1="295" y1="415" x2="500" y2="415" stroke="#6B7280" marker-end="url(#arrowhead)"/>
+
+  <!-- Server: Logic Paths -->
+  <path d="M595 480 L625 500 L595 520 L565 500 Z" fill="#F3F4F6" stroke="#9CA3AF"/>
+  <line x1="595" y1="450" x2="595" y2="475" stroke="#6B7280" marker-end="url(#arrowhead)"/>
+
+  <!-- Exit B: Limit Reached -->
+  <rect x="650" y="480" width="100" height="40" rx="4" fill="#FEE2E2" stroke="#EF4444"/>
+  <text x="700" y="500" class="node-text" text-anchor="middle">Return 429</text>
+  <text x="700" y="512" class="code-text" text-anchor="middle">Quota Exceeded</text>
+  <line x1="625" y1="500" x2="645" y2="500" stroke="#6B7280" marker-end="url(#arrowhead)"/>
+
+  <!-- Client: Exit B UI -->
+  <rect x="115" y="480" width="180" height="40" rx="4" fill="#FEE2E2" stroke="#EF4444"/>
+  <text x="205" y="505" class="node-text" text-anchor="middle" font-weight="bold">EXIT: Sign-up Bridge</text>
+  <line x1="650" y1="500" x2="300" y2="500" stroke="#6B7280" marker-end="url(#arrowhead)"/>
+
+  <!-- Exit A: Success -->
+  <rect x="505" y="580" width="180" height="40" rx="4" fill="#D1FAE5" stroke="#10B981"/>
+  <text x="595" y="605" class="node-text" text-anchor="middle">Return AI Variation</text>
+  <line x1="595" y1="520" x2="595" y2="575" stroke="#6B7280" marker-end="url(#arrowhead)"/>
+
+  <!-- Client: Exit A UI -->
+  <rect x="115" y="580" width="180" height="40" rx="4" fill="#D1FAE5" stroke="#10B981"/>
+  <text x="205" y="605" class="node-text" text-anchor="middle" font-weight="bold">EXIT: Render Variation</text>
+  <line x1="505" y1="600" x2="300" y2="600" stroke="#6B7280" marker-end="url(#arrowhead)"/>
+
+</svg>
