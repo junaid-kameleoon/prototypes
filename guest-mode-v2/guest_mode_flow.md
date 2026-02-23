@@ -1,8 +1,21 @@
-# Guest Mode: Tracking & Rate-Limiting Flow
+# Guest Mode: The Complete User Journey
 
-![Guest Mode Flowchart](guest_mode_flow_tracking.svg)
+![Complete Guest Mode Journey](guest_mode_journey_complete.svg)
 
-This document outlines the high-security tracking and rate-limiting strategy for unauthenticated Guest Mode users, as per the recent technical architecture review.
+This document maps the end-to-end lifecycle of a Guest Mode user, from initial marketing discovery to final platform conversion.
+
+---
+
+## 1. High-Level Flow (5-Lane Journey)
+The diagram above details how we bridge the gap between anonymous browsing and authenticated usage:
+
+1.  **Kameleoon Website**: The entry point where users initiate the "Try it" experience.
+2.  **Chrome Webstore**: A temporary detour if the required PBX extension is missing.
+3.  **PBX Extension (Client Side)**: The persistent engine that maintains the user's `installId` and local environment.
+4.  **Server Side (Gravitee / API)**: The security layer that manages IP rate-limits, issues temporary tokens, and tracks the 3-prompt quota.
+5.  **Kameleoon Platform**: The final destination where the trial work is "handover" to a permanent free account.
+
+---
 
 ## Architecture Overview
 

@@ -1,0 +1,123 @@
+<svg width="1000" height="900" viewBox="0 0 1000 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="1000" height="900" fill="white"/>
+  
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#6B7280" />
+    </marker>
+    <style>
+      .lane-label { font-family: 'Inter', sans-serif; font-size: 11px; font-weight: bold; fill: #6B7280; text-transform: uppercase; letter-spacing: 0.05em; }
+      .node-text { font-family: 'Inter', sans-serif; font-size: 11px; fill: #1F2937; pointer-events: none; }
+      .decision-text { font-family: 'Inter', sans-serif; font-size: 10px; fill: #1E40AF; text-anchor: middle; font-weight: 500; }
+    </style>
+  </defs>
+
+  <!-- Swim Lanes -->
+  <!-- Lane 1: Website -->
+  <rect x="10" y="10" width="980" height="120" rx="8" fill="#F9FAFB" stroke="#E5E7EB"/>
+  <text x="30" y="30" class="lane-label">Kameleoon Website</text>
+
+  <!-- Lane 2: Webstore -->
+  <rect x="10" y="140" width="980" height="120" rx="8" fill="#FFFBEB" stroke="#FEF3C7"/>
+  <text x="30" y="160" class="lane-label">Chrome Webstore</text>
+
+  <!-- Lane 3: Client (Extension) -->
+  <rect x="10" y="270" width="980" height="240" rx="8" fill="#F0F9FF" stroke="#BAE6FD"/>
+  <text x="30" y="290" class="lane-label">PBX Extension (Client Side)</text>
+
+  <!-- Lane 4: Server (Gravitee) -->
+  <rect x="10" y="520" width="980" height="200" rx="8" fill="#F5F3FF" stroke="#DDD6FE"/>
+  <text x="430" y="540" class="lane-label">Server Side (Gravitee / API)</text>
+
+  <!-- Lane 5: Platform -->
+  <rect x="10" y="730" width="980" height="160" rx="8" fill="#F0FDF4" stroke="#BBF7D0"/>
+  <text x="30" y="750" class="lane-label">Kameleoon Platform (Signup)</text>
+
+  <!-- --- NODES --- -->
+
+  <!-- Starting Point (Website) -->
+  <rect x="50" y="50" width="130" height="40" rx="20" fill="#E5E7EB" stroke="#9CA3AF"/>
+  <text x="115" y="75" class="node-text" text-anchor="middle">Entry: Landing Page</text>
+
+  <rect x="220" y="50" width="140" height="40" rx="4" fill="white" stroke="#3B82F6"/>
+  <text x="290" y="75" class="node-text" text-anchor="middle">Click "Try on my site"</text>
+
+  <!-- Detection -->
+  <path d="M430 45 L480 70 L430 95 L380 70 Z" fill="#DBEAFE" stroke="#3B82F6"/>
+  <text x="430" y="74" class="decision-text">Ext Found?</text>
+
+  <!-- Redirect to Webstore -->
+  <line x1="430" y1="95" x2="430" y2="165" stroke="#6B7280" marker-end="url(#arrowhead)"/>
+  <text x="435" y="130" class="node-text" fill="#EF4444">No</text>
+  
+  <rect x="360" y="170" width="140" height="40" rx="4" fill="white" stroke="#F59E0B"/>
+  <text x="430" y="195" class="node-text" text-anchor="middle">Chrome Webstore Page</text>
+
+  <rect x="540" y="170" width="140" height="40" rx="4" fill="#FEF3C7" stroke="#F59E0B"/>
+  <text x="610" y="195" class="node-text" text-anchor="middle">Install Extension</text>
+
+  <line x1="500" y1="190" x2="535" y2="190" stroke="#6B7280" marker-end="url(#arrowhead)"/>
+  
+  <!-- Return to site -->
+  <line x1="610" y1="170" x2="610" y2="95" stroke="#6B7280" marker-end="url(#arrowhead)"/>
+  <text x="615" y="130" class="node-text">Success: Reload</text>
+
+  <!-- Yes -> Extension Flow -->
+  <line x1="480" y1="70" x2="715" y2="70" stroke="#6B7280" marker-end="url(#arrowhead)"/>
+  <text x="500" y="65" class="node-text" fill="#059669">Yes</text>
+
+  <!-- Client Side: ID Generation -->
+  <rect x="720" y="300" width="180" height="40" rx="4" fill="white" stroke="#3B82F6"/>
+  <text x="810" y="325" class="node-text" text-anchor="middle">Get/Gen persistent installId</text>
+  <line x1="810" y1="70" x2="810" y2="295" stroke="#6B7280" marker-end="url(#arrowhead)"/>
+
+  <!-- Server Side: Token Issue -->
+  <rect x="720" y="560" width="180" height="40" rx="4" fill="white" stroke="#8B5CF6"/>
+  <text x="810" y="585" class="node-text" text-anchor="middle">API: GET /issue-free-token</text>
+  <line x1="810" y1="340" x2="810" y2="555" stroke="#6B7280" marker-end="url(#arrowhead)"/>
+
+  <path d="M600 555 L650 580 L600 605 L550 580 Z" fill="#EDE9FE" stroke="#8B5CF6"/>
+  <text x="600" y="584" class="decision-text">IP Limit OK?</text>
+  <line x1="720" y1="580" x2="655" y2="580" stroke="#6B7280" marker-end="url(#arrowhead)"/>
+
+  <!-- Success: Issue JWT -->
+  <rect x="380" y="560" width="150" height="40" rx="4" fill="#ECFDF5" stroke="#10B981"/>
+  <text x="455" y="585" class="node-text" text-anchor="middle">Send JWT (sub=installId)</text>
+  <line x1="550" y1="580" x2="535" y2="580" stroke="#6B7280" marker-end="url(#arrowhead)"/>
+
+  <!-- Interaction Loop -->
+  <rect x="100" y="350" width="180" height="50" rx="4" fill="#DBEAFE" stroke="#3B82F6"/>
+  <text x="190" y="375" class="node-text" text-anchor="middle" font-weight="bold">Product Experience</text>
+  <text x="190" y="388" class="node-text" text-anchor="middle" font-size="9">3 prompts inside the drawer</text>
+  
+  <line x1="455" y1="560" x2="455" y2="375" stroke="#6B7280"/>
+  <line x1="455" y1="375" x2="285" y2="375" stroke="#6B7280" marker-end="url(#arrowhead)"/>
+
+  <!-- Quota Check -->
+  <line x1="190" y1="400" x2="190" y2="620" stroke="#6B7280"/>
+  <line x1="190" y1="620" x2="540" y2="620" stroke="#6B7280" marker-end="url(#arrowhead)"/>
+
+  <path d="M600 595 L650 620 L600 645 L550 620 Z" fill="#EDE9FE" stroke="#8B5CF6" transform="translate(0, 30)"/>
+  <text x="600" y="654" class="decision-text">Quota &lt; 3?</text>
+
+  <line x1="600" y1="675" x2="600" y2="780" stroke="#6B7280" marker-end="url(#arrowhead)"/>
+  <text x="610" y="710" class="node-text" fill="#EF4444" font-weight="bold">No: Prompt Bridge</text>
+
+  <!-- Platform Section -->
+  <rect x="500" y="790" width="200" height="60" rx="6" fill="#F0FDF4" stroke="#16A34A" stroke-dasharray="4"/>
+  <text x="600" y="815" class="node-text" text-anchor="middle" font-weight="bold">Sign-Up Page</text>
+  <text x="600" y="835" class="node-text" text-anchor="middle" font-size="10">Passes installId to platform</text>
+
+  <!-- Success Path -->
+  <rect x="80" y="790" width="180" height="60" rx="4" fill="white" stroke="#10B981"/>
+  <text x="170" y="815" class="node-text" text-anchor="middle" font-weight="bold">Account Active</text>
+  <text x="170" y="835" class="node-text" text-anchor="middle" font-size="10">History & credits synced</text>
+
+  <line x1="500" y1="820" x2="265" y2="820" stroke="#6B7280" marker-end="url(#arrowhead)"/>
+
+  <!-- Server migration call -->
+  <line x1="600" y1="790" x2="600" y2="725" stroke="#6B7280" marker-end="url(#arrowhead)"/>
+  <text x="610" y="760" class="node-text">Sync History</text>
+
+</svg>
