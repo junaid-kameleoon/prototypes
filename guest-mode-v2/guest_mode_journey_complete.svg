@@ -34,7 +34,7 @@
   <rect x="10" y="730" width="980" height="160" rx="8" fill="#F0FDF4" stroke="#BBF7D0"/>
   <text x="30" y="750" class="lane-label">Kameleoon Platform (Signup)</text>
 
-  <!-- --- NODES --- -->
+  <!-- NODES -->
 
   <!-- Starting Point (Website) -->
   <rect x="50" y="50" width="130" height="40" rx="20" fill="#E5E7EB" stroke="#9CA3AF"/>
