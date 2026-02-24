@@ -214,99 +214,161 @@
         </div>
     </section>
 
-    <!-- PBX Guest Mode Drawer -->
-    <aside id="pbxDrawer" class="pbx-drawer flex flex-col">
-        <!-- Close Button -->
-        <button onclick="togglePBX()"
-            class="absolute top-6 right-6 w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center hover:bg-gray-50 transition-colors z-[110]">
-            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-            </svg>
-        </button>
+    <!-- Setup Modal -->
+    <div id="setupModal"
+        class="fixed inset-0 bg-dark/60 backdrop-blur-sm z-[100] hidden items-center justify-center p-6 animate-in fade-in duration-300">
+        <div class="bg-white rounded-[32px] max-w-lg w-full p-10 space-y-8 shadow-2xl relative border border-gray-100">
+            <!-- Close Button -->
+            <button onclick="closeSetupModal()"
+                class="absolute top-6 right-6 text-gray-400 hover:text-dark transition-colors">
+                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
 
-        <header class="p-8 pb-4 border-b border-gray-100 flex items-center justify-between">
-            <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl bg-dark text-brand flex items-center justify-center text-xl">🧠</div>
-                <div>
-                    <h3 class="font-bold text-lg">PBX Assistant</h3>
-                    <div class="flex items-center gap-2">
-                        <span class="text-[10px] font-mono font-bold text-brand bg-dark px-1.5 py-0.5 rounded">GUEST
-                            MODE</span>
-                        <span id="promptCounter" class="text-[10px] text-gray-500 font-mono">3 PROMPTS LEFT</span>
-                    </div>
+            <div class="space-y-2 text-center">
+                <div
+                    class="w-16 h-16 bg-brand rounded-2xl flex items-center justify-center mx-auto text-3xl shadow-lg mb-4">
+                    🧠</div>
+                <h2 class="text-3xl font-bold tracking-tight text-dark">Try Guest Mode</h2>
+                <p class="text-dark/60">Experience the power of PBX on any website instantly.</p>
+            </div>
+
+            <div class="space-y-5">
+                <div class="space-y-2">
+                    <label class="text-xs font-bold uppercase tracking-wider text-dark/40 ml-1">Target Website
+                        URL</label>
+                    <input type="text" id="targetUrl" placeholder="e.g. https://nike.com"
+                        class="w-full px-5 py-4 bg-gray-50 border border-gray-100 rounded-2xl outline-none focus:ring-2 focus:ring-brand focus:bg-white transition-all text-sm">
+                </div>
+                <div class="space-y-2">
+                    <label class="text-xs font-bold uppercase tracking-wider text-dark/40 ml-1">Your First
+                        Prompt</label>
+                    <textarea id="setupPrompt" placeholder="What would you like to change on this site?"
+                        class="w-full h-32 px-5 py-4 bg-gray-50 border border-gray-100 rounded-2xl outline-none focus:ring-2 focus:ring-brand focus:bg-white transition-all text-sm resize-none"></textarea>
                 </div>
             </div>
-        </header>
 
-        <!-- Extension Warning -->
-        <div id="extWarning"
-            class="mx-6 mt-4 p-4 bg-amber-50 border border-amber-200 rounded-xl flex items-start gap-3">
-            <div class="text-amber-600 mt-1">⚠️</div>
-            <div>
-                <div class="text-xs font-bold text-amber-900">Chrome Extension Required</div>
-                <div class="text-[11px] text-amber-700 leading-relaxed mb-2">To apply changes directly to your site,
-                    please install the Kameleoon PBX extension.</div>
-                <button
-                    class="text-[11px] font-bold text-amber-900 underline bg-transparent border-none p-0 cursor-pointer">Add
-                    to Chrome (Free)</button>
+            <div class="space-y-4">
+                <button onclick="startGuestSession()"
+                    class="w-full bg-dark text-brand py-5 rounded-full font-bold text-lg hover:scale-[1.02] transition-all shadow-xl flex items-center justify-center gap-3">
+                    Launch PBX Editor
+                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                    </svg>
+                </button>
+                <p class="text-center text-[11px] text-gray-400">By clicking launch, you agree to our trial terms. No
+                    credit card required.</p>
             </div>
         </div>
+    </div>
 
-        <!-- Chat History -->
-        <div id="chatHistory" class="flex-1 overflow-y-auto p-6 space-y-6">
-            <div class="flex justify-start">
-                <div class="bg-gray-100 text-dark text-xs p-4 rounded-2xl rounded-tl-none max-w-[90%] leading-relaxed">
-                    <div class="text-[10px] font-bold text-dark/40 mb-1 uppercase tracking-wider">PBX Assistant</div>
-                    Hello! I'm your PBX assistant. To get started, <b>which website would you like to optimize
-                        today?</b> <br><br>
-                    Just paste the URL below (e.g., <i>acmerun.com/checkout</i>) and tell me what you'd like to change.
-                </div>
-            </div>
-        </div>
-
-        <!-- Input Area -->
-        <footer class="p-6 border-t border-gray-100">
-            <div class="relative">
-                <textarea id="pbxInput"
-                    class="w-full h-32 p-4 pb-12 bg-gray-100 rounded-2xl text-xs outline-none focus:ring-2 focus:ring-brand/50 transition-all resize-none"
-                    placeholder="e.g. Change the 'Shop Now' button to blue and center it..."></textarea>
-                <div class="absolute bottom-4 right-4 flex items-center gap-3">
-                    <span id="charCount" class="text-[10px] text-gray-400 font-mono">0 / 500</span>
-                    <button onclick="handleSend()"
-                        class="w-10 h-10 rounded-full bg-dark text-brand flex items-center justify-center shadow-lg hover:scale-110 active:scale-95 transition-all">
-                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                        </svg>
-                    </button>
-                </div>
-            </div>
-            <p class="text-center text-[9px] text-gray-400 mt-4 leading-relaxed">
-                Guest mode allows 3 free experiments.
-            </p>
-        </footer>
-    </aside>
+    <!-- Removed separate PBX drawer as requested for homepage -->
 
     <!-- FAB -->
-    <button onclick="togglePBX()"
+    <button onclick="openSetupModal()"
         class="fixed bottom-8 right-8 w-16 h-16 rounded-full bg-dark text-brand shadow-2xl flex items-center justify-center text-3xl z-40 hover:scale-110 active:scale-95 transition-all border-4 border-brand/20">
         🧠
     </button>
 
-    <script src="guest-pbx.js"></script>
     <script>
-        function togglePBX() {
-            const drawer = document.getElementById('pbxDrawer');
-            drawer.classList.toggle('open');
+        function openSetupModal() {
+            const modal = document.getElementById('setupModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
         }
 
-        // Simple input tracking
-        const input = document.getElementById('pbxInput');
-        if (input) {
-            input.addEventListener('input', (e) => {
-                document.getElementById('charCount').textContent = `${e.target.value.length} / 500`;
-            });
+        function closeSetupModal() {
+            const modal = document.getElementById('setupModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
         }
+
+        function startGuestSession() {
+            const url = document.getElementById('targetUrl').value.trim() || 'https://nike.com';
+            const prompt = document.getElementById('setupPrompt').value.trim() || '';
+
+            // Reset prompt count for the new session
+            localStorage.setItem('pbx_prompt_count', '0');
+
+            // Store temporarily
+            localStorage.setItem('pbx_setup_url', url);
+            localStorage.setItem('pbx_setup_prompt', prompt);
+
+            showExtensionModal(url, prompt);
+        }
+
+        function showExtensionModal(url, prompt) {
+            closeSetupModal();
+
+            const modal = document.createElement('div');
+            modal.id = 'extensionModal';
+            modal.className = 'fixed inset-0 bg-dark/95 z-[200] flex items-center justify-center p-6 animate-in fade-in duration-300 backdrop-blur-md';
+            modal.innerHTML = `
+                <div class="bg-white rounded-[40px] p-12 max-w-xl w-full text-center space-y-8 shadow-2xl border-4 border-brand">
+                    <div class="w-24 h-24 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mx-auto text-5xl shadow-inner italic font-serif">K</div>
+                    <div class="space-y-4">
+                        <h2 class="text-3xl font-bold text-dark tracking-tight">Extension Required</h2>
+                        <p class="text-dark/60 text-lg leading-relaxed">To analyze <span class="font-mono text-dark bg-gray-100 px-2 py-1 rounded text-sm">${url}</span> and apply AI changes, you'll need the extension.</p>
+                    </div>
+                    
+                    <div class="p-6 bg-gray-50 rounded-3xl text-left border border-gray-100">
+                        <div class="text-[11px] uppercase font-bold text-gray-400 mb-2 tracking-widest">Target Context</div>
+                        <div class="text-sm text-dark font-medium italic opacity-70">"${prompt || 'Visual optimization request'}"</div>
+                    </div>
+
+                    <div class="flex flex-col gap-4">
+                        <button onclick="simulateInstallation()" class="w-full bg-blue-600 text-white py-5 rounded-full font-bold text-lg hover:scale-[1.02] transition-all shadow-xl">Add to Chrome (Free)</button>
+                        <p class="text-xs text-gray-400">Trusted by over 100,000 experimenters worldwide.</p>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        function simulateInstallation() {
+            const modal = document.getElementById('extensionModal');
+            if (modal) {
+                modal.innerHTML = `
+                    <div class="bg-white rounded-[40px] p-12 max-w-xl w-full text-center space-y-8 shadow-2xl border-4 border-brand">
+                        <div class="flex justify-center flex-col items-center gap-6">
+                            <div class="w-16 h-16 border-8 border-brand border-t-transparent rounded-full animate-spin"></div>
+                            <div class="space-y-4">
+                                <h2 class="text-3xl font-bold text-dark tracking-tight">Waiting for Extension...</h2>
+                                <p class="text-dark/60 text-lg leading-relaxed px-8">Downloading and identifying your browser environment. This page will refresh automatically.</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            // After 3 seconds, show success state briefly then redirect
+            setTimeout(() => {
+                if (modal) {
+                    modal.innerHTML = `
+                        <div class="bg-white rounded-[40px] p-12 max-w-xl w-full text-center space-y-8 shadow-2xl border-4 border-brand">
+                            <div class="flex justify-center flex-col items-center gap-6">
+                                <div class="w-16 h-16 bg-brand/20 text-brand rounded-full flex items-center justify-center text-3xl">✅</div>
+                                <div class="space-y-4">
+                                    <h2 class="text-3xl font-bold text-dark tracking-tight">Extension Detected</h2>
+                                    <p class="text-dark/60 text-lg leading-relaxed px-8">Redirecting you to your experiment session...</p>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                setTimeout(() => {
+                    const url = localStorage.getItem('pbx_setup_url');
+                    const prompt = localStorage.getItem('pbx_setup_prompt');
+                    window.location.href = `mock-target-site.html?url=${encodeURIComponent(url)}&prompt=${encodeURIComponent(prompt)}`;
+                }, 1500);
+            }, 3000);
+        }
+
+        // Expose togglePBX for header button
+        window.togglePBX = openSetupModal;
     </script>
 </body>
 

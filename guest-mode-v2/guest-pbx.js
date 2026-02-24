@@ -5,6 +5,7 @@ const IS_EXTENSION_INSTALLED = window.location.pathname.includes('mock-target-si
 
 document.addEventListener('DOMContentLoaded', () => {
     updateUI();
+    checkQueryParams();
 });
 
 function updateUI() {
@@ -26,6 +27,22 @@ function updateUI() {
     const extWarning = document.getElementById('extWarning');
     if (extWarning) {
         extWarning.style.display = IS_EXTENSION_INSTALLED ? 'none' : 'flex';
+    }
+}
+
+function checkQueryParams() {
+    const params = new URLSearchParams(window.location.search);
+    const prompt = params.get('prompt');
+    if (prompt) {
+        const input = document.getElementById('pbxInput');
+        if (input) {
+            input.value = decodeURIComponent(prompt);
+            // Update char count if visible
+            const charCount = document.getElementById('charCount');
+            if (charCount) {
+                charCount.textContent = `${input.value.length} / 500`;
+            }
+        }
     }
 }
 
@@ -178,23 +195,8 @@ function showConversionModal() {
                 </p>
             </div>
             
-            <!-- Checklist Box -->
-            <div class="bg-[#F9FAFB] rounded-[24px] p-6 text-left space-y-3 border border-gray-100">
-                <ul class="space-y-3">
-                    <li class="flex items-center gap-3 text-xs font-bold text-[#1D342F]">
-                        <span class="text-[#4ADE80] text-lg">✓</span> 3 Variations Drafted
-                    </li>
-                    <li class="flex items-center gap-3 text-xs font-bold text-[#1D342F]">
-                        <span class="text-[#4ADE80] text-lg">✓</span> Impact Analysis ready
-                    </li>
-                    <li class="flex items-center gap-3 text-xs font-bold text-[#1D342F]">
-                        <span class="text-[#4ADE80] text-lg">✓</span> Technical Feasibility Verified
-                    </li>
-                </ul>
-            </div>
-
             <!-- CTA & Links -->
-            <div class="space-y-4">
+            <div class="space-y-4 pt-4">
                 <p class="text-[11px] font-bold text-[#1D342F] px-4">Save your work to a permanent project and continue prompting!</p>
                 <div class="flex flex-col gap-3">
                     <button onclick="location.href='try-pbx-signup.html'" class="w-full bg-[#1D342F] text-[#DAE995] py-4 rounded-full font-bold text-lg hover:scale-[1.02] transition-all shadow-lg">

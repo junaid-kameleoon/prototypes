@@ -129,16 +129,17 @@
         document.addEventListener('DOMContentLoaded', () => {
             const urlParams = new URLSearchParams(window.location.search);
             const initialPrompt = urlParams.get('prompt');
+            const targetUrl = urlParams.get('url');
 
-            // Set internal count to 1 (first prompt already used to trigger install)
-            localStorage.setItem('pbx_prompt_count', '1');
-
+            // Pre-fill the input field but do not send
             if (initialPrompt) {
-                appendMessage('user', initialPrompt);
-                setTimeout(() => {
-                    appendMessage('assistant', "I'm connected and analyzing Acme Run. I've prepared a variation based on your request. Should I apply it?");
-                }, 800);
+                const input = document.getElementById('pbxInput');
+                if (input) {
+                    input.value = initialPrompt;
+                }
             }
+
+            // Optionally could show the target URL in the UI if needed
         });
     </script>
 </body>

@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | Kameleoon</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap"
+        rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: '#DAE995', // Lime Green
+                        dark: '#1D342F',  // Deep Dark Green
+                        slate: '#262E2C', // Dark Slate
+                    },
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .nav-active {
+            @apply bg-brand/10 text-dark border-r-4 border-brand;
+        }
+    </style>
+</head>
+
+<body class="bg-[#F8F9FA] text-dark font-sans min-h-screen flex">
+
+    <!-- Sidebar -->
+    <aside class="w-64 bg-white border-r border-gray-100 hidden lg:flex flex-col">
+        <div class="p-8">
+            <div class="text-2xl font-bold tracking-tighter">Kameleoon</div>
+        </div>
+
+        <nav class="flex-1 space-y-1">
+            <a href="#" class="flex items-center gap-3 px-8 py-4 nav-active font-bold">
+                <span class="text-xl">📊</span> Dashboard
+            </a>
+            <a href="#" class="flex items-center gap-3 px-8 py-4 text-gray-400 hover:bg-gray-50 transition-colors">
+                <span class="text-xl">⚡</span> Experiments
+            </a>
+            <a href="#" class="flex items-center gap-3 px-8 py-4 text-gray-400 hover:bg-gray-50 transition-colors">
+                <span class="text-xl">👥</span> Audience
+            </a>
+            <a href="#" class="flex items-center gap-3 px-8 py-4 text-gray-400 hover:bg-gray-50 transition-colors">
+                <span class="text-xl">🛠️</span> AI Settings
+            </a>
+            <a href="#" class="flex items-center gap-3 px-8 py-4 text-gray-400 hover:bg-gray-50 transition-colors">
+                <span class="text-xl">⚙️</span> Project Configuration
+            </a>
+        </nav>
+
+        <div class="p-8">
+            <div class="bg-dark rounded-2xl p-4 text-white space-y-3">
+                <div class="text-xs font-mono text-brand uppercase tracking-widest">Premium Plan</div>
+                <div class="text-sm font-bold">Unlimited Prompts</div>
+                <button class="w-full bg-brand text-dark text-[10px] font-bold py-2 rounded-lg">UPGRADE NOW</button>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 p-8 lg:p-12 overflow-y-auto">
+        <header class="flex justify-between items-center mb-12">
+            <div>
+                <h1 class="text-3xl font-bold tracking-tight">Welcome back, Junaid</h1>
+                <p class="text-gray-500">Your experiments are performing well today.</p>
+            </div>
+            <div class="flex items-center gap-6">
+                <div class="text-right">
+                    <div class="text-sm font-bold">Acme Run Project</div>
+                    <div class="text-xs text-green-500">● Live Connection</div>
+                </div>
+                <img src="https://i.pravatar.cc/100?u=junaid"
+                    class="w-12 h-12 rounded-full border-2 border-white shadow-md">
+            </div>
+        </header>
+
+        <!-- New Experiment Notification -->
+        <div
+            class="bg-brand/20 border border-brand/50 rounded-3xl p-8 mb-12 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="flex items-center gap-6 text-center md:text-left">
+                <div class="w-16 h-16 bg-white rounded-2xl flex items-center justify-center text-3xl shadow-sm">🚀</div>
+                <div>
+                    <h2 class="text-xl font-bold">Your Guest Mode experiment is ready!</h2>
+                    <p class="text-dark/60 max-w-md">We've successfully synced your 3 variations for Acme Run. You can
+                        now deploy them with one click.</p>
+                </div>
+            </div>
+            <button
+                class="bg-dark text-brand px-8 py-3 rounded-full font-bold shadow-lg hover:scale-105 transition-all">Go
+                to Variations</button>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+            <div class="glass-card rounded-[32px] p-8 shadow-sm">
+                <div class="text-gray-400 text-xs font-bold uppercase tracking-widest mb-4">Total Conversions</div>
+                <div class="text-4xl font-bold mb-2">12,482</div>
+                <div class="text-green-500 text-sm font-bold">↑ 12.4% <span class="text-gray-300 font-normal ml-1">vs
+                        last month</span></div>
+            </div>
+            <div class="glass-card rounded-[32px] p-8 shadow-sm">
+                <div class="text-gray-400 text-xs font-bold uppercase tracking-widest mb-4">Avg. Uplift</div>
+                <div class="text-4xl font-bold mb-2">+8.2%</div>
+                <div class="text-green-500 text-sm font-bold">↑ 2.1% <span class="text-gray-300 font-normal ml-1">AI
+                        Optimized</span></div>
+            </div>
+            <div class="glass-card rounded-[32px] p-8 shadow-sm">
+                <div class="text-gray-400 text-xs font-bold uppercase tracking-widest mb-4">Active Variations</div>
+                <div class="text-4xl font-bold mb-2">24</div>
+                <div class="text-gray-500 text-sm font-bold">6 <span class="text-gray-300 font-normal ml-1">Running
+                        Experiments</span></div>
+            </div>
+        </div>
+
+        <!-- Recent Activity Area -->
+        <div class="grid lg:grid-cols-3 gap-8">
+            <div class="lg:col-span-2 glass-card rounded-[40px] p-10 shadow-sm border border-gray-100">
+                <div class="flex justify-between items-center mb-8">
+                    <h3 class="text-xl font-bold">Live Performance</h3>
+                    <div class="flex gap-2">
+                        <button
+                            class="px-3 py-1 bg-white border border-gray-100 rounded-lg text-xs font-bold">24H</button>
+                        <button
+                            class="px-3 py-1 bg-gray-50 border border-gray-50 rounded-lg text-xs font-bold text-gray-400">7D</button>
+                    </div>
+                </div>
+                <!-- Mock Chart -->
+                <div class="h-64 flex items-end gap-2">
+                    <div class="bg-brand/40 h-[60%] w-full rounded-t-lg"></div>
+                    <div class="bg-brand/40 h-[45%] w-full rounded-t-lg"></div>
+                    <div class="bg-brand/40 h-[75%] w-full rounded-t-lg"></div>
+                    <div class="bg-brand/40 h-[30%] w-full rounded-t-lg"></div>
+                    <div class="bg-brand/40 h-[90%] w-full rounded-t-lg"></div>
+                    <div class="bg-brand/60 h-[80%] w-full rounded-t-lg"></div>
+                    <div class="bg-brand/40 h-[50%] w-full rounded-t-lg"></div>
+                    <div class="bg-brand/40 h-[65%] w-full rounded-t-lg"></div>
+                    <div class="bg-brand/40 h-[40%] w-full rounded-t-lg"></div>
+                    <div class="bg-dark/80 h-[95%] w-full rounded-t-lg"></div>
+                </div>
+            </div>
+
+            <div class="glass-card rounded-[40px] p-10 shadow-sm border border-gray-100">
+                <h3 class="text-xl font-bold mb-8">Top Goals</h3>
+                <div class="space-y-6">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center">💳</div>
+                            <span class="text-sm font-bold">Checkouts</span>
+                        </div>
+                        <span class="text-sm font-bold">2.4k</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center">🛒</div>
+                            <span class="text-sm font-bold">Add to Cart</span>
+                        </div>
+                        <span class="text-sm font-bold">1.8k</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center">📱</div>
+                            <span class="text-sm font-bold">Newsletter</span>
+                        </div>
+                        <span class="text-sm font-bold">842</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+
+</html>

@@ -4,13 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Save Your PBX Progress | Kameleoon</title>
+    <title>Create your account | Kameleoon</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&family=Noto+Sans+Mono:wght@400;500&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
             theme: {
@@ -18,126 +16,205 @@
                     colors: {
                         brand: '#DAE995', // Lime Green
                         dark: '#1D342F',  // Deep Dark Green
-                        slate: '#262E2C', // Dark Slate
+                        accent: '#E5F2A8',
                     },
                     fontFamily: {
-                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
-                        mono: ['"Noto Sans Mono"', 'monospace'],
+                        sans: ['Inter', 'sans-serif'],
                     },
                 }
             }
         }
     </script>
     <style>
+        .input-label {
+            @apply text-[11px] font-bold text-dark/80 mb-1 block;
+        }
+
         .input-field {
-            @apply w-full bg-gray-100 border-none rounded-2xl px-6 py-4 outline-none focus:ring-2 focus:ring-brand/50 transition-all text-sm;
+            @apply w-full border-2 border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:border-brand focus:ring-4 focus:ring-brand/10 outline-none transition-all placeholder:text-gray-400 bg-white;
+            border: 2px solid #E5E7EB;
+            /* Fallback/explicit border */
         }
     </style>
 </head>
 
-<body class="bg-gray-50 min-h-screen flex items-center justify-center p-6 font-sans">
+<body class="bg-white min-h-screen flex font-sans">
 
-    <div class="max-w-4xl w-full bg-white rounded-[40px] shadow-2xl overflow-hidden flex flex-col md:flex-row">
-        <!-- Left Side: Promo/Progress -->
-        <div class="md:w-1/2 bg-dark p-12 text-white space-y-12">
-            <div class="text-2xl font-bold tracking-tighter">Kameleoon</div>
+    <!-- Content Container -->
+    <div class="flex flex-col lg:flex-row w-full max-w-[1440px] mx-auto">
 
-            <div class="space-y-4">
-                <h1 class="text-4xl font-bold leading-tight">Don't lose your experiments.</h1>
-                <p class="text-white/60 text-lg">Sign up now to save the 3 variations you just created and continue
-                    optimizing your site for free.</p>
+        <!-- Left Side: Form -->
+        <div class="lg:w-[45%] p-8 lg:p-20 flex flex-col justify-center">
+            <div class="max-w-md mx-auto w-full space-y-8">
+                <!-- Logo -->
+                <div class="flex justify-center lg:justify-start">
+                    <svg class="w-10 h-10 text-dark" viewBox="0 0 40 40" fill="currentColor">
+                        <path
+                            d="M20 0c11.046 0 20 8.954 20 20s-8.954 20-20 20S0 31.046 0 20 8.954 0 20 0zm0 10a10 10 0 100 20 10 10 0 000-20z"
+                            opacity="0.1" />
+                        <path fill-rule="evenodd"
+                            d="M12 12h6v6h-6v-6zm10 0h6v6h-6v-6zm-10 10h6v6h-6v-6zm10 0h6v6h-6v-6z"
+                            clip-rule="evenodd" />
+                    </svg>
+                </div>
+
+                <div class="text-center lg:text-left space-y-2">
+                    <h1 class="text-4xl font-extrabold tracking-tight text-dark">Create your account</h1>
+                    <p class="text-gray-500 font-medium">Free for 30 days. No credit card required.</p>
+                </div>
+
+                <form class="space-y-5" onsubmit="event.preventDefault(); location.href='dashboard.html';">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="space-y-1">
+                            <label class="input-label">First name</label>
+                            <input type="text" value="Junaid" class="input-field" required>
+                        </div>
+                        <div class="space-y-1">
+                            <label class="input-label">Last name</label>
+                            <input type="text" value="Malik" class="input-field" required>
+                        </div>
+                    </div>
+
+                    <div class="space-y-1">
+                        <label class="input-label">Work e-mail</label>
+                        <input type="text" value="junaid@kameleoon.com" class="input-field" required>
+                    </div>
+
+                    <div class="space-y-1">
+                        <label class="input-label">Company name</label>
+                        <input type="text" value="Kameleoon" class="input-field" required>
+                    </div>
+
+                    <div class="space-y-1">
+                        <label class="input-label">Company URL <span class="text-gray-300 ml-1">ⓘ</span></label>
+                        <input type="text" value="kameleoon.com" class="input-field" required>
+                    </div>
+
+                    <div class="space-y-1">
+                        <label class="input-label">Password</label>
+                        <div class="relative">
+                            <input type="password" value="demo123456" class="input-field" required>
+                            <span
+                                class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 cursor-pointer">👁</span>
+                        </div>
+                    </div>
+
+                    <div class="space-y-1">
+                        <label class="input-label">Confirm password</label>
+                        <div class="relative">
+                            <input type="password" value="demo123456" class="input-field" required>
+                            <span
+                                class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 cursor-pointer">👁</span>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start gap-3 pt-2">
+                        <input type="checkbox" checked
+                            class="mt-0.5 w-4 h-4 rounded border-gray-300 text-dark focus:ring-dark" id="terms"
+                            required>
+                        <label for="terms" class="text-[11px] text-gray-400 leading-tight">
+                            By creating an account, I agree to Kameleoon's <a href="#"
+                                class="text-dark font-medium underline">Term of Service</a>
+                        </label>
+                    </div>
+
+                    <button type="submit"
+                        class="w-full bg-brand text-dark font-bold py-3.5 rounded-lg text-sm uppercase tracking-wider shadow-lg hover:scale-[1.01] transition-all"
+                        id="signupBtn">
+                        Sign Up
+                    </button>
+                </form>
+
+                <div class="text-center text-xs font-medium py-4">
+                    Already have an account? <a href="#" class="text-dark underline">Log in</a><br>
+                    Interested in other features? <a href="#" class="text-dark underline">Get a demo</a>
+                </div>
             </div>
-
-            <div class="space-y-6">
-                <div class="flex items-center gap-4 p-4 bg-white/5 rounded-2xl border border-white/10">
-                    <div
-                        class="w-12 h-12 bg-brand text-dark rounded-xl flex items-center justify-center text-xl font-bold">
-                        1</div>
-                    <div class="text-sm">
-                        <div class="font-bold">Project Initialized</div>
-                        <div class="text-white/40">Context and brand rules applied.</div>
-                    </div>
-                </div>
-                <div class="flex items-center gap-4 p-4 bg-white/5 rounded-2xl border border-white/10">
-                    <div
-                        class="w-12 h-12 bg-brand text-dark rounded-xl flex items-center justify-center text-xl font-bold">
-                        2</div>
-                    <div class="text-sm">
-                        <div class="font-bold">3 Variations Drafted</div>
-                        <div class="text-white/40">Ready to be deployed via extension.</div>
-                    </div>
-                </div>
-                <div class="flex items-center gap-4 p-4 bg-white/5 rounded-2xl border border-white/10">
-                    <div
-                        class="w-12 h-12 bg-brand text-dark rounded-xl flex items-center justify-center text-xl font-bold">
-                        3</div>
-                    <div class="text-sm">
-                        <div class="font-bold">Full Dashboard Access</div>
-                        <div class="text-white/40">Analyze impact and run A/B tests.</div>
-                    </div>
-                </div>
-            </div>
-
-            <p class="text-[10px] text-white/30 font-mono uppercase tracking-widest">Powered by Lupine AI Engine</p>
         </div>
 
-        <!-- Right Side: Signup Form -->
-        <div class="md:w-1/2 p-12 space-y-8 flex flex-col justify-center">
-            <div class="space-y-2">
-                <h2 class="text-2xl font-bold text-dark">Create your account</h2>
-                <p class="text-xs text-gray-500">Already have an account? <a href="#"
-                        class="text-dark font-bold underline">Log in</a></p>
-            </div>
+        <!-- Right Side: Marketing -->
+        <div
+            class="hidden lg:flex lg:w-[55%] bg-[#A5B4FC] p-20 flex-col items-center justify-center relative overflow-hidden">
+            <!-- Background pattern -->
+            <div class="absolute inset-0 opacity-10"
+                style="background-image: radial-gradient(#000 1px, transparent 1px); background-size: 20px 20px;"></div>
 
-            <form class="space-y-4"
-                onsubmit="event.preventDefault(); alert('Account created! Experiments saved.'); location.href='/master-prompt/v5/index.html';">
-                <div>
-                    <input type="text" placeholder="Full Name" class="input-field" required>
-                </div>
-                <div>
-                    <input type="email" placeholder="Work Email" class="input-field" required>
-                </div>
-                <div>
-                    <input type="password" placeholder="Password" class="input-field" required>
+            <div class="z-10 w-full max-w-xl space-y-12">
+                <div class="space-y-4">
+                    <h2 class="text-6xl font-extrabold text-dark leading-tight">Start your free trial</h2>
+                    <p class="text-dark text-xl font-medium opacity-80">30-days to try Prompt-Based Experimentation</p>
                 </div>
 
-                <div class="flex items-start gap-3 pt-2">
-                    <input type="checkbox" class="mt-1 w-4 h-4 rounded border-gray-300 text-dark focus:ring-dark"
-                        id="terms" required>
-                    <label for="terms" class="text-[10px] text-gray-500 leading-relaxed">
-                        I agree to the <a href="#" class="underline">Terms of Service</a> and <a href="#"
-                            class="underline">Privacy Policy</a>. I understand my guest data will be merged into this
-                        account.
-                    </label>
+                <ul class="space-y-4 text-dark font-semibold">
+                    <li class="flex items-center gap-3">
+                        <div
+                            class="w-5 h-5 rounded-full border-2 border-dark flex items-center justify-center text-[10px]">
+                            ✓</div>
+                        Find ideas worth testing
+                    </li>
+                    <li class="flex items-center gap-3">
+                        <div
+                            class="w-5 h-5 rounded-full border-2 border-dark flex items-center justify-center text-[10px]">
+                            ✓</div>
+                        Build variants in minutes
+                    </li>
+                    <li class="flex items-center gap-3">
+                        <div
+                            class="w-5 h-5 rounded-full border-2 border-dark flex items-center justify-center text-[10px]">
+                            ✓</div>
+                        Target the right users, set the right goals
+                    </li>
+                    <li class="flex items-center gap-3">
+                        <div
+                            class="w-5 h-5 rounded-full border-2 border-dark flex items-center justify-center text-[10px]">
+                            ✓</div>
+                        Learn what works and what to do next
+                    </li>
+                </ul>
+
+                <!-- Mockup Box -->
+                <div class="bg-dark rounded-3xl overflow-hidden shadow-2xl scale-110 translate-y-8">
+                    <div class="relative bg-white aspect-[16/10]">
+                        <img id="mockupImg" src="kameleoon_signup_split_view_mockup.png"
+                            class="w-full h-full object-cover">
+                        <!-- Fallback if image not generated -->
+                        <div id="fallback"
+                            class="absolute inset-0 bg-gray-200 hidden flex items-center justify-center text-gray-400 font-bold">
+                            Split View Mockup</div>
+                    </div>
                 </div>
-
-                <button type="submit"
-                    class="w-full bg-brand text-dark py-4 rounded-full font-bold text-lg hover:scale-105 transition-transform mt-4">
-                    Complete Setup
-                </button>
-            </form>
-
-            <div class="pt-4 flex items-center gap-4 justify-center">
-                <div class="h-px bg-gray-200 flex-1"></div>
-                <span class="text-[10px] text-gray-400 font-mono uppercase">Or sign up with</span>
-                <div class="h-px bg-gray-200 flex-1"></div>
-            </div>
-
-            <div class="grid grid-cols-2 gap-4">
-                <button
-                    class="flex items-center justify-center gap-2 py-3 border border-gray-200 rounded-full hover:bg-gray-50 transition-colors">
-                    <img src="https://www.google.com/favicon.ico" class="w-4 h-4" alt="Google">
-                    <span class="text-xs font-bold">Google</span>
-                </button>
-                <button
-                    class="flex items-center justify-center gap-2 py-3 border border-gray-200 rounded-full hover:bg-gray-50 transition-colors">
-                    <img src="https://www.microsoft.com/favicon.ico" class="w-4 h-4" alt="Microsoft">
-                    <span class="text-xs font-bold">Microsoft</span>
-                </button>
             </div>
         </div>
     </div>
 
+    <script>
+        // Simple logic to enable button when form is "filled"
+        const inputs = document.querySelectorAll('input[required]');
+        const btn = document.getElementById('signupBtn');
+
+        const checkInputs = () => {
+            let allFilled = true;
+            inputs.forEach(input => {
+                if (!input.value) allFilled = false;
+            });
+            if (allFilled) {
+                btn.classList.remove('bg-[#F3F4F6]', 'text-dark/30', 'cursor-not-allowed');
+                btn.classList.add('bg-brand', 'text-dark');
+                btn.removeAttribute('disabled');
+            } else {
+                btn.classList.add('bg-[#F3F4F6]', 'text-dark/30', 'cursor-not-allowed');
+                btn.classList.remove('bg-brand', 'text-dark');
+            }
+        };
+
+        inputs.forEach(input => input.addEventListener('input', checkInputs));
+
+        // Handle missing image
+        document.getElementById('mockupImg').onerror = function () {
+            this.style.display = 'none';
+            document.getElementById('fallback').classList.remove('hidden');
+        };
+    </script>
 </body>
 
 </html>
