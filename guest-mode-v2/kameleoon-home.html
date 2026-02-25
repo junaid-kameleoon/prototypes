@@ -131,7 +131,25 @@
                 </p>
                 <!-- PBX Setup Form (In-page) -->
                 <div
-                    class="bg-white p-6 rounded-3xl border-2 border-brand/20 shadow-xl space-y-4 max-w-xl animate-in slide-in-from-bottom-4 duration-500">
+                    class="bg-white p-6 rounded-3xl border-2 border-brand/20 shadow-xl space-y-4 max-w-xl animate-in slide-in-from-bottom-4 duration-500 relative">
+                    <!-- Demo Mode Toggle -->
+                    <div class="absolute -top-12 left-0 right-0 flex justify-center gap-4">
+                        <label class="flex items-center gap-2 cursor-pointer group">
+                            <input type="radio" name="demoMode" value="0" checked
+                                onchange="localStorage.setItem('pbx_prompt_count', '0')" class="hidden peer">
+                            <span
+                                class="px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider border-2 border-gray-100 text-gray-400 peer-checked:bg-white peer-checked:border-brand peer-checked:text-dark transition-all hover:bg-gray-50">Fresh
+                                User (3/3)</span>
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer group">
+                            <input type="radio" name="demoMode" value="3"
+                                onchange="localStorage.setItem('pbx_prompt_count', '3')" class="hidden peer">
+                            <span
+                                class="px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider border-2 border-gray-100 text-gray-400 peer-checked:bg-white peer-checked:border-brand peer-checked:text-dark transition-all hover:bg-gray-50">Rate
+                                Limited (0/3)</span>
+                        </label>
+                    </div>
+
                     <div class="space-y-4">
                         <div class="relative group">
                             <label
@@ -374,6 +392,13 @@
                 }, 1500);
             }, 3000);
         }
+
+        // Initialize demo mode toggle on load
+        document.addEventListener('DOMContentLoaded', () => {
+            const currentCount = localStorage.getItem('pbx_prompt_count') || '0';
+            const radio = document.querySelector(`input[name="demoMode"][value="${currentCount === '3' ? '3' : '0'}"]`);
+            if (radio) radio.checked = true;
+        });
 
         // Expose togglePBX for header button
         window.togglePBX = startGuestSession;
