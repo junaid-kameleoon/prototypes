@@ -129,14 +129,57 @@
                     Say goodbye to manual coding. Describe your experiment in plain English and let PBX handle the rest.
                     Try it free in guest mode today.
                 </p>
-                <div class="flex flex-col sm:flex-row gap-4">
-                    <button onclick="togglePBX()" class="btn-primary text-sm px-8 py-4">
-                        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                <!-- PBX Setup Form (In-page) -->
+                <div
+                    class="bg-white p-6 rounded-3xl border-2 border-brand/20 shadow-xl space-y-4 max-w-xl animate-in slide-in-from-bottom-4 duration-500">
+                    <div class="space-y-4">
+                        <div class="relative group">
+                            <label
+                                class="block text-[10px] font-bold text-dark/40 uppercase tracking-widest mb-1.5 ml-1">Target
+                                Website URL</label>
+                            <div class="relative">
+                                <input type="text" id="targetUrl" value="https://nike.com"
+                                    class="w-full bg-gray-50 border-2 border-gray-100 rounded-2xl px-5 py-4 text-sm font-mono focus:border-brand focus:ring-4 focus:ring-brand/10 outline-none transition-all group-hover:border-gray-200">
+                                <div class="absolute right-4 top-1/2 -translate-y-1/2 text-brand">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1">
+                                        </path>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="relative group">
+                            <label
+                                class="block text-[10px] font-bold text-dark/40 uppercase tracking-widest mb-1.5 ml-1">What
+                                would you like to change?</label>
+                            <div class="relative">
+                                <textarea id="setupPrompt" rows="3"
+                                    class="w-full bg-gray-50 border-2 border-gray-100 rounded-2xl px-5 py-4 text-sm focus:border-brand focus:ring-4 focus:ring-brand/10 outline-none transition-all resize-none group-hover:border-gray-200">Change the 'Buy Now' button color to high-contrast orange and update the headline to be more benefit-oriented</textarea>
+                                <div class="absolute right-4 bottom-4 text-brand/30">
+                                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button onclick="startGuestSession()"
+                        class="w-full bg-brand text-dark py-5 rounded-2xl font-bold text-lg hover:scale-[1.01] active:scale-95 transition-all shadow-lg flex items-center justify-center gap-3">
+                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
                             <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
                         </svg>
-                        Launch Guest PBX
+                        Start Guest Session
                     </button>
-                    <button class="btn-outline text-sm px-8 py-4">See how it works</button>
+
+                    <div
+                        class="flex items-center justify-center gap-2 text-[10px] font-bold text-dark/40 uppercase tracking-tighter">
+                        <span>No signup required</span>
+                        <span class="w-1 h-1 bg-dark/20 rounded-full"></span>
+                        <span>3 free prompts</span>
+                    </div>
                 </div>
                 <div class="flex items-center gap-4 pt-4">
                     <div class="flex -space-x-3">
@@ -214,83 +257,49 @@
         </div>
     </section>
 
-    <!-- Setup Modal -->
-    <div id="setupModal"
-        class="fixed inset-0 bg-dark/60 backdrop-blur-sm z-[100] hidden items-center justify-center p-6 animate-in fade-in duration-300">
-        <div class="bg-white rounded-[32px] max-w-lg w-full p-10 space-y-8 shadow-2xl relative border border-gray-100">
-            <!-- Close Button -->
-            <button onclick="closeSetupModal()"
-                class="absolute top-6 right-6 text-gray-400 hover:text-dark transition-colors">
-                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-            </button>
-
-            <div class="space-y-2 text-center">
-                <div
-                    class="w-16 h-16 bg-brand rounded-2xl flex items-center justify-center mx-auto text-3xl shadow-lg mb-4">
-                    🧠</div>
-                <h2 class="text-3xl font-bold tracking-tight text-dark">Try Guest Mode</h2>
-                <p class="text-dark/60">Experience the power of PBX on any website instantly.</p>
-            </div>
-
-            <div class="space-y-5">
-                <div class="space-y-2">
-                    <label class="text-xs font-bold uppercase tracking-wider text-dark/40 ml-1">Target Website
-                        URL</label>
-                    <input type="text" id="targetUrl" placeholder="e.g. https://nike.com"
-                        class="w-full px-5 py-4 bg-gray-50 border border-gray-100 rounded-2xl outline-none focus:ring-2 focus:ring-brand focus:bg-white transition-all text-sm">
-                </div>
-                <div class="space-y-2">
-                    <label class="text-xs font-bold uppercase tracking-wider text-dark/40 ml-1">Your First
-                        Prompt</label>
-                    <textarea id="setupPrompt" placeholder="What would you like to change on this site?"
-                        class="w-full h-32 px-5 py-4 bg-gray-50 border border-gray-100 rounded-2xl outline-none focus:ring-2 focus:ring-brand focus:bg-white transition-all text-sm resize-none"></textarea>
-                </div>
-            </div>
-
+    <!-- Rate Limit Modal (Signup Popup) -->
+    <div id="signupModal"
+        class="fixed inset-0 bg-dark/90 backdrop-blur-md z-[300] hidden items-center justify-center p-6 animate-in fade-in duration-300">
+        <div
+            class="bg-white rounded-[40px] p-12 max-w-xl w-full text-center space-y-8 shadow-2xl border-[6px] border-brand/30 relative">
+            <button onclick="document.getElementById('signupModal').classList.add('hidden')"
+                class="absolute top-6 right-8 text-dark/20 hover:text-dark text-2xl font-bold">×</button>
+            <div
+                class="w-24 h-24 bg-brand/20 text-brand rounded-full flex items-center justify-center mx-auto text-5xl">
+                ⚡</div>
             <div class="space-y-4">
-                <button onclick="startGuestSession()"
-                    class="w-full bg-dark text-brand py-5 rounded-full font-bold text-lg hover:scale-[1.02] transition-all shadow-xl flex items-center justify-center gap-3">
-                    Launch PBX Editor
-                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                    </svg>
-                </button>
-                <p class="text-center text-[11px] text-gray-400">By clicking launch, you agree to our trial terms. No
-                    credit card required.</p>
+                <h2 class="text-3xl font-bold text-dark tracking-tight italic">You're doing great!</h2>
+                <p class="text-dark/60 text-lg leading-relaxed">It looks like you've already used your available guest
+                    prompts. Create a free account to continue your experiment and save your variations permanenty.</p>
+            </div>
+
+            <div class="flex flex-col gap-4 pt-4">
+                <button onclick="location.href='try-pbx-signup.html'"
+                    class="w-full bg-dark text-brand py-5 rounded-2xl font-bold text-xl hover:scale-[1.02] transition-all shadow-xl">Start
+                    a Free Trial</button>
+                <p class="text-xs text-gray-400 font-medium">30-day trial • No credit card required • 15 credits
+                    included</p>
             </div>
         </div>
     </div>
 
-    <!-- Removed separate PBX drawer as requested for homepage -->
-
-    <!-- FAB -->
-    <button onclick="openSetupModal()"
-        class="fixed bottom-8 right-8 w-16 h-16 rounded-full bg-dark text-brand shadow-2xl flex items-center justify-center text-3xl z-40 hover:scale-110 active:scale-95 transition-all border-4 border-brand/20">
-        🧠
-    </button>
-
     <script>
-        function openSetupModal() {
-            const modal = document.getElementById('setupModal');
+        function showSignupModal() {
+            const modal = document.getElementById('signupModal');
             modal.classList.remove('hidden');
             modal.classList.add('flex');
         }
 
-        function closeSetupModal() {
-            const modal = document.getElementById('setupModal');
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
-        }
-
         function startGuestSession() {
+            // Check rate limit first (Fred's suggestion)
+            const promptCount = parseInt(localStorage.getItem('pbx_prompt_count')) || 0;
+            if (promptCount >= 3) {
+                showSignupModal();
+                return;
+            }
+
             const url = document.getElementById('targetUrl').value.trim() || 'https://nike.com';
             const prompt = document.getElementById('setupPrompt').value.trim() || '';
-
-            // Reset prompt count for the new session
-            localStorage.setItem('pbx_prompt_count', '0');
 
             // Store temporarily
             localStorage.setItem('pbx_setup_url', url);
@@ -300,7 +309,6 @@
         }
 
         function showExtensionModal(url, prompt) {
-            closeSetupModal();
 
             const modal = document.createElement('div');
             modal.id = 'extensionModal';
@@ -368,7 +376,7 @@
         }
 
         // Expose togglePBX for header button
-        window.togglePBX = openSetupModal;
+        window.togglePBX = startGuestSession;
     </script>
 </body>
 
