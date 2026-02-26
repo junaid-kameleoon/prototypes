@@ -109,6 +109,88 @@
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
             overflow: hidden;
         }
+
+        /* Tooltip style */
+        .tooltip {
+            visibility: hidden;
+            position: absolute;
+            bottom: 120%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #111827;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 500;
+            width: 220px;
+            text-align: center;
+            z-index: 100;
+            opacity: 0;
+            transition: opacity 0.2s;
+            pointer-events: none;
+            line-height: 1.4;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .tooltip::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #111827 transparent transparent transparent;
+        }
+
+        .has-tooltip:hover .tooltip {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .attachment-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+            position: relative;
+            background: rgba(243, 244, 246, 0.3);
+            border: 1px solid rgba(229, 231, 235, 0.6);
+            cursor: pointer;
+        }
+
+        .attachment-btn:hover {
+            background: rgba(226, 247, 1, 0.08);
+            /* Subtle lime tint */
+            border-color: rgba(162, 89, 255, 0.3);
+            /* Subtle purple border */
+            transform: translateY(-1px);
+        }
+
+        .attachment-btn .close-overlay {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: white;
+            border: 1px solid #E5E7EB;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+            transition: all 0.2s ease;
+        }
+
+        .attachment-btn:hover .close-overlay {
+            border-color: #A259FF;
+            color: #A259FF;
+        }
     </style>
 </head>
 
@@ -190,22 +272,6 @@
 
         <!-- Input Area -->
         <div class="input-area">
-            <!-- Master Prompt active indicator (Repositioned above chatbox) -->
-            <div class="master-prompt-indicator mb-4">
-                <div class="w-10 h-10 rounded-lg bg-indigo-100 flex items-center justify-center shrink-0">
-                    <svg class="w-5 h-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor"
-                        stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16m-7 6h7" />
-                    </svg>
-                </div>
-                <div class="flex flex-col">
-                    <span class="text-xs font-bold text-gray-900">Master-prompt</span>
-                    <button onclick="openLightbox()"
-                        class="text-[11px] font-semibold text-primary hover:underline text-left">Display
-                        details</button>
-                </div>
-            </div>
-
             <div class="prompt-box">
                 <textarea
                     class="w-full bg-transparent border-none outline-none resize-none text-[13px] text-gray-900 placeholder-gray-400 min-h-[40px]"
@@ -228,6 +294,26 @@
                                 <path d="M19 19C19 24.246 23.254 28.5 28.5 28.5V19H19Z" fill="#0ACF83" />
                             </svg>
                         </button>
+                        <!-- Master Prompt Attachment -->
+                        <div class="has-tooltip">
+                            <button onclick="openLightbox()" class="attachment-btn">
+                                <svg class="w-5 h-5 text-indigo-600" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                </svg>
+                                <div class="close-overlay">
+                                    <svg class="w-2 h-2 text-gray-400" fill="none" viewBox="0 0 24 24"
+                                        stroke="currentColor" stroke-width="3">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </div>
+                            </button>
+                            <div class="tooltip">
+                                This prompt has been created by your account admin to better define technical and
+                                branding constraints. Click to view.
+                            </div>
+                        </div>
                     </div>
                     <button
                         class="w-10 h-10 bg-primary text-white rounded-full flex items-center justify-center shadow-md hover:shadow-lg transition-all">
