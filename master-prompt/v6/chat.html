@@ -149,48 +149,7 @@
             opacity: 1;
         }
 
-        .attachment-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 40px;
-            height: 40px;
-            border-radius: 12px;
-            transition: all 0.2s ease;
-            position: relative;
-            background: rgba(243, 244, 246, 0.3);
-            border: 1px solid rgba(229, 231, 235, 0.6);
-            cursor: pointer;
-        }
-
-        .attachment-btn:hover {
-            background: rgba(226, 247, 1, 0.08);
-            /* Subtle lime tint */
-            border-color: rgba(162, 89, 255, 0.3);
-            /* Subtle purple border */
-            transform: translateY(-1px);
-        }
-
-        .attachment-btn .close-overlay {
-            position: absolute;
-            top: -5px;
-            right: -5px;
-            background: white;
-            border: 1px solid #E5E7EB;
-            border-radius: 50%;
-            width: 18px;
-            height: 18px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
-            transition: all 0.2s ease;
-        }
-
-        .attachment-btn:hover .close-overlay {
-            border-color: #A259FF;
-            color: #A259FF;
-        }
+        /* Removed old attachment-btn CSS in favor of Tailwind utility classes */
     </style>
 </head>
 
@@ -295,21 +254,28 @@
                             </svg>
                         </button>
                         <!-- Master Prompt Attachment -->
-                        <div class="has-tooltip">
-                            <button onclick="openLightbox()" class="attachment-btn">
-                                <svg class="w-5 h-5 text-indigo-600" fill="none" viewBox="0 0 24 24"
-                                    stroke="currentColor" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                                </svg>
-                                <div class="close-overlay">
-                                    <svg class="w-2 h-2 text-gray-400" fill="none" viewBox="0 0 24 24"
-                                        stroke="currentColor" stroke-width="3">
+                        <div class="has-tooltip relative pl-1">
+                            <button onclick="openLightbox()"
+                                class="group flex items-center gap-1.5 px-2.5 py-1.5 h-8 rounded-full border border-gray-200/80 bg-gray-50 hover:bg-gray-100 hover:border-gray-300 transition-all cursor-pointer">
+                                <!-- Icon container -->
+                                <div
+                                    class="w-5 h-5 rounded-full flex items-center justify-center shrink-0 relative overflow-hidden transition-all group-hover:bg-gray-200/80">
+                                    <svg class="w-3.5 h-3.5 text-indigo-500 absolute transition-opacity duration-200 group-hover:opacity-0"
+                                        fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <!-- Shield Check to denote admin constraints -->
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                                    </svg>
+                                    <svg class="w-3.5 h-3.5 text-gray-500 absolute opacity-0 transition-opacity duration-200 group-hover:opacity-100"
+                                        fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                        <!-- Close icon on hover -->
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                                     </svg>
                                 </div>
+                                <span class="text-[12px] font-semibold text-gray-600 select-none pr-1">Master
+                                    Prompt</span>
                             </button>
-                            <div class="tooltip">
+                            <div class="tooltip mb-2 w-[240px]">
                                 This prompt has been created by your account admin to better define technical and
                                 branding constraints. Click to view.
                             </div>
