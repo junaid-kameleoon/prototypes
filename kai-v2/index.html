@@ -104,62 +104,202 @@
         const Bell = ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" /><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" /></svg>;
         const Search = ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><circle cx="11" cy="11" r="8" /><path d="m21 21-4.3-4.3" /></svg>;
         const ArrowUpRight = ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M7 7h10v10" /><path d="M7 17 17 7" /></svg>;
+        const Info = ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><circle cx="12" cy="12" r="10" /><path d="M12 16v-4" /><path d="M12 8h.01" /></svg>;
+        const ChevronDown = ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="m6 9 6 6 6-6" /></svg>;
+        const Maximize2 = ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M15 3h6v6" /><path d="M9 21H3v-6" /><path d="M21 3l-7 7" /><path d="M3 21l7-7" /></svg>;
+        const Mail = ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><rect width="20" height="16" x="2" y="4" rx="2" /><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" /></svg>;
+        const Pause = ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><rect width="4" height="16" x="6" y="4" /><rect width="4" height="16" x="14" y="4" /></svg>;
+        const Play = ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polygon points="5 3 19 12 5 21 5 3" /></svg>;
         const Brain = ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 4.44-2.54Z" /><path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-4.44-2.54Z" /></svg>;
+        const Share2 = ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><circle cx="18" cy="5" r="3" /><circle cx="6" cy="12" r="3" /><circle cx="18" cy="19" r="3" /><line x1="8.59" y1="13.51" x2="15.42" y2="17.49" /><line x1="15.41" y1="6.51" x2="8.59" y2="10.49" /></svg>;
+        const Download = ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" x2="12" y1="15" y2="3" /></svg>;
+        const MoreHorizontal = ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><circle cx="12" cy="12" r="1" /><circle cx="19" cy="12" r="1" /><circle cx="5" cy="12" r="1" /></svg>;
 
         // --- Utils ---
         const cn = (...classes) => classes.filter(Boolean).join(' ');
 
         // --- Data ---
         const ACTIONS = [
-            { icon: Plus, title: "New Experiment", desc: "A/B or MVT with guardrails.", tag: "Draft" },
-            { icon: Wand2, title: "Generate Variants", desc: "Hero & pricing via AI.", tag: "AI" },
-            { icon: Flag, title: "Create Segment", desc: "Natural language targeting.", tag: "Segment" },
-            { icon: Settings2, title: "QA Pre‑flight", desc: "Validate tags & performance.", tag: "System" },
+            { id: 'pbx', icon: Wand2, title: "New A/B test by prompt", desc: "Start prompting your experiment", tag: "PBX" },
+            { id: 'ideas', icon: Plus, title: "Generate Test Ideas", desc: "New hypotheses for your roadmap.", tag: "PBX" },
+            { id: 'workflow', icon: Settings2, title: "Create new workflow", desc: "Automate your experiment lifecycle", tag: "NEW" },
+            { id: 'object', icon: ChevronRight, title: "Create new object", desc: "Create experimentation objects via prompt", tag: "NEW" },
+            { id: 'dwh', icon: ArrowUpRight, title: "Sync to Warehouse", desc: "Push results to Snowflake.", tag: "DWH" },
         ];
 
-        const INSIGHTS = [
-            { kpi: "+2.3%", label: "Average uplift", status: "stable" },
-            { kpi: "81%", label: "Power coverage", status: "good" },
-            { kpi: "3", label: "SRM issues detected", status: "alert" },
-        ];
+        const INSIGHTS = {
+            health: [
+                { label: "SRM Status", value: "No issues", status: "good", sub: "Skew: 50.1/49.9" },
+                { label: "Exposure Balance", value: "Optimal", status: "good", sub: "Var A: 12.1k / Control: 12.0k" },
+                { label: "SDK Pulse", value: "Healthy", status: "good", sub: "Latency: 24ms" }
+            ],
+            velocity: [
+                { label: "Throughput", value: "8/10", status: "stable", sub: "Tests Concluded vs Target" },
+                { label: "Win Rate", value: "32%", status: "stable", sub: "Last 30 days" },
+                { label: "Conclusive Rate", value: "68%", status: "good", sub: "Statistically sig" }
+            ],
+            impact: [
+                { label: "Annualized Lift", value: "+$4.1M", status: "good", sub: "Based on last 6 months" },
+                { label: "Top Performer", value: "Checkout v2", status: "good", sub: "+12.4% conversion" },
+                { label: "New Learnings", value: "3 new learnings", status: "good", sub: "From 4 experiments this week" },
+                { label: "Reinforcement", value: "4 reinforced learnings", status: "good", sub: "From 10 experiments this week" }
+            ],
+            stats: [
+                { label: "Decision Readiness", value: "48 tests", status: "stable", sub: "Waiting for human sign-off" },
+                { label: "Team Insight", value: "82% Hypotheses Validated", status: "success", sub: "Historical Avg: 78%" }
+            ]
+        };
 
         // --- Components ---
         const TabButton = ({ icon: Icon, label, active, onClick }) => (
             <button
                 onClick={onClick}
                 className={cn(
-                    "flex-1 flex items-center justify-center gap-2 py-3 text-xs font-semibold border-b-2 transition-all",
+                    "flex-1 flex items-center justify-center gap-2 py-3 text-xs font-medium border-b-2 transition-all",
                     active
-                        ? "text-primary border-primary bg-primary/5"
+                        ? "text-primary border-primary bg-primary/5 shadow-[inset_0_-2px_0_0_#3838E7]"
                         : "text-gray-500 border-transparent hover:text-gray-900 hover:bg-gray-50"
                 )}
             >
                 <Icon className="h-3.5 w-3.5" />
-                <span>{label}</span>
+                <span className="tracking-tight">{label}</span>
             </button>
         );
 
-        const ActionCard = ({ action }) => (
-            <div className="group p-3 border border-gray-200 bg-white hover:border-primary/30 hover:bg-primary/[0.02] transition-all cursor-pointer rounded-lg">
+        const ActionCard = ({ action, onClick }) => (
+            <div
+                onClick={() => onClick && onClick(action.id)}
+                className="group p-3 border border-gray-100 bg-white hover:border-primary/20 hover:bg-primary/[0.01] transition-all cursor-pointer rounded-lg shadow-sm"
+            >
                 <div className="flex items-start gap-3">
-                    <div className="mt-0.5 h-8 w-8 rounded bg-gray-100 flex items-center justify-center text-gray-500 group-hover:bg-primary group-hover:text-white transition-colors">
+                    <div className="mt-0.5 h-8 w-8 rounded bg-gray-50 flex items-center justify-center text-gray-400 group-hover:bg-primary/10 group-hover:text-primary transition-colors">
                         <action.icon className="h-4 w-4" />
                     </div>
                     <div className="flex-1 min-w-0">
                         <div className="flex items-center justify-between mb-0.5">
-                            <h4 className="text-[13px] font-bold text-gray-900 uppercase tracking-tight">{action.title}</h4>
-                            <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{action.tag}</span>
+                            <h4 className="text-[13px] font-semibold text-gray-800 tracking-tight">{action.title}</h4>
+                            <span className="text-[9px] font-medium text-gray-400 uppercase tracking-widest">{action.tag}</span>
                         </div>
-                        <p className="text-[11px] text-gray-500 font-medium">{action.desc}</p>
+                        <p className="text-[11px] text-gray-500 font-medium leading-normal">{action.desc}</p>
                     </div>
                 </div>
             </div>
         );
 
+        const Modal = ({ isOpen, onClose, title, subtitle, children, footer }) => {
+            if (!isOpen) return null;
+            return (
+                <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                        animate={{ opacity: 1, scale: 1, y: 0 }}
+                        className="bg-white rounded-xl shadow-2xl w-full max-w-lg overflow-hidden flex flex-col"
+                    >
+                        <div className="p-6 border-b border-gray-100 flex items-start justify-between">
+                            <div>
+                                <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2">
+                                    <Wand2 className="h-5 w-5 text-primary" />
+                                    {title}
+                                </h2>
+                                <p className="text-sm text-gray-500 mt-1">{subtitle}</p>
+                            </div>
+                            <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-full transition-colors">
+                                <X className="h-5 w-5 text-gray-400" />
+                            </button>
+                        </div>
+                        <div className="p-6 overflow-y-auto max-h-[70vh]">
+                            {children}
+                        </div>
+                        {footer && (
+                            <div className="p-4 bg-gray-50 border-t border-gray-100 flex justify-between items-center">
+                                {footer}
+                            </div>
+                        )}
+                    </motion.div>
+                </div>
+            );
+        };
+
+        const SimpleChart = ({ expanded = false }) => {
+            const data = [
+                { label: 'Control', val: 12.4, color: '#94a3b8' },
+                { label: 'Var A', val: 14.8, color: '#3838E7' },
+                { label: 'Var B', val: 13.2, color: '#818cf8' },
+            ];
+
+            return (
+                <div className={cn("w-full bg-white border border-gray-100 rounded-lg p-4 mt-2", expanded ? "h-64" : "h-32")}>
+                    <div className="flex items-end justify-around h-full gap-4">
+                        {data.map((d, i) => (
+                            <div key={i} className="flex-1 flex flex-col items-center justify-end h-full">
+                                <motion.div
+                                    initial={{ height: 0 }}
+                                    animate={{ height: `${(d.val / 16) * 100}%` }}
+                                    className="w-full rounded-t"
+                                    style={{ backgroundColor: d.color }}
+                                />
+                                <span className="text-[10px] font-medium text-gray-400 mt-2 uppercase">{d.label}</span>
+                                <span className="text-[10px] font-semibold text-gray-900">{d.val}%</span>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            );
+        };
+
         function App() {
             const [kaiOpen, setKaiOpen] = useState(true);
             const [activeTab, setActiveTab] = useState("actions");
+            const [insightsSubTab, setInsightsSubTab] = useState("summary");
             const [input, setInput] = useState("");
+            const [pbxModalOpen, setPbxModalOpen] = useState(false);
+            const [workflowModalOpen, setWorkflowModalOpen] = useState(false);
+            const [chartModalOpen, setChartModalOpen] = useState(false);
+            const [objectDropdownOpen, setObjectDropdownOpen] = useState(false);
+            const [view, setView] = useState("dashboard"); // dashboard or experiment
+            const [showTestIdeasAlert, setShowTestIdeasAlert] = useState(false);
+            const [isGeneratingIdeas, setIsGeneratingIdeas] = useState(false);
+
+            const handleActionClick = (id) => {
+                if (id === 'pbx') setPbxModalOpen(true);
+                if (id === 'workflow') setWorkflowModalOpen(true);
+                if (id === 'object') setObjectDropdownOpen(!objectDropdownOpen);
+                if (id === 'ideas') {
+                    setActiveTab("chat");
+                    setMessages(prev => [
+                        ...prev,
+                        { role: 'assistant', content: "Please enter the URL or describe the page you'd like me to generate test ideas for." }
+                    ]);
+                    setIsGeneratingIdeas(true);
+                }
+            };
+
+            const [messages, setMessages] = useState([
+                { role: 'user', content: "Summarize the last 3 days' PBX experiment results for the EU segment." },
+                { role: 'assistant', content: "Analysis complete for EU traffic (Last 72h). Variation A is outperforming Control by 18.2% with 94% confidence. Here is the primary conversion breakdown:", type: 'chart' }
+            ]);
+
+            const handleMessageSend = () => {
+                if (!input.trim()) return;
+                const newMsg = { role: 'user', content: input };
+                const updatedMessages = [...messages, newMsg];
+                setMessages(updatedMessages);
+                setInput("");
+
+                if (isGeneratingIdeas) {
+                    setTimeout(() => {
+                        setMessages(prev => [
+                            ...prev,
+                            { role: 'assistant', content: "I'm generating new test ideas for this page. I'll notify you in the Alerts tab once they are ready for review." }
+                        ]);
+                        setIsGeneratingIdeas(false);
+                        // Simulate ideas being ready after a delay
+                        setTimeout(() => {
+                            setShowTestIdeasAlert(true);
+                        }, 5000);
+                    }, 1000);
+                }
+            };
 
             return (
                 <div className="flex flex-col h-screen bg-background overflow-hidden">
@@ -206,29 +346,77 @@
                         {/* Dashboard */}
                         <div className="flex-1 bg-gray-50 p-8 overflow-y-auto">
                             <div className="max-w-5xl mx-auto">
-                                <div className="flex items-center justify-between mb-8">
-                                    <h1 className="text-2xl font-bold tracking-tight">Active Experiments</h1>
-                                    <button className="bg-primary text-white px-4 py-2 rounded text-sm font-bold shadow hover:bg-blue-700 transition-colors">
-                                        Create New Test
-                                    </button>
-                                </div>
+                                {view === "dashboard" ? (
+                                    <>
+                                        <div className="flex items-center justify-between mb-8">
+                                            <h1 className="text-2xl font-bold tracking-tight">Active Experiments</h1>
+                                            <button className="bg-primary text-white px-4 py-2 rounded text-sm font-bold shadow hover:bg-blue-700 transition-colors">
+                                                Create New Test
+                                            </button>
+                                        </div>
 
-                                <div className="grid grid-cols-2 gap-4">
-                                    {[1, 2, 3, 4].map(i => (
-                                        <div key={i} className="p-5 bg-white border border-gray-200 rounded-lg shadow-sm hover:border-primary/20 transition-all">
-                                            <div className="flex justify-between items-start mb-4">
-                                                <div className="text-[10px] font-bold text-gray-400 uppercase tracking-widest bg-gray-50 px-2 py-1 rounded">Experiment ID: 410{i}</div>
-                                                <div className="h-2 w-2 bg-green-500 rounded-full" />
+                                        <div className="grid grid-cols-2 gap-4">
+                                            {[1, 2, 3, 4].map(i => (
+                                                <div
+                                                    key={i}
+                                                    onClick={() => i === 1 ? setView("experiment") : null}
+                                                    className={cn(
+                                                        "p-5 bg-white border border-gray-200 rounded-lg shadow-sm hover:border-primary/20 transition-all",
+                                                        i === 1 ? "cursor-pointer ring-2 ring-primary/20 border-primary/30" : ""
+                                                    )}
+                                                >
+                                                    <div className="flex justify-between items-start mb-4">
+                                                        <div className="text-[10px] font-bold text-gray-400 uppercase tracking-widest bg-gray-50 px-2 py-1 rounded">Experiment ID: 410{i}</div>
+                                                        <div className="h-2 w-2 bg-green-500 rounded-full" />
+                                                    </div>
+                                                    <h3 className="font-bold text-base mb-1">Pricing Page Variation - {i}</h3>
+                                                    <p className="text-xs text-gray-500 mb-6 font-medium">Testing impact on conversion rate for EU traffic.</p>
+                                                    <div className="flex items-center justify-between pt-4 border-t border-gray-50">
+                                                        <span className="text-[10px] font-bold text-gray-400">STATUS: RUNNING</span>
+                                                        <button className="text-xs font-bold text-primary hover:underline">Manage {i === 1 && <span className="text-[8px] bg-primary text-white px-1 ml-1 rounded">DEMO</span>}</button>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </>
+                                ) : (
+                                    <div className="space-y-6">
+                                        <button onClick={() => setView("dashboard")} className="text-xs font-bold text-gray-500 flex items-center gap-1 hover:text-gray-900 transition-colors">
+                                            <ChevronDown className="h-3 w-3 rotate-90" /> BACK TO DASHBOARD
+                                        </button>
+                                        <div className="bg-white p-8 rounded-xl border border-gray-200 shadow-sm">
+                                            <div className="flex items-center gap-3 mb-6">
+                                                <div className="h-10 w-10 bg-primary/10 rounded-lg flex items-center justify-center text-primary font-bold">P1</div>
+                                                <div>
+                                                    <h1 className="text-2xl font-bold">Pricing Page Variation - 1</h1>
+                                                    <div className="flex gap-2 items-center mt-1">
+                                                        <span className="text-[10px] font-bold bg-green-100 text-green-700 px-2 py-0.5 rounded">RUNNING</span>
+                                                        <span className="text-[10px] font-bold text-gray-400">ID: 4101</span>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <h3 className="font-bold text-base mb-1">Pricing Page Variation - {i}</h3>
-                                            <p className="text-xs text-gray-500 mb-6 font-medium">Testing impact on conversion rate for EU traffic.</p>
-                                            <div className="flex items-center justify-between pt-4 border-t border-gray-50">
-                                                <span className="text-[10px] font-bold text-gray-400">STATUS: RUNNING</span>
-                                                <button className="text-xs font-bold text-primary hover:underline">Manage</button>
+                                            <div className="grid grid-cols-3 gap-6 py-6 border-y border-gray-100">
+                                                <div className="space-y-1">
+                                                    <div className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Targeting</div>
+                                                    <div className="text-sm font-semibold">EU Segment • 50/50 Split</div>
+                                                </div>
+                                                <div className="space-y-1">
+                                                    <div className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Primary Goal</div>
+                                                    <div className="text-sm font-semibold">Purchase Success</div>
+                                                </div>
+                                                <div className="space-y-1">
+                                                    <div className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Started</div>
+                                                    <div className="text-sm font-semibold">Oct 12, 2023 (3 days ago)</div>
+                                                </div>
+                                            </div>
+                                            <div className="mt-8">
+                                                <div className="h-48 bg-gray-50 rounded-lg border border-dashed border-gray-300 flex items-center justify-center text-gray-400 text-sm font-bold">
+                                                    Results Visualization Mock
+                                                </div>
                                             </div>
                                         </div>
-                                    ))}
-                                </div>
+                                    </div>
+                                )}
                             </div>
                         </div>
 
@@ -240,46 +428,75 @@
                                     animate={{ x: 0 }}
                                     exit={{ x: "100%" }}
                                     transition={{ type: "tween", duration: 0.2 }}
-                                    className="w-[380px] flex flex-col bg-white border-l border-gray-200 shadow-sleek z-40"
+                                    className="w-[480px] flex flex-col bg-white border-l border-gray-200 shadow-sleek z-40"
                                 >
                                     {/* Sidebar Header */}
                                     <div className="bg-primary p-4 flex items-center justify-between text-white">
                                         <div className="flex items-center gap-2.5">
                                             <div className="h-8 w-8 bg-white/20 rounded-md flex items-center justify-center font-bold text-xs uppercase">K</div>
                                             <div>
-                                                <div className="text-[13px] font-bold">KAI ASSISTANT</div>
-                                                <div className="text-[10px] opacity-70 font-semibold tracking-wider">CONTEXT: DASHBOARD</div>
+                                                <div className="text-[13px] font-semibold">Kai Assistant</div>
+                                                <div className="text-[10px] opacity-70 font-medium tracking-wider">Context: {view}</div>
                                             </div>
                                         </div>
-                                        <button onClick={() => setKaiOpen(false)} className="p-1.5 hover:bg-white/10 rounded-md">
-                                            <X className="h-4 w-4" />
-                                        </button>
+                                        <div className="flex items-center gap-2">
+                                            <button onClick={() => setKaiOpen(false)} className="p-1.5 hover:bg-white/10 rounded-md">
+                                                <X className="h-4 w-4" />
+                                            </button>
+                                        </div>
                                     </div>
 
                                     {/* Tabs */}
                                     <div className="flex border-b border-gray-200">
-                                        <TabButton icon={Settings2} label="ACTIONS" active={activeTab === "actions"} onClick={() => setActiveTab("actions")} />
-                                        <TabButton icon={MessageSquare} label="CHAT" active={activeTab === "chat"} onClick={() => setActiveTab("chat")} />
-                                        <TabButton icon={BarChart3} label="INSIGHTS" active={activeTab === "insights"} onClick={() => setActiveTab("insights")} />
+                                        <TabButton icon={Settings2} label="Actions" active={activeTab === "actions"} onClick={() => setActiveTab("actions")} />
+                                        <TabButton icon={MessageSquare} label="Chat" active={activeTab === "chat"} onClick={() => setActiveTab("chat")} />
+                                        <TabButton icon={BarChart3} label="Insights" active={activeTab === "insights"} onClick={() => setActiveTab("insights")} />
                                     </div>
 
                                     {/* Sidebar Content */}
                                     <div className="flex-1 overflow-y-auto p-5 space-y-6">
                                         {activeTab === "actions" && (
                                             <div className="space-y-6">
-                                                <div className="p-4 bg-gray-50 rounded border border-gray-200">
-                                                    <div className="flex gap-3">
-                                                        <Brain className="h-4 w-4 text-primary shrink-0" />
-                                                        <p className="text-xs font-medium text-gray-700 leading-relaxed">
-                                                            Active Master Prompt detected. I'm following your brand tone and technical constraints automatically.
+                                                <div className="p-4 bg-gray-50 rounded border border-gray-200 group/tt">
+                                                    <div className="flex items-center justify-between cursor-help">
+                                                        <div className="flex items-center gap-3">
+                                                            <Brain className="h-4 w-4 text-primary shrink-0" />
+                                                            <p className="text-[11px] font-semibold text-gray-800 tracking-tight">
+                                                                Active Master Prompt
+                                                            </p>
+                                                        </div>
+                                                        <Info className="h-3.5 w-3.5 text-gray-400" />
+                                                    </div>
+                                                    {/* Tooltip Simulation */}
+                                                    <div className="mt-2 hidden group-hover/tt:block animate-in fade-in slide-in-from-top-1 duration-200">
+                                                        <p className="text-[11px] font-medium text-gray-600 leading-relaxed bg-white p-2 rounded border border-gray-100 shadow-sm">
+                                                            Kai is following your brand tone and technical constraints automatically.
                                                         </p>
                                                     </div>
                                                 </div>
                                                 <div className="space-y-3">
-                                                    <h3 className="text-[10px] font-bold text-gray-400 uppercase tracking-widest px-1">Active Tools</h3>
-                                                    <div className="space-y-2.5">
+                                                    <h3 className="text-[10px] font-bold text-gray-400 tracking-wider px-1">Active tools</h3>
+                                                    <div className="space-y-2.5 relative">
                                                         {ACTIONS.map((action, i) => (
-                                                            <ActionCard key={i} action={action} />
+                                                            <div key={i}>
+                                                                <ActionCard
+                                                                    action={action}
+                                                                    onClick={handleActionClick}
+                                                                />
+                                                                {action.id === 'object' && objectDropdownOpen && (
+                                                                    <motion.div
+                                                                        initial={{ opacity: 0, y: -10 }}
+                                                                        animate={{ opacity: 1, y: 0 }}
+                                                                        className="mt-1 ml-11 p-2 bg-gray-50 border border-gray-200 rounded-lg shadow-sm space-y-1"
+                                                                    >
+                                                                        {['Segment', 'Trigger', 'Goal'].map(obj => (
+                                                                            <button key={obj} onClick={() => setObjectDropdownOpen(false)} className="w-full text-left px-3 py-2 text-[11px] font-bold text-gray-700 hover:bg-white hover:text-primary rounded transition-all">
+                                                                                {obj}
+                                                                            </button>
+                                                                        ))}
+                                                                    </motion.div>
+                                                                )}
+                                                            </div>
                                                         ))}
                                                     </div>
                                                 </div>
@@ -288,50 +505,185 @@
 
                                         {activeTab === "chat" && (
                                             <div className="space-y-4">
-                                                <div className="bg-gray-100 p-3.5 rounded-lg border border-gray-200 text-xs font-medium text-gray-800 leading-relaxed max-w-[90%]">
-                                                    Hi Junaid! I've analyzed your current A/B tests. The mobile pricing test is showing significant results. Shall we summarize?
-                                                </div>
-                                                <div className="flex flex-col items-end">
-                                                    <div className="bg-primary text-white p-3.5 rounded-lg text-xs font-semibold leading-relaxed max-w-[90%] shadow-sm">
-                                                        Yes, summarize the last 3 days of results for the EU segment.
+                                                {messages.map((m, i) => (
+                                                    <div key={i} className={cn("flex flex-col", m.role === 'user' ? "items-end" : "items-start")}>
+                                                        <div className={cn(
+                                                            "p-3.5 rounded-lg text-xs font-semibold leading-relaxed max-w-[95%] shadow-sm",
+                                                            m.role === 'user' ? "bg-primary text-white" : "bg-gray-100 text-gray-800 border border-gray-200"
+                                                        )}>
+                                                            {m.content}
+                                                            {m.type === 'chart' && (
+                                                                <div className="mt-3 space-y-2">
+                                                                    <div className="relative group/chart">
+                                                                        <SimpleChart />
+                                                                        <button
+                                                                            onClick={() => setChartModalOpen(true)}
+                                                                            className="absolute top-4 right-2 p-1.5 bg-white shadow-sm border border-gray-100 rounded opacity-0 group-hover/chart:opacity-100 transition-opacity"
+                                                                        >
+                                                                            <Maximize2 className="h-3 w-3 text-gray-500" />
+                                                                        </button>
+                                                                    </div>
+                                                                    <div className="flex items-center gap-3 px-1">
+                                                                        <button className="flex items-center gap-1.5 text-[10px] font-bold text-gray-400 hover:text-primary transition-colors">
+                                                                            <Share2 className="h-3 w-3" /> SHARE
+                                                                        </button>
+                                                                        <button className="flex items-center gap-1.5 text-[10px] font-bold text-gray-400 hover:text-primary transition-colors">
+                                                                            <Download className="h-3 w-3" /> EXPORT
+                                                                        </button>
+                                                                        <button className="ml-auto text-gray-400 hover:text-gray-600 transition-colors">
+                                                                            <MoreHorizontal className="h-3.5 w-3.5" />
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            )}
+                                                        </div>
                                                     </div>
+                                                ))}
+
+                                                {/* Canned Suggestions in Whitespace */}
+                                                <div className="flex flex-wrap gap-1.5 mt-8 mb-4 px-1">
+                                                    {["Summarize wins", "Analyze EU traffic", "Active alerts"].map((s, i) => (
+                                                        <button
+                                                            key={i}
+                                                            onClick={() => setInput(s)}
+                                                            className="px-2.5 py-1 bg-white border border-gray-100 rounded-full text-[10px] font-semibold text-gray-400 hover:border-primary/30 hover:text-primary transition-all shadow-sm"
+                                                        >
+                                                            {s}
+                                                        </button>
+                                                    ))}
                                                 </div>
                                             </div>
                                         )}
 
                                         {activeTab === "insights" && (
                                             <div className="space-y-4">
-                                                <h3 className="text-[10px] font-bold text-gray-400 uppercase tracking-widest px-1">Project KPIs</h3>
-                                                <div className="grid grid-cols-1 gap-3">
-                                                    {INSIGHTS.map((it, i) => (
-                                                        <div key={i} className="p-4 border border-gray-200 rounded bg-white flex items-center justify-between">
-                                                            <div>
-                                                                <div className="text-xl font-bold tracking-tight text-gray-900">{it.kpi}</div>
-                                                                <div className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">{it.label}</div>
-                                                            </div>
-                                                            <div className={cn(
-                                                                "h-1.5 w-1.5 rounded-full",
-                                                                it.status === "alert" ? "bg-red-500 animate-pulse" : "bg-green-500"
-                                                            )} />
-                                                        </div>
+                                                {/* Insights Sub-tabs */}
+                                                <div className="flex bg-gray-100 p-1 rounded-lg mb-4">
+                                                    {['Summary', 'Alerts'].map(t => (
+                                                        <button
+                                                            key={t}
+                                                            onClick={() => setInsightsSubTab(t.toLowerCase())}
+                                                            className={cn(
+                                                                "flex-1 py-1.5 text-[10px] font-bold tracking-wider rounded transition-all",
+                                                                insightsSubTab === t.toLowerCase() ? "bg-white shadow-sm text-primary" : "text-gray-500 hover:text-gray-700"
+                                                            )}
+                                                        >
+                                                            {t}
+                                                        </button>
                                                     ))}
                                                 </div>
-                                                <div className="p-5 border border-primary/20 bg-primary/5 rounded-lg border-dashed">
-                                                    <div className="flex items-center gap-2 mb-2">
-                                                        <span className="text-[10px] font-black text-primary px-1.5 py-0.5 border border-primary rounded uppercase">Opportunity</span>
+
+                                                {insightsSubTab === 'summary' && (
+                                                    <div className="space-y-6">
+                                                        {/* Section: Health & Safety */}
+                                                        <div className="space-y-3">
+                                                            <h3 className="text-[10px] font-bold text-gray-400 uppercase tracking-widest px-1">Health & Safety</h3>
+                                                            <div className="grid grid-cols-1 gap-2.5">
+                                                                {INSIGHTS.health.map((it, i) => (
+                                                                    <div key={i} className="p-3 border border-gray-100 rounded-lg bg-white flex items-center justify-between group hover:border-primary/20 transition-all shadow-sm">
+                                                                        <div>
+                                                                            <div className="text-[11px] font-bold text-gray-900">{it.value}</div>
+                                                                            <div className="flex items-center gap-1.5 mt-0.5">
+                                                                                <span className="text-[10px] font-semibold text-gray-500">{it.label}</span>
+                                                                                <span className="text-[9px] text-gray-400 font-medium">• {it.sub}</span>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div className={cn(
+                                                                            "h-1.5 w-1.5 rounded-full shadow-[0_0_8px_rgba(34,197,94,0.3)]",
+                                                                            it.status === "alert" ? "bg-red-500 animate-pulse shadow-[0_0_8px_rgba(239,68,68,0.5)]" : "bg-green-500"
+                                                                        )} />
+                                                                    </div>
+                                                                ))}
+                                                            </div>
+                                                        </div>
+
+                                                        {/* Section: Program Velocity */}
+                                                        <div className="space-y-3">
+                                                            <h3 className="text-[10px] font-bold text-gray-400 uppercase tracking-widest px-1">Program Velocity</h3>
+                                                            <div className="grid grid-cols-3 gap-2">
+                                                                {INSIGHTS.velocity.map((it, i) => (
+                                                                    <div key={i} className="p-3 bg-gray-50 border border-gray-100 rounded-lg text-center">
+                                                                        <div className="text-[13px] font-bold text-gray-900">{it.value}</div>
+                                                                        <div className="text-[9px] font-bold text-gray-400 uppercase tracking-tight mt-0.5 leading-tight">{it.label}</div>
+                                                                    </div>
+                                                                ))}
+                                                            </div>
+                                                        </div>
+
+                                                        {/* Section: Impact & Status */}
+                                                        <div className="grid grid-cols-2 gap-3">
+                                                            <div className="space-y-3">
+                                                                <h3 className="text-[10px] font-bold text-gray-400 uppercase tracking-widest px-1">Value Impact</h3>
+                                                                {INSIGHTS.impact.map((it, i) => (
+                                                                    <div key={i} className="p-3 border border-primary/10 rounded-lg bg-primary/[0.02]">
+                                                                        <div className="text-[12px] font-bold text-primary">{it.value}</div>
+                                                                        <div className="text-[10px] font-semibold text-gray-700 mt-0.5">{it.label}</div>
+                                                                        <div className="text-[9px] text-gray-400 font-medium mt-1 leading-tight">{it.sub}</div>
+                                                                    </div>
+                                                                ))}
+                                                            </div>
+                                                            <div className="space-y-3">
+                                                                <h3 className="text-[10px] font-bold text-gray-400 uppercase tracking-widest px-1">Stats Strength</h3>
+                                                                {INSIGHTS.stats.map((it, i) => (
+                                                                    <div key={i} className={cn(
+                                                                        "p-3 border rounded-lg",
+                                                                        it.status === 'alert' ? 'border-amber-100 bg-amber-50/30' :
+                                                                            it.status === 'success' ? 'border-green-100 bg-green-50/50' :
+                                                                                'border-gray-100 bg-gray-50'
+                                                                    )}>
+                                                                        <div className={cn(
+                                                                            "text-[12px] font-bold",
+                                                                            it.status === 'alert' ? 'text-amber-700' :
+                                                                                it.status === 'success' ? 'text-green-700' :
+                                                                                    'text-gray-900'
+                                                                        )}>{it.value}</div>
+                                                                        <div className="text-[10px] font-semibold text-gray-700 mt-0.5">{it.label}</div>
+                                                                        <div className="text-[9px] text-gray-400 font-medium mt-1 leading-tight">{it.sub}</div>
+                                                                    </div>
+                                                                ))}
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                    <h4 className="text-xs font-bold text-gray-900 mb-1">Potential uplift on FR mobile</h4>
-                                                    <p className="text-[11px] text-gray-600 font-medium leading-relaxed">
-                                                        Historical data suggests a variation on the "Mobile CTA" could yield a 4.2% uplift.
-                                                    </p>
-                                                </div>
+                                                )}
+
+                                                {insightsSubTab === 'alerts' && (
+                                                    <div className="space-y-3">
+                                                        {showTestIdeasAlert && (
+                                                            <motion.div
+                                                                initial={{ opacity: 0, x: -20 }}
+                                                                animate={{ opacity: 1, x: 0 }}
+                                                                className="p-4 border-l-4 border-primary bg-primary/5 rounded-r-lg"
+                                                            >
+                                                                <div className="flex items-center gap-2 mb-1">
+                                                                    <span className="text-[9px] font-black px-1.5 py-0.5 rounded uppercase bg-primary text-white">New</span>
+                                                                </div>
+                                                                <h4 className="text-xs font-bold text-gray-900 leading-tight">New test ideas are available for your requested page. View them now</h4>
+                                                            </motion.div>
+                                                        )}
+                                                        {[
+                                                            { title: "Opportunity detected", type: "Opportunity", color: "primary", desc: "Variation 'Mobile CTA' could yield 4.2% uplift." },
+                                                            { title: "Broken goal", type: "Critical", color: "red-500", desc: "Goal 'Checkout Success' has 0 events detected since 2pm." },
+                                                            { title: "Experiment reached confidence", type: "Stats", color: "green-600", desc: "Pricing Page Test has reached 95% statistical significance." }
+                                                        ].map((a, i) => (
+                                                            <div key={i} className="p-4 border-l-4 border-gray-200 bg-gray-50 rounded-r-lg" style={{ borderLeftColor: a.color === 'primary' ? '#3838E7' : a.color }}>
+                                                                <div className="flex items-center gap-2 mb-1">
+                                                                    <span className={cn("text-[9px] font-black px-1.5 py-0.5 rounded uppercase", a.color === 'primary' ? "bg-primary/10 text-primary" : "bg-red-50 text-red-600")}>
+                                                                        {a.type}
+                                                                    </span>
+                                                                </div>
+                                                                <h4 className="text-xs font-bold text-gray-900">{a.title}</h4>
+                                                                <p className="text-[11px] text-gray-600 font-medium leading-relaxed mt-1">{a.desc}</p>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                )}
                                             </div>
                                         )}
                                     </div>
 
                                     {/* Sidebar Composer */}
                                     <div className="p-5 bg-gray-50 border-t border-gray-200">
-                                        <div className="bg-white border border-gray-200 rounded-lg p-3 shadow-sleek focus-within:ring-1 focus-within:ring-primary focus-within:border-primary transition-all">
+                                        <div className="bg-white border border-gray-200 rounded-lg p-3 shadow-sleek focus-within:ring-1 focus-within:ring-primary focus-within:border-primary transition-all relative">
                                             <textarea
                                                 className="w-full h-16 resize-none outline-none text-xs font-medium text-gray-700 placeholder:text-gray-400"
                                                 placeholder="Ask Kai or type / for commands..."
@@ -342,7 +694,10 @@
                                                 <div className="flex gap-2">
                                                     <button className="h-6 w-6 rounded bg-gray-50 flex items-center justify-center text-gray-400 hover:text-gray-600"><Plus className="h-3.5 w-3.5" /></button>
                                                 </div>
-                                                <button className="h-7 w-7 bg-primary text-white rounded-full flex items-center justify-center hover:bg-blue-700 transition-colors">
+                                                <button
+                                                    onClick={handleMessageSend}
+                                                    className="h-7 w-7 bg-primary text-white rounded-full flex items-center justify-center hover:bg-blue-700 transition-colors"
+                                                >
                                                     <Send className="h-3.5 w-3.5" />
                                                 </button>
                                             </div>
@@ -357,6 +712,107 @@
                                 </motion.aside>
                             )}
                         </AnimatePresence>
+
+                        {/* PBX Modal */}
+                        <Modal
+                            isOpen={pbxModalOpen}
+                            onClose={() => setPbxModalOpen(false)}
+                            title="New A/B test by prompt"
+                            subtitle="Create an experiment in seconds by prompting the AI."
+                            footer={
+                                <>
+                                    <button onClick={() => setPbxModalOpen(false)} className="text-xs font-bold text-gray-500 flex items-center gap-1 hover:text-gray-700">
+                                        <ChevronDown className="h-3 w-3 rotate-90" /> BACK
+                                    </button>
+                                    <button className="px-6 py-2 bg-gray-100 text-gray-400 rounded-lg text-xs font-bold uppercase tracking-wider">
+                                        CREATE
+                                    </button>
+                                </>
+                            }
+                        >
+                            <div className="space-y-4">
+                                <div className="space-y-1.5">
+                                    <label className="text-[11px] font-bold text-gray-900 uppercase tracking-tight">Name</label>
+                                    <input type="text" placeholder="Give your experiment a name" className="w-full p-3 border border-gray-200 rounded-lg text-sm bg-white outline-none focus:ring-1 focus:ring-primary transition-all" />
+                                </div>
+                                <div className="space-y-1.5">
+                                    <label className="text-[11px] font-bold text-gray-900 uppercase tracking-tight">Project</label>
+                                    <div className="w-full p-3 border border-gray-200 rounded-lg text-sm bg-white flex items-center justify-between text-gray-400 cursor-pointer">
+                                        Select a project
+                                        <ChevronDown className="h-4 w-4" />
+                                    </div>
+                                </div>
+                                <div className="space-y-1.5">
+                                    <label className="text-[11px] font-bold text-gray-900 uppercase tracking-tight">URL of the page where you want to launch the simulation</label>
+                                    <input type="text" placeholder="Enter the URL to launch the simulation" className="w-full p-3 border border-gray-200 rounded-lg text-sm bg-white outline-none focus:ring-1 focus:ring-primary transition-all" />
+                                </div>
+                                <div className="space-y-1.5">
+                                    <div className="flex justify-between items-center">
+                                        <label className="text-[11px] font-bold text-gray-900 uppercase tracking-tight">Description</label>
+                                        <span className="text-[10px] text-gray-400">0 / 500</span>
+                                    </div>
+                                    <textarea rows="4" placeholder="Describe the purpose of your experiment. This information will make it easier to analyze your results." className="w-full p-3 border border-gray-200 rounded-lg text-sm bg-white outline-none focus:ring-1 focus:ring-primary transition-all resize-none"></textarea>
+                                </div>
+                                <button className="flex items-center gap-2 px-4 py-2 border border-primary text-primary rounded-lg text-xs font-bold hover:bg-primary/5 transition-colors">
+                                    <Plus className="h-3.5 w-3.5" /> ADD TAG
+                                </button>
+                            </div>
+                        </Modal>
+
+                        {/* Chart Modal */}
+                        <Modal
+                            isOpen={chartModalOpen}
+                            onClose={() => setChartModalOpen(false)}
+                            title="EU Segment Results Summary"
+                            subtitle="Last 72 hours performance breakdown."
+                        >
+                            <SimpleChart expanded />
+                            <div className="mt-8 space-y-4">
+                                <div className="p-4 bg-gray-50 rounded-lg grid grid-cols-3 gap-4">
+                                    <div>
+                                        <div className="text-[10px] font-medium text-gray-400 uppercase tracking-wider">Revenue Uplift</div>
+                                        <div className="text-xl font-bold text-green-600">+$2,410</div>
+                                    </div>
+                                    <div>
+                                        <div className="text-[10px] font-medium text-gray-400 uppercase tracking-wider">Confidence</div>
+                                        <div className="text-xl font-bold text-gray-900">94.2%</div>
+                                    </div>
+                                    <div>
+                                        <div className="text-[10px] font-medium text-gray-400 uppercase tracking-wider">Visitors</div>
+                                        <div className="text-xl font-bold text-gray-900">12,402</div>
+                                    </div>
+                                </div>
+                                <p className="text-xs font-medium text-gray-600 leading-relaxed">
+                                    The primary conversion goal 'Purchase' continues to show stability.
+                                    Variation A remains the clear winner with a statistical significance of 94%.
+                                </p>
+                            </div>
+                        </Modal>
+
+                        {/* Workflow Modal */}
+                        <Modal
+                            isOpen={workflowModalOpen}
+                            onClose={() => setWorkflowModalOpen(false)}
+                            title="Create new workflow"
+                            subtitle="Automate your experimentation process with AI-driven triggers."
+                        >
+                            <div className="grid grid-cols-2 gap-4">
+                                {[
+                                    { icon: Mail, title: "Send email", desc: "Notify stakeholders on results." },
+                                    { icon: MessageSquare, title: "Alert on Slack", desc: "Push stats to #xp-alerts." },
+                                    { icon: Pause, title: "Pause XP if", desc: "Automatically stop on regressions." },
+                                    { icon: Play, title: "Start XP if", desc: "Trigger tests on traffic surges." },
+                                ].map((wf, i) => (
+                                    <div key={i} className="p-4 border border-gray-100 rounded-xl bg-gray-50 hover:bg-white hover:border-primary/20 hover:shadow-md transition-all cursor-pointer group">
+                                        <div className="h-10 w-10 bg-white rounded-lg flex items-center justify-center text-gray-400 group-hover:text-primary mb-3 shadow-sm">
+                                            <wf.icon className="h-5 w-5" />
+                                        </div>
+                                        <h4 className="text-[13px] font-semibold text-gray-800 mb-1">{wf.title}</h4>
+                                        <p className="text-[11px] text-gray-500 font-medium leading-relaxed">{wf.desc}</p>
+                                    </div>
+                                ))}
+                            </div>
+                        </Modal>
                     </main>
                 </div>
             );
