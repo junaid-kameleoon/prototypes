@@ -156,7 +156,7 @@
                                 class="block text-[10px] font-bold text-dark/40 uppercase tracking-widest mb-1.5 ml-1">Target
                                 Website URL</label>
                             <div class="relative">
-                                <input type="text" id="targetUrl" value="https://nike.com"
+                                <input type="text" id="targetUrl" placeholder="https://nike.com"
                                     class="w-full bg-gray-50 border-2 border-gray-100 rounded-2xl px-5 py-4 text-sm font-mono focus:border-brand focus:ring-4 focus:ring-brand/10 outline-none transition-all group-hover:border-gray-200">
                                 <div class="absolute right-4 top-1/2 -translate-y-1/2 text-brand">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -173,8 +173,8 @@
                                 class="block text-[10px] font-bold text-dark/40 uppercase tracking-widest mb-1.5 ml-1">What
                                 would you like to change?</label>
                             <div class="relative">
-                                <textarea id="setupPrompt" rows="3"
-                                    class="w-full bg-gray-50 border-2 border-gray-100 rounded-2xl px-5 py-4 text-sm focus:border-brand focus:ring-4 focus:ring-brand/10 outline-none transition-all resize-none group-hover:border-gray-200">Change the 'Buy Now' button color to high-contrast orange and update the headline to be more benefit-oriented</textarea>
+                                <textarea id="setupPrompt" rows="3" placeholder="e.g. Change the 'Buy Now' button color to high-contrast orange..."
+                                    class="w-full bg-gray-50 border-2 border-gray-100 rounded-2xl px-5 py-4 text-sm focus:border-brand focus:ring-4 focus:ring-brand/10 outline-none transition-all resize-none group-hover:border-gray-200"></textarea>
                                 <div class="absolute right-4 bottom-4 text-brand/30">
                                     <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
                                         <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
@@ -393,11 +393,71 @@
             }, 3000);
         }
 
+        // Synchronized Typewriter Effect (with variable speeds)
+        function runSyncTypewriter(config, urlSpeed = 30, promptSpeed = 20) {
+            const urlEl = document.getElementById('targetUrl');
+            const promptEl = document.getElementById('setupPrompt');
+            let index = 0;
+
+            function startPair() {
+                const current = config[index];
+                let urlCharIndex = 0;
+                let promptCharIndex = 0;
+                let urlDone = false;
+                let promptDone = false;
+
+                function typeUrl() {
+                    if (urlCharIndex < current.url.length) {
+                        urlEl.placeholder = current.url.substring(0, ++urlCharIndex);
+                        setTimeout(typeUrl, urlSpeed);
+                    } else {
+                        urlDone = true;
+                        checkBothDone();
+                    }
+                }
+
+                function typePrompt() {
+                    if (promptCharIndex < current.prompt.length) {
+                        promptEl.placeholder = current.prompt.substring(0, ++promptCharIndex);
+                        setTimeout(typePrompt, promptSpeed);
+                    } else {
+                        promptDone = true;
+                        checkBothDone();
+                    }
+                }
+
+                function checkBothDone() {
+                    if (urlDone && promptDone) {
+                        setTimeout(() => {
+                            index = (index + 1) % config.length;
+                            startPair();
+                        }, 2500);
+                    }
+                }
+
+                typeUrl();
+                typePrompt();
+            }
+
+            startPair();
+        }
+
+        const inspirations = [
+            { url: "https://nike.com", prompt: "Change the 'Buy Now' button color to high-contrast orange..." },
+            { url: "https://apple.com", prompt: "Update the hero title to 'Shop Smarter, Run Faster'..." },
+            { url: "https://amazon.com", prompt: "Make the main CTA button lime green and more prominent..." },
+            { url: "https://sephora.com", prompt: "Replace the background image with a high-resolution lifestyle shot..." },
+            { url: "https://toyota.com", prompt: "Add a countdown timer below the headline to create urgency..." }
+        ];
+
         // Initialize demo mode toggle on load
         document.addEventListener('DOMContentLoaded', () => {
             const currentCount = localStorage.getItem('pbx_prompt_count') || '0';
             const radio = document.querySelector(`input[name="demoMode"][value="${currentCount === '3' ? '3' : '0'}"]`);
             if (radio) radio.checked = true;
+            
+            // Start synchronized typewriter
+            runSyncTypewriter(inspirations);
         });
 
         // Expose togglePBX for header button
