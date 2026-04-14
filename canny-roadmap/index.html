@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Canny Roadmap Timeline</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="shell">
+      <aside class="sidebar">
+        <div class="brand">
+          <p class="eyebrow">Roadmap Studio</p>
+          <h1>Quarter Timeline</h1>
+          <p class="lede">
+            A GitHub Pages roadmap layer for live Canny ideas with PM, squad,
+            and tag filters.
+          </p>
+        </div>
+
+        <section class="panel">
+          <h2>Filters</h2>
+          <label class="field">
+            <span>Quarter</span>
+            <select id="quarter-filter"></select>
+          </label>
+          <label class="field">
+            <span>Group By</span>
+            <select id="group-by-filter">
+              <option value="pm">PM</option>
+              <option value="squad">Squad</option>
+            </select>
+          </label>
+          <label class="field">
+            <span>PM</span>
+            <select id="pm-filter"></select>
+          </label>
+          <label class="field">
+            <span>Squad</span>
+            <select id="squad-filter"></select>
+          </label>
+          <div class="field">
+            <span>Tags</span>
+            <div id="tag-filter" class="tag-filter"></div>
+          </div>
+        </section>
+
+        <section class="panel">
+          <h2>Selected Idea</h2>
+          <div id="empty-state" class="empty-state">
+            Select a timeline bar to inspect and edit its roadmap placement.
+          </div>
+          <form id="idea-form" class="idea-form hidden">
+            <label class="field">
+              <span>Title</span>
+              <input id="idea-title" type="text" readonly />
+            </label>
+            <label class="field">
+              <span>PM</span>
+              <input id="idea-pm" type="text" />
+            </label>
+            <label class="field">
+              <span>Squad</span>
+              <input id="idea-squad" type="text" />
+            </label>
+            <label class="field">
+              <span>Quarter</span>
+              <select id="idea-quarter"></select>
+            </label>
+            <div class="field inline-fields">
+              <label>
+                <span>Start Week</span>
+                <input id="idea-start" type="number" min="1" max="13" />
+              </label>
+              <label>
+                <span>End Week</span>
+                <input id="idea-end" type="number" min="1" max="13" />
+              </label>
+            </div>
+            <label class="field">
+              <span>Status</span>
+              <input id="idea-status" type="text" readonly />
+            </label>
+            <button class="save-button" type="submit">Save My View</button>
+          </form>
+        </section>
+
+        <section class="panel tips">
+          <h2>How It Works</h2>
+          <p>Roadmap data is synced from Canny during GitHub Pages deploys.</p>
+          <p>Drag a bar to move it week by week across the quarter.</p>
+          <p>Changes you make here are stored only in this browser.</p>
+        </section>
+      </aside>
+
+      <main class="workspace">
+        <header class="workspace-header">
+          <div>
+            <p class="eyebrow">Canny Overlay</p>
+            <h2 id="timeline-title">Roadmap timeline</h2>
+            <p id="sync-status" class="sync-status">Loading roadmap data…</p>
+          </div>
+          <div class="toolbar">
+            <div class="stats">
+              <div class="stat-card">
+                <span>Ideas</span>
+                <strong id="idea-count">0</strong>
+              </div>
+              <div class="stat-card">
+                <span>Visible Lanes</span>
+                <strong id="lane-count">0</strong>
+              </div>
+              <div class="stat-card">
+                <span>Focused Tag</span>
+                <strong id="focused-tag">All</strong>
+              </div>
+            </div>
+            <button id="reset-button" class="refresh-button" type="button">
+              Reset Local Edits
+            </button>
+          </div>
+        </header>
+
+        <section class="board">
+          <div class="timeline-head">
+            <div class="lane-label header-label">Lane</div>
+            <div id="week-header" class="week-header"></div>
+          </div>
+          <div id="timeline-body" class="timeline-body"></div>
+        </section>
+      </main>
+    </div>
+
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>
