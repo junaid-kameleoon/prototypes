@@ -18,7 +18,6 @@ const state = {
 };
 
 const elements = {
-  quarterFilter: document.querySelector("#quarter-filter"),
   groupByFilter: document.querySelector("#group-by-filter"),
   pmFilter: document.querySelector("#pm-filter"),
   squadFilter: document.querySelector("#squad-filter"),
@@ -64,10 +63,6 @@ async function init() {
 }
 
 function bindControls() {
-  elements.quarterFilter.addEventListener("change", (event) => {
-    state.filters.quarter = event.target.value;
-    render();
-  });
 
   elements.groupByFilter.addEventListener("change", (event) => {
     state.filters.groupBy = event.target.value;
@@ -136,11 +131,6 @@ async function loadRoadmap() {
 }
 
 function render() {
-  const quarters = quarterMapFromIdeas();
-  if (!state.filters.quarter && quarters.size > 0) {
-    state.filters.quarter = quarters.keys().next().value;
-  }
-
   renderFilterControls();
   renderWeekHeader();
   renderBoard();
@@ -150,11 +140,7 @@ function render() {
 
 function renderFilterControls() {
   const quarterOptions = [...quarterMapFromIdeas().keys()];
-  if (state.filters.quarter && !quarterOptions.includes(state.filters.quarter)) {
-    state.filters.quarter = quarterOptions[0] || "";
-  }
-
-  populateSelect(elements.quarterFilter, quarterOptions, state.filters.quarter);
+  
   populateSelect(elements.groupByFilter, ["pm", "squad"], state.filters.groupBy);
 
   const visibleIdeas = filteredIdeas();
@@ -480,8 +466,9 @@ function getSelectedIdea() {
 }
 
 function populateSelect(element, options, selectedValue) {
+  if (!element) return;
   element.innerHTML = "";
-  if (!options.length) return;
+  if (!options || !options.length) return;
 
   for (const option of options) {
     const optionElement = document.createElement("option");
