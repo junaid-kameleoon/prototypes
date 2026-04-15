@@ -294,11 +294,6 @@ function buildTimelineItem(idea, rowIndex, rowHeight) {
 
   item.append(leftHandle, content, rightHandle);
 
-  item.addEventListener("click", () => {
-    state.selectedIdeaId = idea.id;
-    render();
-  });
-
   item.addEventListener("pointerdown", (event) => {
     const action = event.target.dataset.action || "move";
     const trackRect = item.parentElement.getBoundingClientRect();
@@ -311,8 +306,8 @@ function buildTimelineItem(idea, rowIndex, rowHeight) {
       originalEndWeek: idea.endWeek,
       originalRowIndex: rowIndex,
       trackWidth: trackRect.width,
+      didDrag: false,
     };
-    state.selectedIdeaId = idea.id;
     item.classList.add("is-interacting");
     item.setPointerCapture(event.pointerId);
   });
@@ -356,6 +351,14 @@ function handlePointerMove(event) {
   const idea = state.ideas.find((entry) => entry.id === state.interaction.ideaId);
   if (!idea) return;
 
+  // Check if pointer moved far enough to count as a drag (5px threshold)
+  const dx = event.clientX - state.interaction.pointerStartX;
+  const dy = event.clientY - state.interaction.pointerStartY;
+  if (!state.interaction.didDrag && Math.sqrt(dx * dx + dy * dy) > 5) {
+    state.interaction.didDrag = true;
+  }
+  if (!state.interaction.didDrag) return;
+
   const weekDelta = Math.round(
     ((event.clientX - state.interaction.pointerStartX) / state.interaction.trackWidth) * 13,
   );
@@ -392,8 +395,18 @@ function handlePointerMove(event) {
 
 function handlePointerUp() {
   if (!state.interaction) return;
-  saveOverrides();
+  const wasDrag = state.interaction.didDrag;
+  const ideaId = state.interaction.ideaId;
+  
+  if (wasDrag) {
+    saveOverrides();
+  } else {
+    // Pure click — open detail sidebar
+    state.selectedIdeaId = ideaId;
+  }
+  
   state.interaction = null;
+  render();
 }
 
 function saveSelectedIdea() {
