@@ -157,7 +157,7 @@ function renderFilterControls() {
   populateSelect(elements.quarterFilter, quarterOptions, state.filters.quarter);
   populateSelect(elements.groupByFilter, ["pm", "squad"], state.filters.groupBy);
 
-  const visibleIdeas = state.ideas.filter((idea) => idea.quarter === state.filters.quarter);
+  const visibleIdeas = filteredIdeas();
   const pmOptions = ["All", ...uniqueValues(visibleIdeas, "pm")];
   const squadOptions = ["All", ...uniqueValues(visibleIdeas, "squad")];
   const tagOptions = ["All", ...uniqueTags(visibleIdeas)];
@@ -189,23 +189,24 @@ function renderFilterControls() {
 }
 
 function renderWeekHeader() {
-  const quarter = quarterMapFromIdeas().get(state.filters.quarter);
-  elements.timelineTitle.textContent = state.filters.quarter
-    ? `${state.filters.quarter} timeline`
-    : "Roadmap timeline";
+  elements.timelineTitle.textContent = "Annual Roadmap";
   elements.weekHeader.innerHTML = "";
 
-  if (!quarter) return;
+  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
-  for (let week = 1; week <= 13; week += 1) {
-    const startDate = new Date(Date.UTC(quarter.year, quarter.startMonth, 1 + (week - 1) * 7));
-    const month = startDate.toLocaleString("en-US", { month: "short", timeZone: "UTC" });
-    const day = startDate.toLocaleString("en-US", { day: "numeric", timeZone: "UTC" });
-
-    const cell = document.createElement("div");
-    cell.className = "week-cell";
-    cell.innerHTML = `<strong>W${week}</strong><span>${month} ${day}</span>`;
-    elements.weekHeader.appendChild(cell);
+  for (let m = 0; m < 12; m++) {
+    const monthCell = document.createElement("div");
+    monthCell.className = "month-cell";
+    monthCell.innerHTML = `<strong>${months[m]}</strong>`;
+    
+    // Create 4 subdivisions (weeks)
+    for (let w = 0; w < 4; w++) {
+      const divider = document.createElement("div");
+      divider.className = "week-divider";
+      monthCell.appendChild(divider);
+    }
+    
+    elements.weekHeader.appendChild(monthCell);
   }
 }
 
@@ -267,8 +268,8 @@ function buildTimelineItem(idea, rowIndex, rowHeight) {
   item.dataset.status = idea.status;
 
   const span = Math.max(1, idea.endWeek - idea.startWeek + 1);
-  item.style.left = `${((idea.startWeek - 1) / 13) * 100}%`;
-  item.style.width = `${(span / 13) * 100}%`;
+  item.style.left = `${((idea.startWeek - 1) / 48) * 100}%`;
+  item.style.width = `${(span / 48) * 100}%`;
   item.style.top = `${10 + rowIndex * rowHeight}px`;
 
   const leftHandle = document.createElement("span");
@@ -289,7 +290,6 @@ function buildTimelineItem(idea, rowIndex, rowHeight) {
       <div class="item-label">${idea.title}</div>
       ${votes > 0 ? `<div class="item-badge" title="Score: ${score}">▲ ${votes}</div>` : ""}
     </div>
-    <div class="item-meta">W${idea.startWeek}-W${idea.endWeek} · ${idea.status}</div>
   `;
 
   item.append(leftHandle, content, rightHandle);
@@ -365,8 +365,13 @@ function handlePointerMove(event) {
 
   if (state.interaction.action === "move") {
     const duration = state.interaction.originalEndWeek - state.interaction.originalStartWeek;
+    
+    const weekDelta = Math.round(
+      ((event.clientX - state.interaction.pointerStartX) / state.interaction.trackWidth) * 48,
+    );
+    
     const newStart = clampWeek(state.interaction.originalStartWeek + weekDelta);
-    idea.startWeek = Math.min(newStart, 13 - duration);
+    idea.startWeek = Math.min(newStart, 48 - duration);
     idea.endWeek = idea.startWeek + duration;
     
     // Vertical Delta
@@ -423,11 +428,17 @@ function saveSelectedIdea() {
 
 function filteredIdeas() {
   return state.ideas.filter((idea) => {
-    if (state.filters.quarter && idea.quarter !== state.filters.quarter) return false;
     if (state.filters.pm !== "All" && idea.pm !== state.filters.pm) return false;
     if (state.filters.squad !== "All" && idea.squad !== state.filters.squad) return false;
     if (state.filters.tag !== "All" && !(idea.tags || []).includes(state.filters.tag)) return false;
     return true;
+  }).sort((a, b) => {
+     // Sort by creation date (recency) then by votes
+     const dateA = new Date(a.source?.created || 0);
+     const dateB = new Date(b.source?.created || 0);
+     if (dateA > dateB) return -1;
+     if (dateA < dateB) return 1;
+     return (b.voteCount || 0) - (a.voteCount || 0);
   });
 }
 
@@ -441,32 +452,27 @@ function groupIdeas(ideas, key) {
 }
 
 function assignRows(ideas) {
-  const sorted = [...ideas].sort((a, b) => a.startWeek - b.startWeek || a.endWeek - b.endWeek);
+  // We prioritize the sort order (recency/votes) for the layout density
   const rows = new Map();
-  const occupiedLanes = [];
+  const laneEnds = []; // Stores the endWeek for each row in this lane
 
-  // First pass: Honor manual indices
-  for (const idea of sorted) {
-    if (idea.manualRowIndex !== undefined) {
-      rows.set(idea.id, idea.manualRowIndex);
-      occupiedLanes[idea.manualRowIndex] = Math.max(occupiedLanes[idea.manualRowIndex] || 0, idea.endWeek);
-    }
-  }
-
-  // Second pass: Pack the rest
-  for (const idea of sorted) {
-    if (idea.manualRowIndex !== undefined) continue;
-
+  for (const idea of ideas) {
     let rowIndex = 0;
-    while (occupiedLanes[rowIndex] && idea.startWeek <= occupiedLanes[rowIndex]) {
+    // Find the first row where this idea can fit without overlapping
+    // We only check if the startWeek > laneEnds[rowIndex]
+    // Since ideas is already sorted by something else, we just find the first slot.
+    while (laneEnds[rowIndex] !== undefined && idea.startWeek <= laneEnds[rowIndex]) {
       rowIndex++;
     }
-    occupiedLanes[rowIndex] = idea.endWeek;
+    
     rows.set(idea.id, rowIndex);
-    idea.manualRowIndex = rowIndex; // Save it so it stays static
+    laneEnds[rowIndex] = idea.endWeek;
+    
+    // Update manualRowIndex to keep it here if they move it horizontally later
+    idea.manualRowIndex = rowIndex; 
   }
 
-  return { rows, totalRows: Math.max(1, occupiedLanes.length) };
+  return { rows, totalRows: Math.max(1, laneEnds.length) };
 }
 
 function getSelectedIdea() {
@@ -495,7 +501,7 @@ function uniqueTags(items) {
 }
 
 function clampWeek(value) {
-  return Math.min(13, Math.max(1, Number.isFinite(value) ? value : 1));
+  return Math.min(48, Math.max(1, Number.isFinite(value) ? value : 1));
 }
 
 function quarterMapFromIdeas() {

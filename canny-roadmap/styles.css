@@ -7,7 +7,7 @@
   --teal: #1b6b6f;
   --shadow: 0 16px 48px rgba(63, 43, 24, 0.12);
   --lane-label-width: 220px;
-  --week-count: 13;
+  --week-count: 48;
 }
 
 * {
@@ -216,7 +216,7 @@ input[readonly] {
 }
 
 .board {
-  min-width: 980px;
+  min-width: 1400px;
   border-radius: 24px;
   overflow: hidden;
   border: 1px solid rgba(58, 46, 34, 0.12);
@@ -246,24 +246,33 @@ input[readonly] {
 
 .week-header {
   display: grid;
-  grid-template-columns: repeat(var(--week-count), minmax(72px, 1fr));
+  grid-template-columns: repeat(12, 1fr);
   background: rgba(248, 239, 227, 0.8);
 }
 
-.week-cell {
-  padding: 16px 8px;
-  text-align: center;
+.month-cell {
+  position: relative;
   border-left: 1px solid var(--line);
+  padding: 12px 0 0;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
 }
 
-.week-cell strong {
+.month-cell strong {
   display: block;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
+  margin-bottom: 8px;
 }
 
-.week-cell span {
-  font-size: 0.78rem;
-  color: var(--muted);
+.week-divider {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  height: 8px; /* Visual height for the header portion */
+}
+
+.week-divider div {
+  border-left: 1px solid rgba(58, 46, 34, 0.05);
 }
 
 .timeline-body {
@@ -303,8 +312,24 @@ input[readonly] {
       90deg,
       transparent 0,
       transparent calc((100% / var(--week-count)) - 1px),
-      rgba(58, 46, 34, 0.08) calc((100% / var(--week-count)) - 1px),
-      rgba(58, 46, 34, 0.08) calc(100% / var(--week-count))
+      rgba(58, 46, 34, 0.05) calc((100% / var(--week-count)) - 1px),
+      rgba(58, 46, 34, 0.05) calc(100% / var(--week-count))
+    );
+}
+
+/* Harder dividers for month boundaries */
+.timeline-track::after {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      transparent 0,
+      transparent calc((100% / 12) - 1px),
+      rgba(58, 46, 34, 0.15) calc((100% / 12) - 1px),
+      rgba(58, 46, 34, 0.15) calc(100% / 12)
     );
 }
 
