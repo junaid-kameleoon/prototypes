@@ -131,6 +131,66 @@
       </main>
     </div>
 
+    <aside id="detail-sidebar" class="detail-sidebar">
+      <div class="detail-header">
+        <button id="close-detail" class="icon-button">✕</button>
+        <span class="detail-eyebrow">Feature Details</span>
+      </div>
+      
+      <div class="detail-body">
+        <h2 id="detail-title">Feature Title</h2>
+        
+        <div class="detail-stats">
+          <div class="detail-stat">
+            <span class="stat-label">Votes</span>
+            <strong id="detail-votes">0</strong>
+          </div>
+          <div class="detail-stat">
+            <span class="stat-label">Canny Score</span>
+            <strong id="detail-score">0</strong>
+          </div>
+        </div>
+
+        <div class="detail-info">
+          <div class="field">
+            <span>Status</span>
+            <div id="detail-status-pill" class="status-pill">Planned</div>
+          </div>
+          <div class="field">
+            <span>Owner</span>
+            <div id="detail-owner" class="text-secondary">PM Name</div>
+          </div>
+          <div class="field">
+            <span>Squad</span>
+            <div id="detail-squad" class="text-secondary">Squad Name</div>
+          </div>
+        </div>
+
+        <hr class="divider" />
+
+        <div class="detail-actions">
+          <h3>Roadmap Placement</h3>
+          <form id="detail-form" class="detail-form">
+            <div class="field grid-2">
+              <label>
+                <span>Start Week</span>
+                <input id="detail-start" type="number" min="1" max="13" />
+              </label>
+              <label>
+                <span>End Week</span>
+                <input id="detail-end" type="number" min="1" max="13" />
+              </label>
+            </div>
+            <label class="field">
+              <span>Quarter</span>
+              <select id="detail-quarter"></select>
+            </label>
+            <button class="primary-button" type="submit">Update View</button>
+          </form>
+        </div>
+      </div>
+    </aside>
+
     <script type="module" src="./main.js"></script>
   </body>
 </html>

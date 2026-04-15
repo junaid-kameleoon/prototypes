@@ -110,12 +110,16 @@ function normalizeIdea(item) {
     endWeek: 3,
     status: statusName,
     tags: [groupName].filter(Boolean),
+    score: item.score || 0,
+    voteCount: item.voteCount || 0,
     source: {
       created,
       updatedAt,
       owner: ownerName,
       group: groupName,
       urlName: item.urlName || null,
+      score: item.score || 0,
+      voteCount: item.voteCount || 0,
     },
   };
 }

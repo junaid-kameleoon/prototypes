@@ -40,6 +40,20 @@ const elements = {
   ideaStatus: document.querySelector("#idea-status"),
   syncStatus: document.querySelector("#sync-status"),
   resetButton: document.querySelector("#reset-button"),
+  
+  // Right Sidebar Elements
+  detailSidebar: document.querySelector("#detail-sidebar"),
+  closeDetail: document.querySelector("#close-detail"),
+  detailTitle: document.querySelector("#detail-title"),
+  detailVotes: document.querySelector("#detail-votes"),
+  detailScore: document.querySelector("#detail-score"),
+  detailStatusPill: document.querySelector("#detail-status-pill"),
+  detailOwner: document.querySelector("#detail-owner"),
+  detailSquad: document.querySelector("#detail-squad"),
+  detailForm: document.querySelector("#detail-form"),
+  detailStart: document.querySelector("#detail-start"),
+  detailEnd: document.querySelector("#detail-end"),
+  detailQuarter: document.querySelector("#detail-quarter"),
 };
 
 void init();
@@ -78,6 +92,17 @@ function bindControls() {
   elements.resetButton.addEventListener("click", () => {
     window.localStorage.removeItem(OVERRIDE_STORAGE_KEY);
     void loadRoadmap();
+  });
+
+  elements.closeDetail.addEventListener("click", () => {
+    state.selectedIdeaId = null;
+    document.body.classList.remove("detail-open");
+    render();
+  });
+
+  elements.detailForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    saveSelectedIdea();
   });
 
   window.addEventListener("pointermove", handlePointerMove);
@@ -254,9 +279,16 @@ function buildTimelineItem(idea, rowIndex, rowHeight) {
   rightHandle.className = "resize-handle resize-right";
   rightHandle.dataset.action = "resize-right";
 
+  const votes = idea.voteCount || 0;
+  const score = idea.score || 0;
+
   const content = document.createElement("div");
+  content.className = "item-content";
   content.innerHTML = `
-    <div class="item-label">${idea.title}</div>
+    <div class="item-header">
+      <div class="item-label">${idea.title}</div>
+      ${votes > 0 ? `<div class="item-badge" title="Score: ${score}">▲ ${votes}</div>` : ""}
+    </div>
     <div class="item-meta">W${idea.startWeek}-W${idea.endWeek} · ${idea.status}</div>
   `;
 
@@ -274,11 +306,14 @@ function buildTimelineItem(idea, rowIndex, rowHeight) {
       ideaId: idea.id,
       action,
       pointerStartX: event.clientX,
+      pointerStartY: event.clientY,
       originalStartWeek: idea.startWeek,
       originalEndWeek: idea.endWeek,
+      originalRowIndex: rowIndex,
       trackWidth: trackRect.width,
     };
     state.selectedIdeaId = idea.id;
+    item.classList.add("is-interacting");
     item.setPointerCapture(event.pointerId);
   });
 
@@ -295,13 +330,25 @@ function renderSelectedIdea() {
 
   elements.emptyState.classList.add("hidden");
   elements.ideaForm.classList.remove("hidden");
-  elements.ideaTitle.value = idea.title;
-  elements.ideaPm.value = idea.pm;
-  elements.ideaSquad.value = idea.squad;
-  elements.ideaQuarter.value = idea.quarter;
-  elements.ideaStart.value = String(idea.startWeek);
-  elements.ideaEnd.value = String(idea.endWeek);
-  elements.ideaStatus.value = idea.status;
+  elements.detailTitle.textContent = idea.title;
+  elements.detailVotes.textContent = idea.voteCount || 0;
+  elements.detailScore.textContent = idea.score || 0;
+  elements.detailStatusPill.textContent = idea.status;
+  elements.detailStatusPill.dataset.status = idea.status;
+  elements.detailOwner.textContent = idea.pm;
+  elements.detailSquad.textContent = idea.squad;
+
+  elements.detailStart.value = String(idea.startWeek);
+  elements.detailEnd.value = String(idea.endWeek);
+  
+  populateSelect(
+    elements.detailQuarter,
+    [...quarterMapFromIdeas().keys()],
+    idea.quarter
+  );
+  
+  // Show right sidebar
+  document.body.classList.add("detail-open");
 }
 
 function handlePointerMove(event) {
@@ -318,6 +365,11 @@ function handlePointerMove(event) {
     const newStart = clampWeek(state.interaction.originalStartWeek + weekDelta);
     idea.startWeek = Math.min(newStart, 13 - duration);
     idea.endWeek = idea.startWeek + duration;
+    
+    // Vertical Delta
+    const rowHeight = 56;
+    const rowDelta = Math.round((event.clientY - state.interaction.pointerStartY) / rowHeight);
+    idea.manualRowIndex = Math.max(0, state.interaction.originalRowIndex + rowDelta);
   }
 
   if (state.interaction.action === "resize-left") {
@@ -348,11 +400,9 @@ function saveSelectedIdea() {
   const idea = getSelectedIdea();
   if (!idea) return;
 
-  idea.pm = elements.ideaPm.value.trim() || "Unassigned";
-  idea.squad = elements.ideaSquad.value.trim() || "Unassigned";
-  idea.quarter = elements.ideaQuarter.value;
-  idea.startWeek = clampWeek(Number(elements.ideaStart.value));
-  idea.endWeek = Math.max(idea.startWeek, clampWeek(Number(elements.ideaEnd.value)));
+  idea.quarter = elements.detailQuarter.value;
+  idea.startWeek = clampWeek(Number(elements.detailStart.value));
+  idea.endWeek = Math.max(idea.startWeek, clampWeek(Number(elements.detailEnd.value)));
 
   saveOverrides();
   render();
@@ -380,26 +430,30 @@ function groupIdeas(ideas, key) {
 function assignRows(ideas) {
   const sorted = [...ideas].sort((a, b) => a.startWeek - b.startWeek || a.endWeek - b.endWeek);
   const rows = new Map();
-  const rowEndWeeks = [];
+  const occupiedLanes = [];
 
+  // First pass: Honor manual indices
   for (const idea of sorted) {
-    let placed = false;
-    for (let rowIndex = 0; rowIndex < rowEndWeeks.length; rowIndex += 1) {
-      if (idea.startWeek > rowEndWeeks[rowIndex]) {
-        rowEndWeeks[rowIndex] = idea.endWeek;
-        rows.set(idea.id, rowIndex);
-        placed = true;
-        break;
-      }
-    }
-
-    if (!placed) {
-      rowEndWeeks.push(idea.endWeek);
-      rows.set(idea.id, rowEndWeeks.length - 1);
+    if (idea.manualRowIndex !== undefined) {
+      rows.set(idea.id, idea.manualRowIndex);
+      occupiedLanes[idea.manualRowIndex] = Math.max(occupiedLanes[idea.manualRowIndex] || 0, idea.endWeek);
     }
   }
 
-  return { rows, totalRows: Math.max(1, rowEndWeeks.length) };
+  // Second pass: Pack the rest
+  for (const idea of sorted) {
+    if (idea.manualRowIndex !== undefined) continue;
+
+    let rowIndex = 0;
+    while (occupiedLanes[rowIndex] && idea.startWeek <= occupiedLanes[rowIndex]) {
+      rowIndex++;
+    }
+    occupiedLanes[rowIndex] = idea.endWeek;
+    rows.set(idea.id, rowIndex);
+    idea.manualRowIndex = rowIndex; // Save it so it stays static
+  }
+
+  return { rows, totalRows: Math.max(1, occupiedLanes.length) };
 }
 
 function getSelectedIdea() {
@@ -478,6 +532,7 @@ function saveOverrides() {
         quarter: idea.quarter,
         startWeek: idea.startWeek,
         endWeek: idea.endWeek,
+        manualRowIndex: idea.manualRowIndex,
       },
     ]),
   );
@@ -498,6 +553,7 @@ function mergeIdeasWithOverrides(ideas, overrides) {
       quarter: override.quarter || idea.quarter,
       startWeek,
       endWeek,
+      manualRowIndex: override.manualRowIndex ?? idea.manualRowIndex,
       tags: Array.isArray(idea.tags) ? idea.tags : [],
     };
   });
